@@ -64,7 +64,7 @@ jobs:
       - name: Checkout develop code
         uses: actions/checkout@v4
         with:
-          ref: main
+          ref: develop
           
       - name: Make final branch name
         id: make-branch
