@@ -1,9 +1,9 @@
-import Header from "../components/Header";
+import { DateInput } from "../components/DateInput";
 
 export default function Page() {
   return (
     <div>
-      <Header />
+      <DateInput />
     </div>
   );
 }
