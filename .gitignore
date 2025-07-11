@@ -35,3 +35,6 @@ pnpm-debug.log*
 
 # ui
 dist/
+
+*storybook.log
+storybook-static
