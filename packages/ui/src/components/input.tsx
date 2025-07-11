@@ -6,7 +6,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 const calendar = "font-medium border-0 border-b-2 pb-2 pr-8 focus-visible:border-action-green";
 
 const inputVariants = cva(
-  "flex h-10 w-full border-gray-300 bg-white px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-gray-500 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-none",
+  "flex h-10 w-full border-gray-300 bg-white px-3 py-2 text-sm ring-offset-background file:border-0 placeholder:text-gray-500 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-none",
   {
     variants: {
       variant: {

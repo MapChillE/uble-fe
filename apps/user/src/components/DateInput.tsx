@@ -19,7 +19,11 @@ function isValidDate(date: Date | undefined) {
   return !isNaN(date.getTime());
 }
 
-export function DateInput(isModal: boolean) {
+interface DateInputProps {
+  isModal?: boolean;
+}
+
+export function DateInput({ isModal = false }: DateInputProps) {
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [month, setMonth] = useState<Date | undefined>(date);
@@ -75,6 +79,7 @@ export function DateInput(isModal: boolean) {
           onKeyDown={handleKey}
         />
         <DatePickerPopover
+          isModal={isModal}
           open={open}
           onOpenChange={setOpen}
           date={date}

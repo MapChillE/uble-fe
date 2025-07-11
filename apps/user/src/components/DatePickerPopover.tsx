@@ -1,10 +1,9 @@
-// components/DatePickerPopover.tsx
 import { CalendarIcon } from "lucide-react";
-import { Button } from "@workspace/ui/components/button";
 import { Calendar } from "@workspace/ui/components/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@workspace/ui/components/popover";
 
 interface DatePickerPopoverProps {
+  isModal: boolean;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   date: Date | undefined;
@@ -14,6 +13,7 @@ interface DatePickerPopoverProps {
 }
 
 export function DatePickerPopover({
+  isModal,
   open,
   onOpenChange,
   date,
@@ -24,13 +24,12 @@ export function DatePickerPopover({
   return (
     <Popover open={open} onOpenChange={onOpenChange}>
       <PopoverTrigger asChild>
-        <Button
+        <button
           id="date-picker"
-          variant="ghost"
-          className="absolute right-2 top-1/2 size-6 -translate-y-1/2"
+          className="absolute right-0 top-0 h-full p-1 text-gray-300 hover:text-gray-900"
         >
-          <CalendarIcon className="size-3.5" />
-        </Button>
+          <CalendarIcon className={isModal ? "h-4 w-4" : "h-5 w-5"} />
+        </button>
       </PopoverTrigger>
       <PopoverContent
         className="w-auto overflow-hidden p-0"
@@ -42,6 +41,7 @@ export function DatePickerPopover({
           mode="single"
           selected={date}
           captionLayout="dropdown"
+          disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
           month={month}
           onMonthChange={onMonthChange}
           onSelect={onSelect}
