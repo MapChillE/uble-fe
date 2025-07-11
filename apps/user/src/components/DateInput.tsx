@@ -1,26 +1,15 @@
 "use client";
 
-import * as React from "react";
-import { CalendarIcon } from "lucide-react";
-
-import { Button } from "@workspace/ui/components/button";
-import { Calendar } from "@workspace/ui/components/calendar";
 import { Input } from "@workspace/ui/components/input";
-import { Popover, PopoverContent, PopoverTrigger } from "@workspace/ui/components/popover";
+import { format } from "date-fns";
+import { DatePickerPopover } from "./DatePickerPopover";
+import { useState } from "react";
 
 export default function formatDate(date: Date | undefined) {
   if (!date) {
     return "";
   }
-
-  return date
-    .toLocaleDateString("ko-KR", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-    })
-    .replace(/\. /g, ".")
-    .replace(/\.$/, "");
+  return format(date, "yyyy.MM.dd");
 }
 
 function isValidDate(date: Date | undefined) {
@@ -30,65 +19,69 @@ function isValidDate(date: Date | undefined) {
   return !isNaN(date.getTime());
 }
 
-export function DateInput() {
-  const [open, setOpen] = React.useState(false);
-  const [date, setDate] = React.useState<Date | undefined>(new Date());
-  const [month, setMonth] = React.useState<Date | undefined>(date);
-  const [value, setValue] = React.useState(formatDate(date));
+export function DateInput(isModal: boolean) {
+  const [open, setOpen] = useState(false);
+  const [date, setDate] = useState<Date | undefined>(new Date());
+  const [month, setMonth] = useState<Date | undefined>(date);
+  const [value, setValue] = useState(formatDate(date));
+
+  //input
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let raw = e.target.value.replace(/\D/g, "");
+    if (raw.length > 8) raw = raw.slice(0, 8);
+
+    let formatted = raw;
+    if (raw.length > 4) {
+      formatted = raw.slice(0, 4) + "." + raw.slice(4);
+    }
+    if (raw.length > 6) {
+      formatted = raw.slice(0, 4) + "." + raw.slice(4, 6) + "." + raw.slice(6);
+    }
+
+    setValue(formatted);
+
+    const date = new Date(e.target.value);
+
+    if (isValidDate(date)) {
+      setDate(date);
+      setMonth(date);
+    }
+  };
+
+  const handleKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setOpen(true);
+    }
+  };
+
+  //calendar
+  const handleSelect = (date: Date | undefined) => {
+    setDate(date);
+    setValue(formatDate(date));
+    setOpen(false);
+  };
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="relative flex gap-2">
+      <div className="relative m-[10px] flex gap-2">
         <Input
+          variant={isModal ? "modalCalendar" : "calendar"}
           id="date"
           value={value}
           placeholder="YYYY.MM.DD"
           className="bg-background pr-10"
-          onChange={(e) => {
-            const date = new Date(e.target.value);
-            setValue(e.target.value);
-            if (isValidDate(date)) {
-              setDate(date);
-              setMonth(date);
-            }
-          }}
-          onKeyDown={(e) => {
-            if (e.key === "ArrowDown") {
-              e.preventDefault();
-              setOpen(true);
-            }
-          }}
+          onChange={handleChange}
+          onKeyDown={handleKey}
         />
-        <Popover open={open} onOpenChange={setOpen}>
-          <PopoverTrigger asChild>
-            <Button
-              id="date-picker"
-              variant="ghost"
-              className="absolute right-2 top-1/2 size-6 -translate-y-1/2"
-            >
-              <CalendarIcon className="size-3.5" />
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent
-            className="w-auto overflow-hidden p-0"
-            align="end"
-            alignOffset={-8}
-            sideOffset={10}
-          >
-            <Calendar
-              mode="single"
-              selected={date}
-              captionLayout="dropdown"
-              month={month}
-              onMonthChange={setMonth}
-              onSelect={(date) => {
-                setDate(date);
-                setValue(formatDate(date));
-                setOpen(false);
-              }}
-            />
-          </PopoverContent>
-        </Popover>
+        <DatePickerPopover
+          open={open}
+          onOpenChange={setOpen}
+          date={date}
+          month={month}
+          onMonthChange={setMonth}
+          onSelect={handleSelect}
+        />
       </div>
     </div>
   );
