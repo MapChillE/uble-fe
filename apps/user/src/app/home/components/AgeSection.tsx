@@ -21,7 +21,7 @@ const AgeSection = () => {
       <div
         className="flex gap-4 overflow-x-auto scrollbar-hide px-4 pb-2"
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
-        <DynamicCard />
+        <DynamicCard data={testData} />
       </div>
     </div>
   );
