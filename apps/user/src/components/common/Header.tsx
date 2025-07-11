@@ -2,7 +2,7 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { ChevronLeft, ScanBarcode } from "lucide-react";
-import { hideLayout } from "../utils/hideLayout";
+import { hideLayout } from "@/utils/hideLayout";
 
 export default function Header() {
   const router = useRouter();

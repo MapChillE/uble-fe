@@ -2,7 +2,7 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { Home, Heart, UserIcon, MapPin } from "lucide-react";
-import { hideLayout } from "../utils/hideLayout";
+import { hideLayout } from "@/utils/hideLayout";
 
 export default function Footer() {
   const pathname = usePathname();
