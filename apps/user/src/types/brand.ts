@@ -1,41 +1,25 @@
 import { responseStatus } from "./api";
 
 /**
- * 브랜드 혜택 정보 타입
- */
-interface BrandBenefit {
-  /** 
-   * 등급 (ENUM: VIP, NORMAL, LOCAL, VIP_NORMAL) 
-   * VIP: VIP, VVIP
-   * NORMAL: 일반, 우수, VIP, VVIP
-   * LOCAL: 우수, VIP, VVIP
-   * VIP_NORMAL: 일반, 우수, VIP, VVIP
-   * */
-  rank: "VIP" | "NORMAL" | "LOCAL" | "VIP_NORMAL";
-  /** 혜택 내용 (예: 결제한 금액의 10% 할인) */
-  content: string;
-  /** 혜택 사용 방법 */
-  manual?: string;
-  /** 제공 횟수 (예: 월 1회) */
-  provisionCount: string;
-}
-
-/**
  * 브랜드 단일 항목 타입
  */
-interface BrandContent {
+export interface BrandContent {
   /** 브랜드 고유 ID */
   brandId: number;
   /** 브랜드 이름 */
   name: string;
+  /** 브랜드 카테고리 */
+  category: string;
+  /** 브랜드 설명 */
+  description: string;
   /** 브랜드 대표 이미지 URL */
   imgUrl: string;
-  /** 사용자가 북마크한 경우 해당 북마크 ID */
-  bookmarkId: number;
-  /** 이 브랜드에 속한 혜택 목록 */
-  benefits: BrandBenefit[];
+  /** VIP콕 혜택이 존재하는지 여부 */
+  isVIPcock: boolean;
+  /** 혜택을 사용할 수 있는 최소 등급 */
+  minRank: "NONE" | "NORMAL" | "PREMIUM";
   /** 사용자가 북마크했는지 여부 */
-  bookmarked: boolean;
+  bookmarked?: boolean;
 }
 
 /**
