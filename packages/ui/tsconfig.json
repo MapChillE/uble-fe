@@ -4,7 +4,9 @@
     "baseUrl": ".",
     "paths": {
       "@workspace/ui/*": ["./src/*"]
-    }
+    },
+    "outDir": "./dist",
+    "rootDir": "./src"
   },
   "include": ["."],
   "exclude": ["node_modules", "dist"]
