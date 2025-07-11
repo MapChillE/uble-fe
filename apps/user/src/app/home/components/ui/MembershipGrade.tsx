@@ -1,13 +1,21 @@
 import React from 'react';
-import { GRADE_COLORS } from '@/types/constants';
+// import { GRADE_COLORS } from '@/types/constants';
 import { BrandContent } from '@/types/brand';
+
+const GRADE_COLORS = {
+  VIP콕: "#9869f1",
+  VVIP: "#eb3f88",
+  VIP: "#9869f1",
+  우수: "#93aefe",
+  일반: "#b5b3c2",
+}
 interface MembershipGradeProps {
   rank: "NONE" | "NORMAL" | "PREMIUM";
   isVIPcock: boolean;
 }
 
 const RANK_MAP: Record<MembershipGradeProps["rank"], string[]> = {
-  NONE: ["노말", "우수", "VIP", "VVIP"],
+  NONE: ["일반", "우수", "VIP", "VVIP"],
   NORMAL: ["우수", "VIP", "VVIP"],
   PREMIUM: ["VIP", "VVIP"],
 };
