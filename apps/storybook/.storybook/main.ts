@@ -12,9 +12,7 @@ function getAbsolutePath(value: string): any {
 const config: StorybookConfig = {
   stories: [
     "../src/**/*.mdx",
-    "../src/**/*.stories.@(ts|tsx)",
-    // UI 패키지의 스토리도 필요하다면 아래 주석 해제
-    // "../../../packages/ui/src/**/*.stories.@(js|jsx|mjs|ts|tsx)",
+    "../src/**/*.stories.@(ts|tsx)"
   ],
   addons: [
     getAbsolutePath("@chromatic-com/storybook"),
