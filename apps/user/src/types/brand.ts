@@ -4,8 +4,14 @@ import { responseStatus } from "./api";
  * 브랜드 혜택 정보 타입
  */
 interface BrandBenefit {
-  /** 등급 (예: 우수/VIP/VVIP) */
-  rank: string;
+  /** 
+   * 등급 (ENUM: VIP, NORMAL, LOCAL, VIP_NORMAL) 
+   * VIP: VIP, VVIP
+   * NORMAL: 일반, 우수, VIP, VVIP
+   * LOCAL: 우수, VIP, VVIP
+   * VIP_NORMAL: 일반, 우수, VIP, VVIP
+   * */
+  rank: "VIP" | "NORMAL" | "LOCAL" | "VIP_NORMAL";
   /** 혜택 내용 (예: 결제한 금액의 10% 할인) */
   content: string;
   /** 혜택 사용 방법 */
@@ -39,9 +45,9 @@ interface BrandListData {
   /** 현재 페이지에 포함된 브랜드 콘텐츠 배열 */
   content: BrandContent[];
   /** 다음 요청 시 더 가져올 목록이 존재하는지 여부 */
-  hasNext: boolean;
+  hasNext?: boolean;
   /** 마지막으로 로드된 브랜드의 커서 ID (다음 요청 시 starting point) */
-  lastCursorId: number;
+  lastCursorId?: number;
 }
 
 interface BrandDetailData extends BrandContent {
