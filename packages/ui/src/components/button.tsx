@@ -11,9 +11,9 @@ const buttonVariants = cva(
       variant: {
         default:
           "font-semibold bg-[#41d596] text-white border-[#41d596] hover:bg-[#14B470] shadow-lg",
-        category_select:
+        filter_select:
           "font-semibold bg-[#41d596] text-white border-[#41d596] hover:bg-[#14B470] shadow-lg",
-        category_unselect:
+        filter_unselect:
           "font-semibold bg-white text-gray-700 border border-gray-300 hover:bg-gray-50",
         disabled: "font-semibold bg-gray-200 text-gray-400",
 
@@ -43,6 +43,7 @@ const buttonVariants = cva(
         full: "px-4 py-2 w-full h-12",
         select: "py-3 px-4",
         feedback: "flex-1",
+        mypage: "py-2 px-3",
       },
     },
     defaultVariants: {
