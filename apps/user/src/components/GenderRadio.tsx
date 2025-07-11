@@ -8,7 +8,7 @@ interface GenderRadioProps {
   isModal?: boolean;
 }
 
-export default function GenderRadio({ isModal }: GenderRadioProps) {
+export default function GenderRadio({ isModal = false }: GenderRadioProps) {
   const [gender, setGender] = useState("남성");
 
   return (
