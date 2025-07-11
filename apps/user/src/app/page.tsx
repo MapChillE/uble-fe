@@ -1,9 +1,3 @@
-import { DateInput } from "../components/DateInput";
-
 export default function Page() {
-  return (
-    <div>
-      <DateInput isModal={true} />
-    </div>
-  );
+  return <div></div>;
 }
