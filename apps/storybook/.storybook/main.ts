@@ -1,6 +1,5 @@
 import type { StorybookConfig } from "@storybook/nextjs-vite";
-
-import { join, dirname } from "path";
+import { join, dirname, resolve } from "path";
 
 /**
  * This function is used to resolve the absolute path of a package.
@@ -9,10 +8,12 @@ import { join, dirname } from "path";
 function getAbsolutePath(value: string): any {
   return dirname(require.resolve(join(value, "package.json")));
 }
+
 const config: StorybookConfig = {
   stories: [
     "../src/**/*.mdx",
-    "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)",
+    "../src/**/*.stories.@(ts|tsx)",
+    // UI 패키지의 스토리도 필요하다면 아래 주석 해제
     // "../../../packages/ui/src/**/*.stories.@(js|jsx|mjs|ts|tsx)",
   ],
   addons: [
@@ -26,5 +27,16 @@ const config: StorybookConfig = {
     options: {},
   },
   staticDirs: ["../public"],
+  async viteFinal(config) {
+    config.resolve = config.resolve || {};
+    config.resolve.alias = {
+      ...(config.resolve.alias || {}),
+      "@user": resolve(__dirname, "../../user/src"),
+      "@workspace/ui": resolve(__dirname, "../../../packages/ui/src"),
+      "@": resolve(__dirname, "../../user/src"),
+    };
+    return config;
+  },
 };
+
 export default config;
