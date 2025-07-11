@@ -3,9 +3,10 @@ import React from 'react';
 import { Card, CardContent } from '@workspace/ui/components/card';
 import { Badge } from '@workspace/ui/components/badge';
 import { Heart } from 'lucide-react';
-import MembershipGrade from './MembershipGrade';
+import MembershipGrade from '../../app/home/components/ui/MembershipGrade';
 import { BrandContent } from '@/types/brand';
 import classNames from 'classnames';
+import FavoriteBtn from '../FavoriteBtn';
 
 type Variant = 'vertical' | 'horizontal';
 interface DynamicCardProps {
@@ -23,20 +24,6 @@ const DynamicCard = ({ data, variant = "vertical" }: DynamicCardProps) => {
     minRank,
     bookmarked,
   } = data;
-  const FavoriteBtn = () => (
-    // <button
-    //   onClick={(e) => { e.stopPropagation(); toggleFavorite?.(brandId); }}
-    //   className="flex-shrink-0"
-    // >
-    <Heart
-      className={classNames(
-        variant === 'vertical' ? 'w-4 h-4' : 'w-5 h-5',
-        bookmarked ? 'text-[#FD7563]' : 'text-gray-400'
-      )}
-      fill={bookmarked ? '#FD7563' : 'none'}
-    />
-    // </button>
-  );
 
   return (
     <Card
@@ -66,7 +53,7 @@ const DynamicCard = ({ data, variant = "vertical" }: DynamicCardProps) => {
                 <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded font-semibold">
                   {category}
                 </span>
-                <FavoriteBtn />
+                <FavoriteBtn brandId={brandId} bookmarked={bookmarked} variant={variant} />
               </div>
               <h3 className="font-semibold text-gray-900 text-sm line-clamp-1">{name}</h3>
               <h5 className="text-gray-900 text-sm line-clamp-1">{description}</h5>
@@ -88,7 +75,7 @@ const DynamicCard = ({ data, variant = "vertical" }: DynamicCardProps) => {
                   <p className="text-xs text-gray-500 mb-1 font-semibold">{category}</p>
                   <h4 className="text-sm font-bold text-gray-900 leading-tight truncate">{name}</h4>
                 </div>
-                <FavoriteBtn />
+                <FavoriteBtn brandId={brandId} bookmarked={bookmarked} variant={variant} />
               </div>
               <h5 className="text-gray-900 text-sm line-clamp-2 mb-2">{description}</h5>
               {/* 등급별 배치 */}
