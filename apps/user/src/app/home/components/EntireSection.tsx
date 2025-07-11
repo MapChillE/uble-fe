@@ -1,8 +1,8 @@
 import React from 'react';
 
-import DynamicCard from './ui/DynamicCard';
+import DynamicCard from '../../../components/ui/DynamicCard';
 import { BrandContent } from '@/types/brand';
-import SectionHeader from './ui/SectionHeader';
+import SectionHeader from '../../../components/ui/SectionHeader';
 
 const EntireSection = () => {
   const testData: BrandContent = {

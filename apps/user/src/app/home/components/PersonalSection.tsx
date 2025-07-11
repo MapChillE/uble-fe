@@ -1,6 +1,6 @@
 import React from 'react';
-import SectionHeader from './ui/SectionHeader';
-import DynamicCard from './ui/DynamicCard';
+import SectionHeader from '../../../components/ui/SectionHeader';
+import DynamicCard from '../../../components/ui/DynamicCard';
 
 const PersonalSection = () => {
   // section 하나당 하나의 api 응답을 가짐
