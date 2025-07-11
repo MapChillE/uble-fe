@@ -2,8 +2,8 @@
 
 import { Input } from "@workspace/ui/components/input";
 import { format } from "date-fns";
-import { DatePickerPopover } from "./DatePickerPopover";
 import { useState } from "react";
+import { DatePickerPopover } from "./DatePickerPopover";
 
 export default function formatDate(date: Date | undefined) {
   if (!date) {
