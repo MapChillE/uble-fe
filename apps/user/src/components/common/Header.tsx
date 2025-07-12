@@ -22,9 +22,11 @@ export default function Header() {
             <button onClick={() => router.push("/home")} className="text-2xl font-bold">
               Uble
             </button>
-            <button>
-              <ScanBarcode />
-            </button>
+            {pathname === "/home" && (
+              <button>
+                <ScanBarcode />
+              </button>
+            )}
           </>
         )}
       </div>
