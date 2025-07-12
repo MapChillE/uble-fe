@@ -2,15 +2,10 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { ChevronLeft, ScanBarcode } from "lucide-react";
-import { hideLayout } from "@/utils/hideLayout";
 
 export default function Header() {
   const router = useRouter();
   const pathname = usePathname();
-
-  if (hideLayout(pathname)) {
-    return <></>;
-  }
 
   return (
     <header className="sticky top-0 z-50 bg-white">

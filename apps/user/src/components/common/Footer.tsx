@@ -2,7 +2,6 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { Home, Heart, UserIcon, MapPin } from "lucide-react";
-import { hideLayout } from "@/utils/hideLayout";
 
 export default function Footer() {
   const pathname = usePathname();
@@ -14,10 +13,6 @@ export default function Footer() {
     { path: "/favorite", icon: Heart, label: "즐겨찾기" },
     { path: "/mypage", icon: UserIcon, label: "마이페이지" },
   ];
-
-  if (hideLayout(pathname)) {
-    return <></>;
-  }
 
   return (
     <div className="border-border fixed bottom-0 left-0 right-0 border-t bg-white">
