@@ -15,7 +15,7 @@ export default function RootLayout({
       <body>
         <Providers>
           <Header />
-          <main>{children}</main>
+          <main style={{ paddingBottom: "72px" }}>{children}</main>
           <Footer />
         </Providers>
       </body>

@@ -26,7 +26,9 @@ export function DatePickerPopover({
       <PopoverTrigger asChild>
         <button
           id="date-picker"
+          aria-label="날짜 선택"
           className="absolute right-0 top-0 h-full p-1 text-gray-300 hover:text-gray-900"
+          type="button"
         >
           <CalendarIcon className={isModal ? "h-4 w-4" : "h-5 w-5"} />
         </button>
