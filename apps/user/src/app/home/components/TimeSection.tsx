@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
-
-import SectionHeader from '../../../components/ui/SectionHeader';
-import DynamicCard from '../../../components/ui/DynamicCard';
+import SectionHeader from '@/components/ui/SectionHeader';
+import DynamicCard from '@/components/ui/DynamicCard';
 import { BrandContent } from '@/types/brand';
 
 const TimeSection = () => {
