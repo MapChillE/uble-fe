@@ -1,10 +1,10 @@
 import { periodOptions } from '@/types/constants';
 import { Button } from '@workspace/ui/components/button';
-import React, { SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 
 interface PeriodFilterProps {
   period: string;
-  setPeriod: React.Dispatch<React.SetStateAction<string>>;
+  setPeriod: Dispatch<SetStateAction<string>>;
 }
 const PeriodFilter = ({ period, setPeriod }: PeriodFilterProps) => {
   return (
