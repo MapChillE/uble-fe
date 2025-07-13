@@ -72,7 +72,7 @@ export function DateInput({ isModal = false }: DateInputProps) {
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="relative m-[10px] flex gap-2">
+      <div className="relative m-[10px]">
         <Input
           variant={isModal ? "modalCalendar" : "calendar"}
           id="date"
