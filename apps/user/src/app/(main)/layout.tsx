@@ -2,7 +2,6 @@ import "@workspace/ui/globals.css";
 import Footer from "../../components/common/Footer";
 import Header from "../../components/common/Header";
 
-import "@workspace/ui/globals.css";
 import { Providers } from "@/components/providers";
 
 export default function RootLayout({
