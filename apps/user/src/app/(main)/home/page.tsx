@@ -7,7 +7,7 @@ import EntireSection from "./components/EntireSection";
 const page = () => {
   return (
     <section className="space-y-8">
-      {/* <PersonalSection /> */}
+      <PersonalSection />
       <AgeSection />
       <TimeSection />
       <EntireSection />

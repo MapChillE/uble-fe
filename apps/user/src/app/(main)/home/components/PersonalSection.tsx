@@ -1,7 +1,6 @@
 import React from "react";
 import SectionHeader from "@/components/ui/SectionHeader";
 import DynamicCard from "@/components/ui/DynamicCard";
-import { testData } from "./TimeSection";
 
 const PersonalSection = () => {
   return (
@@ -11,7 +10,7 @@ const PersonalSection = () => {
         className="scrollbar-hide flex gap-4 overflow-x-auto px-4 pb-2"
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
-        <DynamicCard data={testData} />
+        <DynamicCard />
       </div>
     </div>
   );

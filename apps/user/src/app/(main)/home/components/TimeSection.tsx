@@ -3,7 +3,7 @@ import SectionHeader from "@/components/ui/SectionHeader";
 import DynamicCard from "@/components/ui/DynamicCard";
 import { BrandContent } from "@/types/brand";
 
-export const testData: BrandContent = {
+const testData: BrandContent = {
   brandId: 104,
   name: "스타벅스",
   category: "푸드",

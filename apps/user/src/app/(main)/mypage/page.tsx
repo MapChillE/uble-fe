@@ -2,7 +2,7 @@ import React from "react";
 import ProfileCard from "./components/ui/ProfileCard";
 import ProfileInfo from "./components/ProfileInfo";
 import ProfileStatistics from "./components/ProfileStatistics";
-// import BenefitListBtn from "./components/BenefitListBtn";
+import BenefitListBtn from "./components/BenefitListBtn";
 import FeedbackBtn from "./components/FeedbackBtn";
 import LogoutBtn from "./components/LogoutBtn";
 import WithdrawBtn from "./components/WithdrawBtn";
@@ -18,9 +18,9 @@ const page = () => {
           <ProfileStatistics />
         </ProfileCard>
         <div className="space-y-2">
-          {/* <ProfileCard>
+          <ProfileCard>
             <BenefitListBtn />
-          </ProfileCard> */}
+          </ProfileCard>
           <ProfileCard>
             <FeedbackBtn />
           </ProfileCard>
