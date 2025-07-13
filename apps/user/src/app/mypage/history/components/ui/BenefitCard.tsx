@@ -1,5 +1,4 @@
 import { Card, CardContent } from '@workspace/ui/components/card';
-
 import React, { ReactNode } from 'react';
 
 interface BenefitCardProps {
