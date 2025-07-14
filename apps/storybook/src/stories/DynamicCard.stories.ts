@@ -1,42 +1,42 @@
-import React from 'react';
-import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { fn } from 'storybook/test';
+import React from "react";
+import type { Meta, StoryObj } from "@storybook/nextjs-vite";
+import { fn } from "storybook/test";
 
-import DynamicCard from '@user/app/home/components/ui/DynamicCard';
-import { BrandContent } from '@user/types/brand';
+import { BrandContent } from "@user/types/brand";
+import DynamicCard from "../../../user/src/components/ui/DynamicCard";
 
 // 더미 데이터 정의
 const sampleBrand: BrandContent = {
   brandId: 1,
-  name: 'Awesome Brand',
-  category: '패션',
-  description: '트렌디한 의류를 만나보세요',
-  imgUrl: 'https://via.placeholder.com/150',
+  name: "Awesome Brand",
+  category: "패션",
+  description: "트렌디한 의류를 만나보세요",
+  imgUrl: "https://via.placeholder.com/150",
   isVIPcock: false,
   minRank: "NONE",
   bookmarked: false,
 };
 
 const meta = {
-  title: 'Components/DynamicCard',
+  title: "Components/DynamicCard",
   component: DynamicCard,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   argTypes: {
     variant: {
-      control: { type: 'radio' },
-      options: ['vertical', 'horizontal'],
-      description: '카드 레이아웃 타입',
+      control: { type: "radio" },
+      options: ["vertical", "horizontal"],
+      description: "카드 레이아웃 타입",
     },
     data: {
-      control: 'object',
-      description: '브랜드/파트너 정보',
+      control: "object",
+      description: "브랜드/파트너 정보",
     },
     // onClick: { action: 'onClick' },
     // toggleFavorite: { action: 'toggleFavorite' },
   },
   args: {
     data: sampleBrand,
-    variant: 'vertical',
+    variant: "vertical",
     // onClick: fn(),
     // toggleFavorite: fn(),
   },
@@ -53,7 +53,7 @@ export const Vertical: Story = {};
 // 가로 레이아웃
 export const Horizontal: Story = {
   args: {
-    variant: 'horizontal',
+    variant: "horizontal",
   },
 };
 

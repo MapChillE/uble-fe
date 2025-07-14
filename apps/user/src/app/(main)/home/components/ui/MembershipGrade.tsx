@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 // import { GRADE_COLORS } from '@/types/constants';
-import { BrandContent } from '@/types/brand';
+import { BrandContent } from "@/types/brand";
 
 const GRADE_COLORS = {
   VIP콕: "#9869f1",
@@ -8,7 +8,7 @@ const GRADE_COLORS = {
   VIP: "#9869f1",
   우수: "#93aefe",
   일반: "#b5b3c2",
-}
+};
 interface MembershipGradeProps {
   rank: "NONE" | "NORMAL" | "PREMIUM";
   isVIPcock: boolean;
@@ -44,7 +44,7 @@ const MembershipGrade = ({ rank, isVIPcock }: MembershipGradeProps) => {
         {grades.map((row, rowIdx) => (
           <span
             key={row}
-            className="px-1.5 py-0.5 rounded text-xs font-normal"
+            className="rounded px-1.5 py-0.5 text-xs font-normal"
             style={{
               backgroundColor: getGradeBackgroundColor(row),
               color: getGradeColor(row),
