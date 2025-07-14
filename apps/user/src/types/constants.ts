@@ -21,3 +21,15 @@ export const CATEGORIES = [
 ] as const;
 
 export type Category = (typeof CATEGORIES)[number];
+
+interface periodType {
+  label: string;
+  value: string;
+}
+export const periodOptions: periodType[] = [
+  { label: "전체", value: "all" },
+  { label: "1개월", value: "1month" },
+  { label: "3개월", value: "3months" },
+  { label: "6개월", value: "6months" },
+  { label: "1년", value: "1year" },
+];
