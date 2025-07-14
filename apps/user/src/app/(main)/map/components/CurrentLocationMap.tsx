@@ -1,7 +1,12 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Coordinates, NaverMap, NaverMapOptions, NaverMarker } from "@/types/map";
+import {
+  Coordinates,
+  NaverMap as NaverMapInstance,
+  NaverMapOptions,
+  NaverMarker,
+} from "@/types/map";
 
 const mapId = "current-location-map";
 
@@ -11,7 +16,7 @@ type CurrentLocationMapProps = {
 };
 
 export default function CurrentLocationMap({ zoom, category }: CurrentLocationMapProps) {
-  const mapRef = useRef<NaverMap | null>(null);
+  const mapRef = useRef<NaverMapInstance | null>(null);
   const markerRef = useRef<NaverMarker | null>(null);
   const [currentLocation, setCurrentLocation] = useState<Coordinates | null>(null);
   const [loading, setLoading] = useState(true);
@@ -24,7 +29,6 @@ export default function CurrentLocationMap({ zoom, category }: CurrentLocationMa
       setLoading(false);
       return;
     }
-
     setLoading(true);
     setError(null);
 
