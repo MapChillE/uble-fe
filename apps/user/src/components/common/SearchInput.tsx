@@ -1,16 +1,12 @@
-"use client";
-
 import { Input } from "@workspace/ui/components/input";
 import { Search } from "lucide-react";
-import { useState } from "react";
 
-export default function SearchInput() {
-  const [searchQuery, setSearchQuery] = useState("");
+interface SearchInputProps {
+  searchQuery: string;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
-  };
-
+export default function SearchInput({ searchQuery, handleChange }: SearchInputProps) {
   return (
     <section>
       <div className="relative">

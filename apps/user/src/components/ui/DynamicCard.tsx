@@ -1,62 +1,54 @@
-import React from 'react';
+import React from "react";
 
-import { Card, CardContent } from '@workspace/ui/components/card';
-import { Badge } from '@workspace/ui/components/badge';
-import { Heart } from 'lucide-react';
-import MembershipGrade from '../../app/home/components/ui/MembershipGrade';
-import { BrandContent } from '@/types/brand';
-import classNames from 'classnames';
-import FavoriteBtn from '../FavoriteBtn';
+import { Card, CardContent } from "@workspace/ui/components/card";
+import { Badge } from "@workspace/ui/components/badge";
+import { Heart } from "lucide-react";
+import MembershipGrade from "../../app/(main)/home/components/ui/MembershipGrade";
+import { BrandContent } from "@/types/brand";
+import classNames from "classnames";
+import FavoriteBtn from "../FavoriteBtn";
 
-type Variant = 'vertical' | 'horizontal';
+type Variant = "vertical" | "horizontal";
 interface DynamicCardProps {
   data: BrandContent;
   variant?: Variant;
 }
 const DynamicCard = ({ data, variant = "vertical" }: DynamicCardProps) => {
-  const {
-    brandId,
-    name,
-    category,
-    description,
-    imgUrl,
-    isVIPcock,
-    minRank,
-    bookmarked,
-  } = data;
+  const { brandId, name, category, description, imgUrl, isVIPcock, minRank, bookmarked } = data;
 
   return (
     <Card
       // onClick={onClick}
       className={classNames(
-        'cursor-pointer hover:border-[#41d596] hover:shadow-lg transition-all duration-200 border-gray-200 bg-white',
+        "cursor-pointer border-gray-200 bg-white transition-all duration-200 hover:border-[#41d596] hover:shadow-lg",
         {
           // 세로형: 고정 너비 & 세로 레이아웃
-          'flex-shrink-0 w-64': variant === 'vertical',
+          "w-64 flex-shrink-0": variant === "vertical",
           // 가로형: 가로로 늘어나는 flex row
-          'relative': variant === 'horizontal',
+          relative: variant === "horizontal",
         }
       )}
     >
-      <CardContent className={variant === 'vertical' ? 'p-0' : 'p-4'}>
-        {variant === 'vertical' ? (
+      <CardContent className={variant === "vertical" ? "p-0" : "p-4"}>
+        {variant === "vertical" ? (
           // --- Vertical Layout ---
           <>
             <div className="relative">
               <img
-                src={imgUrl || '/placeholder.svg'} alt={name}
-                className="w-full h-32 object-cover rounded-t-lg"
+                src={imgUrl || "/placeholder.svg"}
+                alt={name}
+                className="h-32 w-full rounded-t-lg object-cover"
               />
             </div>
-            <div className="p-3 space-y-2">
+            <div className="space-y-2 p-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded font-semibold">
+                <span className="rounded bg-gray-100 px-2 py-1 text-xs font-semibold text-gray-500">
                   {category}
                 </span>
                 <FavoriteBtn brandId={brandId} bookmarked={bookmarked} variant={variant} />
               </div>
-              <h3 className="font-semibold text-gray-900 text-sm line-clamp-1">{name}</h3>
-              <h5 className="text-gray-900 text-sm line-clamp-1">{description}</h5>
+              <h3 className="line-clamp-1 text-sm font-semibold text-gray-900">{name}</h3>
+              <h5 className="line-clamp-1 text-sm text-gray-900">{description}</h5>
               <div className="flex flex-col items-end space-y-0.5">
                 <MembershipGrade rank={minRank} isVIPcock={isVIPcock} />
               </div>
@@ -66,20 +58,21 @@ const DynamicCard = ({ data, variant = "vertical" }: DynamicCardProps) => {
           // --- Horizontal Layout ---
           <div className="flex items-center space-x-4">
             <img
-              src={imgUrl || '/placeholder.svg'} alt={name}
-              className="w-16 h-16 rounded-lg object-cover flex-shrink-0"
+              src={imgUrl || "/placeholder.svg"}
+              alt={name}
+              className="h-16 w-16 flex-shrink-0 rounded-lg object-cover"
             />
-            <div className="flex-1 min-w-0">
-              <div className="flex items-start justify-between mb-2">
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs text-gray-500 mb-1 font-semibold">{category}</p>
-                  <h4 className="text-sm font-bold text-gray-900 leading-tight truncate">{name}</h4>
+            <div className="min-w-0 flex-1">
+              <div className="mb-2 flex items-start justify-between">
+                <div className="min-w-0 flex-1">
+                  <p className="mb-1 text-xs font-semibold text-gray-500">{category}</p>
+                  <h4 className="truncate text-sm font-bold leading-tight text-gray-900">{name}</h4>
                 </div>
                 <FavoriteBtn brandId={brandId} bookmarked={bookmarked} variant={variant} />
               </div>
-              <h5 className="text-gray-900 text-sm line-clamp-2 mb-2">{description}</h5>
+              <h5 className="mb-2 line-clamp-2 text-sm text-gray-900">{description}</h5>
               {/* 등급별 배치 */}
-              <div className="flex flex-col space-y-1 mb-2">
+              <div className="mb-2 flex flex-col space-y-1">
                 {/* 예시: getGradeLayout 같은 helper를 쓰셔도 되고 */}
                 <MembershipGrade rank={minRank} isVIPcock={isVIPcock} />
               </div>

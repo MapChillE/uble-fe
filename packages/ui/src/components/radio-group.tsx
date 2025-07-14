@@ -35,7 +35,7 @@ const radioItemVariants = cva(
 );
 
 const radioIconVariants = cva(
-  "rounded-full bg-white absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform을",
+  "rounded-full bg-white absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform",
   {
     variants: {
       iconSize: {
