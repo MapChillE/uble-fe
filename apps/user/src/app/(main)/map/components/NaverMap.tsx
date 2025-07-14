@@ -2,7 +2,7 @@
 
 import { useCallback, useRef, useEffect } from "react";
 import { Coordinates } from "@/types/map";
-import type { NaverMap, NaverMapOptions, NaverLatLng } from "@/types/map";
+import type { NaverMap, NaverMapOptions } from "@/types/map";
 
 const mapId = "naver-map";
 
@@ -13,11 +13,12 @@ interface NaverMapProps {
 
 export default function NaverMap({ loc, zoom = 15 }: NaverMapProps) {
   const mapRef = useRef<NaverMap | null>(null);
+  const [lng, lat] = loc; // 구조 분해
 
   const initializeMap = useCallback(() => {
     if (typeof window !== "undefined" && window.naver) {
       const mapOptions: NaverMapOptions = {
-        center: new window.naver.maps.LatLng(loc[1], loc[0]), // [lng, lat] -> [lat, lng]
+        center: new window.naver.maps.LatLng(lat, lng),
         zoom: zoom,
         scaleControl: true,
         mapDataControl: true,
@@ -28,7 +29,7 @@ export default function NaverMap({ loc, zoom = 15 }: NaverMapProps) {
       const map = new window.naver.maps.Map(mapId, mapOptions);
       mapRef.current = map;
     }
-  }, [loc, zoom]);
+  }, [lat, lng, zoom]);
 
   // 스크립트가 로드된 후 지도 초기화
   useEffect(() => {
