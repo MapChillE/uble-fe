@@ -5,7 +5,7 @@ import { format } from "date-fns";
 import { useState } from "react";
 import { DatePickerPopover } from "./DatePickerPopover";
 
-export default function formatDate(date: Date | undefined) {
+function formatDate(date: Date | undefined) {
   if (!date) {
     return "";
   }
@@ -35,21 +35,25 @@ export function DateInput({ isModal = false }: DateInputProps) {
     if (raw.length > 8) raw = raw.slice(0, 8);
 
     let formatted = raw;
+
     if (raw.length > 4) {
       formatted = raw.slice(0, 4) + "." + raw.slice(4);
     }
+
     if (raw.length > 6) {
-      formatted = raw.slice(0, 4) + "." + raw.slice(4, 6) + "." + raw.slice(6);
+      const year = raw.slice(0, 4);
+      const month = raw.slice(4, 6);
+      const day = raw.slice(6);
+      formatted = year + "." + month + "." + day;
+
+      const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+      if (isValidDate(date)) {
+        setDate(date);
+        setMonth(date);
+      }
     }
 
     setValue(formatted);
-
-    const date = new Date(e.target.value);
-
-    if (isValidDate(date)) {
-      setDate(date);
-      setMonth(date);
-    }
   };
 
   const handleKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -68,7 +72,7 @@ export function DateInput({ isModal = false }: DateInputProps) {
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="relative m-[10px] flex gap-2">
+      <div className="relative m-[10px]">
         <Input
           variant={isModal ? "modalCalendar" : "calendar"}
           id="date"
