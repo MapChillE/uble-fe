@@ -2,7 +2,7 @@
 
 import { useCallback, useRef, useEffect } from "react";
 import { Coordinates } from "@/types/map";
-import type { NaverMap, NaverMapOptions } from "@/types/map";
+import type { NaverMap as NaverMapInstance, NaverMapOptions } from "@/types/map";
 
 const mapId = "naver-map";
 
@@ -12,7 +12,7 @@ interface NaverMapProps {
 }
 
 export default function NaverMap({ loc, zoom = 15 }: NaverMapProps) {
-  const mapRef = useRef<NaverMap | null>(null);
+  const mapRef = useRef<NaverMapInstance | null>(null);
   const [lng, lat] = loc; // 구조 분해
 
   const initializeMap = useCallback(() => {
