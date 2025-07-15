@@ -1,10 +1,10 @@
-import React from "react";
-import BenefitHeader from "./components/BenefitHeader";
+import React from 'react';
+import BenefitList from './components/BenefitList';
 
 const page = () => {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <BenefitHeader />
+    <div className='min-h-screen bg-gray-50'>
+      <BenefitList />
     </div>
   );
 };
