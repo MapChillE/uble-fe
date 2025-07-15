@@ -1,6 +1,6 @@
 import { Heart } from 'lucide-react';
 
-import React from 'react';
+
 import classNames from 'classnames';
 
 interface FavoriteBtnProps {

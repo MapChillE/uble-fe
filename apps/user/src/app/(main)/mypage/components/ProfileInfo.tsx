@@ -1,4 +1,4 @@
-import React from 'react';
+
 
 import { UserInfo } from '@/types/profile';
 import { Badge } from '@workspace/ui/components/badge';

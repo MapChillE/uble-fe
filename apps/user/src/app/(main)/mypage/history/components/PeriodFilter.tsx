@@ -1,6 +1,6 @@
 import { periodOptions } from "@/types/constants";
 import { Button } from "@workspace/ui/components/button";
-import React, { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 interface PeriodFilterProps {
   period: string;

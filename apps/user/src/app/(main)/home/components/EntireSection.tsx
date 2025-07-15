@@ -1,4 +1,4 @@
-import React from "react";
+
 import DynamicCard from "@/components/ui/DynamicCard";
 import { BrandContent } from "@/types/brand";
 import SectionHeader from "@/components/ui/SectionHeader";

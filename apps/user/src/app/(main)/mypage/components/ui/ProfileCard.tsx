@@ -1,5 +1,5 @@
 import { Card, CardContent } from '@workspace/ui/components/card';
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 interface ProfileCardProps {
   children: ReactNode;

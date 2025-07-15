@@ -1,5 +1,5 @@
 import { ChevronRight, MessageSquare } from 'lucide-react';
-import React from 'react';
+
 
 const FeedbackBtn = () => {
   return (

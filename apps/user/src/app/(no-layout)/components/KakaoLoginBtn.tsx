@@ -1,5 +1,5 @@
 'use client'
-import React from 'react';
+
 import { apiHandler } from '@api/apiHandler';
 import { kakaoLogin } from '@/service/user';
 

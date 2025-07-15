@@ -1,5 +1,5 @@
 'use client'
-import React, { Fragment, useState } from 'react';
+import { Fragment, useState } from 'react';
 import BenefitStatistics from './BenefitStatistics';
 import { benefitHistory } from './testData';
 import BenefitListItem from './BenefitListItem';

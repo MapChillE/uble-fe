@@ -2,7 +2,7 @@
 import { Button } from '@workspace/ui/components/button';
 import { LogOut } from 'lucide-react';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const LogoutBtn = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
