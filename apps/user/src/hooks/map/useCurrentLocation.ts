@@ -33,7 +33,7 @@ export function useCurrentLocation() {
         setLoading(false);
       },
       {
-        enableHighAccuracy: false,
+        enableHighAccuracy: true,
         timeout: 10000,
         maximumAge: 300000, // 5분
       }
