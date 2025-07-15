@@ -10,3 +10,7 @@ export interface UserStatistics {
   category: string;
   total: number;
 }
+
+export interface UserRole {
+  role: string | null;
+}
