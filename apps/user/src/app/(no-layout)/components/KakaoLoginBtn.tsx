@@ -18,7 +18,7 @@ const KakaoLoginBtn = () => {
   return (
     <div className="flex justify-center">
       <button onClick={login}>
-        <img src="kakao_login.png" />
+        <img src="kakao_login.png" alt="카카오 로그인" />
       </button>
     </div>
   );
