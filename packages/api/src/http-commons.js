@@ -34,13 +34,14 @@ function handleAuthError() {
 
 /** 토큰 재발급 함수 */
 async function reissueAndRetry(originalRequest) {
-  const response = await axios.post(BASE_URL + "api/auth/reissue", {}, { withCredentials: true });
+  const response = await axios.post(`${BASE_URL}api/auth/reissue"`, {}, { withCredentials: true });
   const newAccessToken = response.headers["authorization"];
-  window.localStorage.setItem("accessToken", newAccessToken.slice(7));
   if (newAccessToken) {
-    api.defaults.headers["Authorization"] = `Bearer ${newAccessToken}`;
+    const token = newAccessToken.startsWith("Bearer ") ? newAccessToken.slice(7) : newAccessToken;
+    window.localStorage.setItem("accessToken", token);
+    api.defaults.headers["Authorization"] = newAccessToken;
     processQueue(null, newAccessToken);
-    originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+    originalRequest.headers["Authorization"] = newAccessToken;
     return api(originalRequest);
   }
   throw new Error("토큰 재발급 실패");
