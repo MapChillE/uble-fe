@@ -1,3 +1,9 @@
+import TestBtn from "./components/TestBtn";
+
 export default function SignupPage() {
-  return <div></div>;
+  return (
+    <div>
+      <TestBtn />
+    </div>
+  );
 }
