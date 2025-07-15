@@ -35,7 +35,6 @@ function handleAuthError() {
 /** 토큰 재발급 함수 */
 async function reissueAndRetry(originalRequest) {
   const response = await axios.post(BASE_URL + "api/auth/reissue", {}, { withCredentials: true });
-  console.log(response);
   const newAccessToken = response.headers["authorization"];
   window.localStorage.setItem("accessToken", newAccessToken.slice(7));
   if (newAccessToken) {
