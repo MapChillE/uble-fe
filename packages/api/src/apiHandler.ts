@@ -11,9 +11,9 @@ export function errorTracker(error: unknown) {
     } else if (
       typeof responseMessage?.data === "object" &&
       responseMessage?.data !== null &&
-      Object.hasOwn(responseMessage.data, "message")
+      Object.prototype.hasOwnProperty.call(responseMessage.data, "message")
     ) {
-      msg = (responseMessage.data as AxiosError).message || msg;
+      msg = (responseMessage.data as { message: string }).message || msg;
     }
   } else if (error instanceof Error) {
     msg = error.message;
