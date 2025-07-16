@@ -36,7 +36,7 @@ const ProgressHeader = ({ currentStep, setCurrentStep }: ProgressHeaderProps) =>
         <div className="w-full bg-gray-200 rounded-full h-1">
           <div
             className="bg-[#41d596] h-1 rounded-full transition-all duration-300"
-            style={{ width: `${(currentStep / 5) * 100}%` }}
+            style={{ width: `${(currentStep / TOTAL_STEPS) * 100}%` }}
           />
         </div>
       </div>
