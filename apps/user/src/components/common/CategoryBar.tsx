@@ -1,26 +1,30 @@
 "use client";
 
 import { Button } from "@workspace/ui/components/button";
-import { CATEGORIES, Category } from "@/types/constants";
+import { Category } from "@/types/category";
 import { memo } from "react";
+import { useCategoryStore } from "@/store/useCategoryStore";
 
 interface CategoryBarProps {
   selectedCategory: Category;
-  onSelectCategory: (cat: Category) => void;
+  onSelectCategory: (category: Category) => void;
 }
 
 const CategoryBar = ({ selectedCategory, onSelectCategory }: CategoryBarProps) => {
+  const { categories } = useCategoryStore();
+
   return (
     <nav className="scrollbar-hide absolute left-4 right-4 top-16 z-10 flex gap-2 overflow-x-auto whitespace-nowrap py-3">
-      {/* TODO:  추후 백엔드에서 받아온 CATEGORIES로 사용 */}
-      {CATEGORIES.map((cat) => (
+      {categories.map((cat) => (
         <Button
-          key={cat}
-          variant={selectedCategory === cat ? "filter_select" : "filter_unselect"}
+          key={cat.categoryId}
+          variant={
+            selectedCategory.categoryId === cat.categoryId ? "filter_select" : "filter_unselect"
+          }
           size="sm"
           onClick={() => onSelectCategory(cat)}
         >
-          {cat}
+          {cat.categoryName}
         </Button>
       ))}
     </nav>
