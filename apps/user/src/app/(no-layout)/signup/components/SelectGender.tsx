@@ -25,7 +25,7 @@ const SelectGender = ({ info, setInfo }: StepProps) => {
                 type="radio"
                 name="gender"
                 value={gender}
-                checked={info.gender === gender}
+                checked={info.gender === selectToEng(gender)}
                 onChange={(e) => setInfo({ ...info, gender: selectToEng(e.target.value) })}
                 className="sr-only"
               />
@@ -33,7 +33,7 @@ const SelectGender = ({ info, setInfo }: StepProps) => {
                 className={`w-5 h-5 rounded-full border-2 transition-all ${info.gender === selectToEng(gender) ? "border-[#41d596] bg-[#41d596]" : "border-gray-300"
                   }`}
               >
-                {info.gender === gender && (
+                {info.gender === selectToEng(gender) && (
                   <div className="w-2 h-2 bg-white rounded-full absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
                 )}
               </div>
