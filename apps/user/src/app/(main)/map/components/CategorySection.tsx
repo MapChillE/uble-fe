@@ -1,12 +1,13 @@
 "use client";
 import CategoryBar from "@/components/common/CategoryBar";
-import { useMapStore } from "@/store/useMapStore";
+import { Category } from "@/types/category";
+interface CategorySectionProps {
+  selectedCategory: Category;
+  onSelectCategory: (cat: Category) => void;
+}
 
-const CategorySection = () => {
-  const selectedCategory = useMapStore((s) => s.selectedCategory);
-  const setSelectedCategory = useMapStore((s) => s.setSelectedCategory);
-
-  return <CategoryBar selectedCategory={selectedCategory} onSelectCategory={setSelectedCategory} />;
+const CategorySection = ({ selectedCategory, onSelectCategory }: CategorySectionProps) => {
+  return <CategoryBar selectedCategory={selectedCategory} onSelectCategory={onSelectCategory} />;
 };
 
 export default CategorySection;

@@ -15,6 +15,7 @@ const LogoutBtn = () => {
     const { data } = await apiHandler(() => logout());
     const result = data?.statusCode;
     if (result === 0) {
+      window.localStorage.removeItem("accessToken");
       router.push("/");
     }
     else {
