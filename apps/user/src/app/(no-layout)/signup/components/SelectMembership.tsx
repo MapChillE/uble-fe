@@ -1,4 +1,5 @@
 import { StepProps } from "@/types/profile";
+import { Button } from "@workspace/ui/components/button";
 
 const SelectMembership = ({ info, setInfo }: StepProps) => {
   const MEMBERSHIP_GRADES = ["VVIP", "VIP", "우수", "일반"];
@@ -16,16 +17,14 @@ const SelectMembership = ({ info, setInfo }: StepProps) => {
 
       <div className="grid grid-cols-2 gap-3">
         {MEMBERSHIP_GRADES.map((rank) => (
-          <button
+          <Button
             key={rank}
             onClick={() => setInfo({ ...info, rank: rank })}
-            className={`py-3 px-4 rounded-lg transition-all ${info.rank === rank
-              ? "bg-[#41d596]/10 text-[#41d596]"
-              : "bg-gray-100 text-gray-600 hover:bg-[#41d596]/10 hover:text-[#41d596]"
-              }`}
+            className="py-3 px-4 rounded-lg transition-all"
+            variant={info.rank === rank ? "onb_selected" : "onb_unselected"}
           >
             <span className="text-sm font-semibold">{rank}</span>
-          </button>
+          </Button>
         ))}
       </div>
     </div>
