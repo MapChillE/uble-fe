@@ -50,7 +50,7 @@ const SignupContainer = () => {
       <div className="flex-1 px-5 py-4">
         {StepComponent ? <StepComponent info={info} setInfo={setInfo} /> : null}
       </div>
-      <NextStepBtn currentStep={currentStep} setCurrentStep={setCurrentStep} canProceed={canProceed} />
+      <NextStepBtn currentStep={currentStep} setCurrentStep={setCurrentStep} canProceed={canProceed} info={info} />
     </div>
   );
 };
