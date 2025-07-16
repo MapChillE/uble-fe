@@ -51,7 +51,7 @@ const InputBirth = ({ info, setInfo }: StepProps) => {
               setInfo({
                 ...info,
                 birthDate: date
-                  ? date.toISOString().slice(0, 10) // 'YYYY-MM-DD'
+                  ? formatDate(date)
                   : '',
               });
             }}
