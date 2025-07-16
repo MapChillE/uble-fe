@@ -1,4 +1,5 @@
 'use client'
+import { TOTAL_STEPS } from '@/types/constants';
 import { Button } from '@workspace/ui/components/button';
 import { useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction } from 'react';
@@ -11,7 +12,7 @@ interface NextStepBtnProps {
 const NextStepBtn = ({ currentStep, canProceed, setCurrentStep }: NextStepBtnProps) => {
   const router = useRouter();
   const handleNext = () => {
-    if (currentStep < 5) {
+    if (currentStep < TOTAL_STEPS) {
       setCurrentStep(currentStep + 1)
     } else {
       // completeOnboarding({
@@ -34,7 +35,7 @@ const NextStepBtn = ({ currentStep, canProceed, setCurrentStep }: NextStepBtnPro
         className={`w-full h-12 text-sm font-semibold rounded-lg transition-all ${canProceed() ? "bg-[#41d596] hover:bg-[#14B470] text-white" : "bg-gray-200 text-gray-400 cursor-not-allowed"
           }`}
       >
-        {currentStep === 5 ? "시작하기" : "다음"}
+        {currentStep === TOTAL_STEPS ? "시작하기" : "다음"}
       </Button>
     </div>
   );
