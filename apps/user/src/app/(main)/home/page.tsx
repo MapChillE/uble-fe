@@ -1,7 +1,7 @@
 import AgeSection from "@/app/(main)/home/components/AgeSection";
 import PersonalSection from "@/app/(main)/home/components/PersonalSection";
 import TimeSection from "@/app/(main)/home/components/TimeSection";
-import React from "react";
+
 import EntireSection from "./components/EntireSection";
 import SearchSection from "./components/SearchSection";
 

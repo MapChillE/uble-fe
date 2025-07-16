@@ -2,7 +2,7 @@
 import { Button } from '@workspace/ui/components/button';
 import { UserX } from 'lucide-react';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const WithdrawBtn = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);

@@ -1,6 +1,6 @@
 import { UserStatistics } from '@/types/profile';
 import { BarChart3 } from 'lucide-react';
-import React, { Fragment } from 'react';
+import { Fragment } from 'react';
 
 const ProfileStatistics = () => {
   const userStats: UserStatistics = {

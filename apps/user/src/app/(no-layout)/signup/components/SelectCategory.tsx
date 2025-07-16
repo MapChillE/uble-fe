@@ -1,0 +1,71 @@
+import { StepProps } from "@/types/profile";
+import { Button } from "@workspace/ui/components/button";
+
+/** 서버에 정수 배열로 넘겨줘야 해서 key:value 쌍으로 카테고리 선언 */
+const CATEGORIES = {
+  1: "액티비티",
+  2: "뷰티/건강",
+  3: "쇼핑",
+  4: "생활/편의",
+  5: "푸드",
+  6: "문화여가",
+  7: "교육",
+  8: "여행/교통"
+} as const;
+const CATEGORY_KEYS = Object.keys(CATEGORIES).map(Number); // [1,2,3,4,5,6,7,8]
+const SelectCategory = ({ info, setInfo }: StepProps) => {
+  // categoryIds를 number[]로 변환 (profile.ts는 그대로 두고 여기서만 처리)
+  const categoryIds: number[] = info.categoryIds;
+
+  const toggleInterest = (key: number) => {
+    if (categoryIds.includes(key)) {
+      setInfo({ ...info, categoryIds: categoryIds.filter((id) => id !== key) });
+    } else if (categoryIds.length < 3) {
+      setInfo({ ...info, categoryIds: [...categoryIds, key] });
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="space-y-2">
+        <h1 className="text-xl font-semibold text-gray-900 leading-tight">
+          관심 있는 분야를
+          <br />
+          선택해주세요
+        </h1>
+        <p className="text-sm text-gray-500 font-medium">관심 있는 분야를 선택해주세요</p>
+      </div>
+
+      <div className="space-y-4">
+        <div className="grid grid-cols-2 gap-3">
+          {CATEGORY_KEYS.map((key) => {
+            const isSelected = categoryIds.includes(key);
+            const isDisabled = !isSelected && categoryIds.length >= 3;
+
+            return (
+              <Button
+                key={key}
+                onClick={() => toggleInterest(key)}
+                disabled={isDisabled}
+                variant={isSelected
+                  ? "onb_selected"
+                  : "onb_unselected"
+                }
+              >
+                <span className="text-sm font-semibold">{CATEGORIES[key as keyof typeof CATEGORIES]}</span>
+              </Button>
+            )
+          })}
+        </div>
+
+        {categoryIds.length > 0 && (
+          <div className="text-center">
+            <span className="text-sm text-[#41d596] font-semibold">{categoryIds.length}/3개 선택됨</span>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default SelectCategory;

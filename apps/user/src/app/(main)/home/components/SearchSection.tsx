@@ -1,6 +1,6 @@
 'use client'
 import SearchInput from '@/components/common/SearchInput';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const SearchSection = () => {
   const [searchQuery, setSearchQuery] = useState('');

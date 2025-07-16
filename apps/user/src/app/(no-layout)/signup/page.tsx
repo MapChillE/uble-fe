@@ -1,9 +1,9 @@
-import TestBtn from "./components/TestBtn";
+import SignupContainer from "./components/SignupContainer";
 
 export default function SignupPage() {
   return (
     <div>
-      <TestBtn />
+      <SignupContainer />
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import { memo } from 'react';
 import { Benefit } from '@/types/benefit';
 import BenefitCard from './ui/BenefitCard';
 import { Badge } from '@workspace/ui/components/badge';

@@ -1,4 +1,4 @@
-import React from 'react';
+
 import ProfileCard from './components/ui/ProfileCard';
 import ProfileInfo from './components/ProfileInfo';
 import ProfileStatistics from './components/ProfileStatistics';

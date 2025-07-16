@@ -1,4 +1,4 @@
-import React from 'react';
+
 import BenefitList from './components/BenefitList';
 
 const page = () => {

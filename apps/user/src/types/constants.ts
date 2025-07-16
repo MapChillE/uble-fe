@@ -6,6 +6,9 @@ export const GRADE_COLORS = {
   일반: "#b5b3c2",
 };
 
+/** 사용자 추가 정보 입력 단계 */
+export const TOTAL_STEPS = 5;
+
 export const CATEGORIES = [
   "전체",
   "계절",
@@ -33,3 +36,4 @@ export const periodOptions: periodType[] = [
   { label: "6개월", value: "6months" },
   { label: "1년", value: "1year" },
 ];
+
