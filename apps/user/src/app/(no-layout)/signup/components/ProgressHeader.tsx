@@ -1,4 +1,5 @@
 'use client'
+import { TOTAL_STEPS } from '@/types/constants';
 import { ChevronLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Dispatch, Fragment, SetStateAction } from 'react';
@@ -10,7 +11,7 @@ interface ProgressHeaderProps {
 const ProgressHeader = ({ currentStep, setCurrentStep }: ProgressHeaderProps) => {
   const router = useRouter();
   const handleBack = () => {
-    if (currentStep > 1) {
+    if (currentStep > 1 && currentStep <= TOTAL_STEPS) {
       setCurrentStep(currentStep - 1)
     } else {
       router.back()
