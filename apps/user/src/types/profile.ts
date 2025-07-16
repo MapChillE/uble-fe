@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
+import { responseStatus } from "./api";
 
 export interface UserInfo {
   nickname: string;
@@ -28,3 +29,7 @@ export interface StepProps {
   info: InfoForm;
   setInfo: Dispatch<SetStateAction<InfoForm>>;
 };
+
+export interface SetUserInfo extends responseStatus {
+  data: InfoForm;
+}

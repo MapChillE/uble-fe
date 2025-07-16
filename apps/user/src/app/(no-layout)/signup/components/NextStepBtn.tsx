@@ -1,5 +1,8 @@
 'use client'
+import { setUserInfo } from '@/service/user';
 import { TOTAL_STEPS } from '@/types/constants';
+import { InfoForm } from '@/types/profile';
+import { apiHandler } from '@api/apiHandler';
 import { Button } from '@workspace/ui/components/button';
 import { useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction } from 'react';
@@ -8,22 +11,26 @@ interface NextStepBtnProps {
   currentStep: number;
   canProceed: () => boolean;
   setCurrentStep: Dispatch<SetStateAction<number>>;
+  info: InfoForm;
 }
-const NextStepBtn = ({ currentStep, canProceed, setCurrentStep }: NextStepBtnProps) => {
+const NextStepBtn = ({ currentStep, canProceed, setCurrentStep, info }: NextStepBtnProps) => {
   const router = useRouter();
-  const handleNext = () => {
+
+  const storeUserInfo = async () => {
+    const { data } = await apiHandler(() => setUserInfo(info));
+    const result = data?.statusCode;
+    return result === 0 ? true : false;
+  }
+
+  const handleNext = async () => {
     if (currentStep < TOTAL_STEPS) {
       setCurrentStep(currentStep + 1)
     } else {
-      // completeOnboarding({
-      //   grade: formData.grade,
-      //   birthDate: formData.birthDate,
-      //   gender: formData.gender,
-      //   preferences: { interests: formData.interests },
-      //   barcodeNumber: formData.barcodeNumber,
-      // })
-      // 여기서 비동기 처리 후 routing
-      router.push("/home")
+      const storeResult = await storeUserInfo();
+      if (storeResult) {
+        router.push("/home")
+      }
+      else alert("정보 저장을 실패했습니다.");
     }
   }
 
