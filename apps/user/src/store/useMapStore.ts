@@ -1,11 +1,7 @@
 import { create } from "zustand";
-import { Category } from "@/types/constants";
 import { MyPlace } from "@/types/map";
 
 interface MapState {
-  selectedCategory: Category;
-  setSelectedCategory: (category: Category) => void;
-
   myPlaces: MyPlace[];
   addMyPlace: (place: MyPlace) => void;
 
@@ -14,9 +10,6 @@ interface MapState {
 }
 
 export const useMapStore = create<MapState>((set) => ({
-  selectedCategory: "전체",
-  setSelectedCategory: (category) => set({ selectedCategory: category }),
-
   myPlaces: [],
   addMyPlace: (place) =>
     set((state) => ({
