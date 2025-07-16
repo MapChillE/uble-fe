@@ -34,7 +34,7 @@ function handleAuthError() {
 
 /** 토큰 재발급 함수 */
 async function reissueAndRetry(originalRequest) {
-  const response = await axios.post(`${BASE_URL}api/auth/reissue"`, {}, { withCredentials: true });
+  const response = await axios.post(`${BASE_URL}api/auth/reissue`, {}, { withCredentials: true });
   const newAccessToken = response.headers["authorization"];
   if (newAccessToken) {
     const token = newAccessToken.startsWith("Bearer ") ? newAccessToken.slice(7) : newAccessToken;
