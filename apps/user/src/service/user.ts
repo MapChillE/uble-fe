@@ -1,4 +1,4 @@
-import { InfoForm, SetUserInfo, UserRole } from "@/types/profile";
+import { InfoForm, LogoutRes, SetUserInfo, UserRole } from "@/types/profile";
 import api from "@api/http-commons";
 
 export const kakaoLogin = async (code: string): Promise<UserRole> => {
@@ -24,3 +24,7 @@ export const setUserInfo = async (params: InfoForm): Promise<SetUserInfo> => {
   return data;
 }
 
+export const logout = async (): Promise<LogoutRes> => {
+  const { data } = await api.post("api/auth/logout");
+  return data;
+}
