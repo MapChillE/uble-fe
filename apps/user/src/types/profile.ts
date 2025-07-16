@@ -33,3 +33,7 @@ export interface StepProps {
 export interface SetUserInfo extends responseStatus {
   data: InfoForm;
 }
+
+export interface LogoutRes extends responseStatus {
+  data: null;
+}
