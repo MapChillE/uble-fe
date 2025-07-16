@@ -12,6 +12,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.83.0",
     "@workspace/ui": "workspace:*",
     "classnames": "^2.5.1",
     "date-fns": "^4.1.0",
