@@ -35,7 +35,7 @@ const DynamicCard = ({ data, variant = "vertical" }: DynamicCardProps) => {
           <>
             <div className="relative">
               <img
-                src={imgUrl || "/placeholder.svg"}
+                src={imgUrl || "/placeholder.png"}
                 alt={name}
                 className="h-32 w-full rounded-t-lg object-cover"
               />
@@ -58,7 +58,7 @@ const DynamicCard = ({ data, variant = "vertical" }: DynamicCardProps) => {
           // --- Horizontal Layout ---
           <div className="flex items-center space-x-4">
             <img
-              src={imgUrl || "/placeholder.svg"}
+              src={imgUrl || "/placeholder.png"}
               alt={name}
               className="h-16 w-16 flex-shrink-0 rounded-lg object-cover"
             />
