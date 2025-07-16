@@ -15,7 +15,7 @@ const CATEGORIES = {
 const CATEGORY_KEYS = Object.keys(CATEGORIES).map(Number); // [1,2,3,4,5,6,7,8]
 const SelectCategory = ({ info, setInfo }: StepProps) => {
   // categoryIds를 number[]로 변환 (profile.ts는 그대로 두고 여기서만 처리)
-  const categoryIds: number[] = (info.categoryIds as unknown as number[]) ?? [];
+  const categoryIds: number[] = info.categoryIds;
 
   const toggleInterest = (key: number) => {
     if (categoryIds.includes(key)) {
