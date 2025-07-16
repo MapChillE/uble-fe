@@ -1,32 +1,114 @@
+"use client";
 
-import DynamicCard from "@/components/ui/DynamicCard";
-import { BrandContent } from "@/types/brand";
+import { useState, useMemo, useRef, useEffect } from "react";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import SectionHeader from "@/components/ui/SectionHeader";
+import DynamicCard from "@/components/ui/DynamicCard";
+import type {
+  BrandContent,
+  BrandListData,
+  FetchBrandsParams,
+} from "@/types/brand";
+import { fetchBrands } from "@/service/brand";
 
-const EntireSection = () => {
-  const testData: BrandContent = {
-    brandId: 104,
-    name: "스타벅스",
-    category: "푸드",
-    description: "커피를 팝니다.",
-    imgUrl: "",
-    isVIPcock: true,
-    minRank: "NONE",
-    bookmarked: true,
-  };
+const PAGE_SIZE = 8;
+
+function calcSeason(date: Date) {
+  const m = date.getMonth() + 1;
+  if (m >= 3 && m <= 5) return "SPRING";
+  if (m >= 6 && m <= 8) return "SUMMER";
+  if (m >= 9 && m <= 11) return "AUTUMN";
+  return "WINTER";
+}
+
+export default function EntireSection() {
+  const [categoryId, setCategoryId] = useState<number | undefined>(undefined);
+  const [season, setSeason] = useState<string | undefined>(undefined);
+  const [type, setType] = useState<string | undefined>(undefined);
+
+  const params = useMemo<FetchBrandsParams>(
+    () => ({ categoryId, season, type, size: PAGE_SIZE }),
+    [categoryId, season, type]
+  );
+  const queryKey = useMemo(() => ["brands", params] as const, [params]);
+
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    isError,
+    error,
+  } = useInfiniteQuery({
+    queryKey,
+    queryFn: ({ pageParam = undefined }) =>
+      fetchBrands({ ...params, lastBrandId: pageParam }),
+    getNextPageParam: (lastPage: BrandListData) =>
+      lastPage.hasNext ? lastPage.lastCursorId : undefined,
+    staleTime: 1000 * 60 * 5,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    initialPageParam: undefined,
+  });
+
+  // ─── infinite scroll sentinel setup ─────────────────────
+  const loadMoreRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!loadMoreRef.current || !hasNextPage) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry && entry.isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      { rootMargin: "200px" }
+    );
+    obs.observe(loadMoreRef.current);
+    return () => { obs.disconnect(); };
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+
   return (
     <div className="space-y-4">
       <SectionHeader title="전체 제휴처" />
-      <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        <DynamicCard data={testData} variant="horizontal" />
-        <DynamicCard data={testData} variant="horizontal" />
-        <DynamicCard data={testData} variant="horizontal" />
-        <DynamicCard data={testData} variant="horizontal" />
-        <DynamicCard data={testData} variant="horizontal" />
-        <DynamicCard data={testData} variant="horizontal" />
+
+      {/* 필터 UI */}
+      <div className="flex gap-2 mb-4">
+        <button onClick={() => { setCategoryId(1); setSeason(undefined); setType(undefined); }}>
+          푸드
+        </button>
+        <button onClick={() => { setCategoryId(undefined); setSeason(calcSeason(new Date())); setType(undefined); }}>
+          계절
+        </button>
+        <button onClick={() => { setCategoryId(undefined); setSeason(undefined); setType("VIP"); }}>
+          VIP콕
+        </button>
+        <button onClick={() => { setCategoryId(undefined); setSeason(undefined); setType(undefined); }}>
+          전체
+        </button>
       </div>
+
+      {isLoading && <p>로딩 중…</p>}
+      {isError && <p className="text-red-500">에러: {error?.message}</p>}
+
+      {data && (
+        <>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-8">
+            {data.pages
+              .flatMap(page => page.content)
+              .map((brand: BrandContent) => (
+                <DynamicCard
+                  key={brand.brandId}
+                  data={brand}
+                  variant="horizontal"
+                />
+              ))}
+          </div>
+
+          {/* 이 div가 보일 때마다 다음 페이지를 불러옵니다 */}
+          <div ref={loadMoreRef} className="h-1" />
+        </>
+      )}
     </div>
   );
-};
-
-export default EntireSection;
+}
