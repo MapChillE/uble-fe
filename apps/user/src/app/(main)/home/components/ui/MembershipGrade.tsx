@@ -10,14 +10,15 @@ const GRADE_COLORS = {
   일반: "#b5b3c2",
 };
 interface MembershipGradeProps {
-  rank: "NONE" | "NORMAL" | "PREMIUM";
+  rank: "NONE" | "NORMAL" | "PREMIUM" | "VIP";
   isVIPcock: boolean;
 }
 
 const RANK_MAP: Record<MembershipGradeProps["rank"], string[]> = {
-  NONE: ["일반", "우수", "VIP", "VVIP"],
-  NORMAL: ["우수", "VIP", "VVIP"],
-  PREMIUM: ["VIP", "VVIP"],
+  NONE: [],
+  NORMAL: ["일반", "우수", "VIP", "VVIP"],
+  PREMIUM: ["우수", "VIP", "VVIP"],
+  VIP: ["VIP", "VVIP"],
 };
 
 const MembershipGrade = ({ rank, isVIPcock }: MembershipGradeProps) => {
