@@ -37,6 +37,8 @@ const buttonVariants = cva(
 
         circle_outline:
           "rounded-full border border-gray-300 bg-white shadow-lg hover:bg-gray-50 hover:text-gray-900",
+        ghost: "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
+        none: "",
       },
       size: {
         default: "h-10 px-4 py-2 has-[>svg]:px-3",
