@@ -20,6 +20,11 @@ export default function MapContainer() {
   // TODO: useCategoryStore에서 카테고리 존재 여부 if문 확인해서 추가 or api + 추가
   useEffect(() => {
     getCategories().then(({ data, error }) => {
+      if (error) {
+        console.log("카테고리 로딩 실패: ", error);
+        // 에러 상태 관리 또는 토스트 알림 추가
+        return;
+      }
       if (data && data.data && Array.isArray(data.data.data.categoryList)) {
         setCategories([
           ALL_CATEGORY,
