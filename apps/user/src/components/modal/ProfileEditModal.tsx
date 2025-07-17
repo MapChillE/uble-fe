@@ -4,10 +4,13 @@ import { Input } from "@workspace/ui/components/input";
 import { Label } from "@workspace/ui/components/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@workspace/ui/components/popover";
 import { Calendar, CalendarIcon } from "lucide-react";
+import useProfileEditModalStore from "@/store/useProfileEditModalStore";
 
 const ProfileEditModal = () => {
+  const { isOpen, close } = useProfileEditModalStore();
+
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={close}>
       <DialogContent className="max-w-md max-h-[90vh] overflow-hidden flex flex-col">
         <DialogHeader className="flex-shrink-0">
           <DialogTitle className="text-lg font-semibold">프로필 수정</DialogTitle>
@@ -150,7 +153,7 @@ const ProfileEditModal = () => {
 
         {/* 버튼 */}
         <div className="flex-shrink-0 flex space-x-3 pt-4">
-          <Button variant="outline" onClick={onClose} className="flex-1 bg-transparent">
+          <Button variant="outline" onClick={close} className="flex-1 bg-transparent">
             취소
           </Button>
           <Button
