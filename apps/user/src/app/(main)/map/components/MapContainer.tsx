@@ -3,7 +3,7 @@
 import { Star } from "lucide-react";
 import { Button } from "@workspace/ui/components/button";
 import SearchSection from "@/components/common/SearchSection";
-import CurrentLocationMap from "@/app/(main)/map/components/MapWithBaseLocation";
+import MapWithBaseLocation from "@/app/(main)/map/components/MapWithBaseLocation";
 import MyPlaceSheet from "@/app/(main)/map/components/MyPlaceSheet";
 import CategorySection from "@/app/(main)/map/components/CategorySection";
 import { useEffect, useMemo, useState } from "react";
@@ -49,7 +49,7 @@ export default function MapContainer() {
   return (
     <div className="relative h-screen w-full">
       {/* {categories.length > 0 && ( */}
-      <CurrentLocationMap zoom={15} selectedCategory={selectedCategory} />
+      <MapWithBaseLocation zoom={15} selectedCategory={selectedCategory} />
       {/* )} */}
       <div className="absolute left-0 right-0 top-0 z-10">
         <SearchSection />
