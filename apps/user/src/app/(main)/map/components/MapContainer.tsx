@@ -11,6 +11,7 @@ import { Category } from "@/types/category";
 import { getCategories } from "@/service/category";
 import { useCategoryStore } from "@/store/useCategoryStore";
 import { apiHandler } from "@api/apiHandler";
+import { ANY_CATEGORYS } from "@/types/constants";
 
 const ALL_CATEGORY: Category = { categoryId: 0, categoryName: "전체" };
 
@@ -32,6 +33,7 @@ export default function MapContainer() {
           categoryId: category.categoryId,
           categoryName: category.categoryName,
         })),
+        ...ANY_CATEGORYS
       ]);
     }
   };
