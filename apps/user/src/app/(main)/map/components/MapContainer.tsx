@@ -2,9 +2,9 @@
 
 import { Star } from "lucide-react";
 import { Button } from "@workspace/ui/components/button";
-import SearchSection from "@/components/common/SearchSection";
+import SearchSection from "../../home/components/SearchSection";
 import CurrentLocationMap from "@/app/(main)/map/components/MapWithBaseLocation";
-import MyPlaceSheet from "@/app/(main)/map/components/MyPlaceSheet";
+// import MyPlaceSheet from "@/app/(main)/map/components/MyPlaceSheet";
 import CategorySection from "@/components/common/CategorySection";
 import { useEffect, useMemo, useState } from "react";
 import { Category } from "@/types/category";
@@ -58,7 +58,7 @@ export default function MapContainer() {
         <SearchSection />
       </div>
       <CategorySection selectedCategory={selectedCategory} onSelectCategory={setSelectedCategory} />
-      <MyPlaceSheet trigger={trigger} />
+      {/* <MyPlaceSheet trigger={trigger} /> */}
     </div>
   );
 }
