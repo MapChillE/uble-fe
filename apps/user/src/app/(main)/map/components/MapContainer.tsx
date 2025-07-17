@@ -57,7 +57,9 @@ export default function MapContainer() {
       <div className="absolute left-0 right-0 top-0 z-10">
         <SearchSection />
       </div>
-      <CategorySection selectedCategory={selectedCategory} onSelectCategory={setSelectedCategory} />
+      <div className="absolute left-4 right-4 top-16 z-10">
+        <CategorySection selectedCategory={selectedCategory} onSelectCategory={setSelectedCategory} />
+      </div>
       {/* <MyPlaceSheet trigger={trigger} /> */}
     </div>
   );

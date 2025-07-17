@@ -19,7 +19,7 @@ const CategoryBar = ({ selectedCategory, onSelectCategory }: CategoryBarProps) =
   }
 
   return (
-    <nav className="scrollbar-hide absolute left-4 right-4 top-16 z-10 flex gap-2 overflow-x-auto whitespace-nowrap py-3">
+    <nav className=" flex gap-2 overflow-x-auto whitespace-nowrap py-3">
       {categories.map((cat) => (
         <Button
           key={cat.categoryId}
