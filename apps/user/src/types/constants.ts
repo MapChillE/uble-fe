@@ -1,3 +1,5 @@
+import { Coordinates } from "@/types/map";
+
 export const GRADE_COLORS = {
   VIP콕: "#9869f1",
   VVIP: "#eb3f88",
@@ -37,3 +39,4 @@ export const periodOptions: periodType[] = [
   { label: "1년", value: "1year" },
 ];
 
+export const DEFAULT_LOCATION: Coordinates = [126.978, 37.5665]; // 서울시청

@@ -1,7 +1,6 @@
 import { useState, useCallback } from "react";
 import { Coordinates } from "@/types/map";
-
-const DEFAULT_LOCATION: Coordinates = [126.978, 37.5665]; // 서울시청
+import { DEFAULT_LOCATION } from "@/types/constants";
 
 export function useCurrentLocation() {
   const [location, setLocation] = useState<Coordinates>();
@@ -17,6 +16,8 @@ export function useCurrentLocation() {
     }
     setLoading(true);
     setError(null);
+
+    // TODO: 로딩중 UI 추가
 
     navigator.geolocation.getCurrentPosition(
       (position) => {

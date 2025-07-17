@@ -7,7 +7,7 @@ import type { NaverMap as NaverMapInstance, NaverMapOptions, NaverMarker } from 
 const mapId = "naver-map";
 
 export interface Pin {
-  id: string;
+  id: number;
   coords: Coordinates; // [lng, lat]
   name?: string;
   onClick?: () => void;
@@ -23,38 +23,38 @@ interface NaverMapProps {
 
 export default function NaverMap({ loc, zoom = 15, pins }: NaverMapProps) {
   const mapRef = useRef<NaverMapInstance | null>(null);
-  const [lng, lat] = loc; // 구조 분해
   const markerRefs = useRef<NaverMarker[]>([]);
+  const [lng, lat] = loc; // 구조 분해
 
-  // 지도 및 마커 초기화
+  // 최초 지도 생성
   useEffect(() => {
-    if (typeof window === "undefined" || !window.naver) return;
+    if (!mapRef.current && typeof window !== "undefined" && window.naver) {
+      const mapOptions: NaverMapOptions = {
+        center: new window.naver.maps.LatLng(lat, lng),
+        zoom: zoom,
+        scaleControl: true,
+        mapDataControl: true,
+        logoControlOptions: {
+          position: window.naver.maps.Position.BOTTOM_LEFT,
+        },
+      };
+      const map = new window.naver.maps.Map(mapId, mapOptions);
+      mapRef.current = map;
+    }
+  }, [loc]);
 
-    // 지도 옵션
-    const mapOptions: NaverMapOptions = {
-      center: new window.naver.maps.LatLng(lat, lng),
-      zoom: zoom,
-      scaleControl: true,
-      mapDataControl: true,
-      logoControlOptions: {
-        position: window.naver.maps.Position.BOTTOM_LEFT,
-      },
-    };
+  // 마커만 핀 변경될 때 갱신
+  useEffect(() => {
+    if (!mapRef.current) return;
 
-    // 지도 인스턴스 생성
-    const map = new window.naver.maps.Map(mapId, mapOptions);
-    mapRef.current = map;
-
-    // 기존 마커 제거
     markerRefs.current.forEach((marker) => marker.setMap(null));
     markerRefs.current = [];
 
-    // 마커 추가
     if (pins) {
       pins.forEach((pin) => {
         const marker = new window.naver.maps.Marker({
           position: new window.naver.maps.LatLng(pin.coords[1], pin.coords[0]),
-          map: map,
+          map: mapRef.current!,
           title: pin.name || "",
         });
         if (pin.onClick) {
@@ -63,7 +63,7 @@ export default function NaverMap({ loc, zoom = 15, pins }: NaverMapProps) {
         markerRefs.current.push(marker);
       });
     }
-  }, [lat, lng, zoom, pins]);
+  }, [pins]);
 
   return <div id={mapId} style={{ width: "100%", height: "100%" }} />;
 }

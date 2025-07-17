@@ -1,5 +1,10 @@
 import api from "@api/http-commons";
-import { apiHandler } from "@api/apiHandler";
 import { CategoryListResponse } from "@/types/category";
 
-export const getCategories = () => apiHandler<CategoryListResponse>(() => api.get("/api/category"));
+export const getCategories = async (): Promise<CategoryListResponse> => {
+  const { data: response } = await api.get("/api/category");
+  if (response.data) {
+    const data = response.data;
+    return data;
+  } else return response;
+};

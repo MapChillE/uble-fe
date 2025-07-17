@@ -7,14 +7,17 @@ export interface Category {
   categoryName: string;
 }
 
+export interface SearchParams extends Category {
+  season: string;
+  type: "VIP" | "LOCAL";
+}
+
+export interface CategoryList {
+  categoryList: Category[];
+}
 /**
- * 카테고리 전체 조회 API
+ * 카테고리 전체 조회 API[]
  */
 export interface CategoryListResponse extends responseStatus {
-  data: {
-    data: {
-      /** 카테고리 목록 데이터 */
-      categoryList: Category[];
-    };
-  };
+  categoryList: Category[];
 }
