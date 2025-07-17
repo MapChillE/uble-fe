@@ -11,9 +11,7 @@ import { Category } from "@/types/category";
 import { getCategories } from "@/service/category";
 import { useCategoryStore } from "@/store/useCategoryStore";
 import { apiHandler } from "@api/apiHandler";
-import { ANY_CATEGORYS } from "@/types/constants";
-
-const ALL_CATEGORY: Category = { categoryId: 0, categoryName: "전체" };
+import { ALL_CATEGORY, ANY_CATEGORYS } from "@/types/constants";
 
 export default function MapContainer() {
   const [selectedCategory, setSelectedCategory] = useState<Category>(ALL_CATEGORY);

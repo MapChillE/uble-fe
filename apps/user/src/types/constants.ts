@@ -26,6 +26,7 @@ export const periodOptions: periodType[] = [
 
 export const DEFAULT_LOCATION: Coordinates = [126.978, 37.5665]; // 서울시청
 
+export const ALL_CATEGORY: Category = { categoryId: 0, categoryName: "전체" };
 export const ANY_CATEGORYS: Category[] = [
   { categoryId: "LOCAL", categoryName: "우리동네멤버십" },
   { categoryId: "SEASON", categoryName: "계절" },
