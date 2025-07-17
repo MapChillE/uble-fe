@@ -14,10 +14,13 @@ import type {
 import { Category } from "@/types/category";
 import CategorySection from "@/components/common/CategorySection";
 import { getCurrentSeason } from "@/utils/season";
+import LoadingState from "./ui/LoadingState";
+import ErrorState from "./ui/ErrorState";
+import EmptyState from "./ui/EmptyState";
+import { ALL_CATEGORY } from "@/types/constants";
 
 const PAGE_SIZE = 8;
 
-const ALL_CATEGORY: Category = { categoryId: 0, categoryName: "전체" };
 export default function EntireSection() {
   const [categorys, setCategorys] = useState<Category>(ALL_CATEGORY);
 
@@ -58,7 +61,6 @@ export default function EntireSection() {
     initialPageParam: undefined,
   });
 
-  // ─── infinite scroll sentinel setup ─────────────────────
   const loadMoreRef = useInfiniteScroll({
     hasNextPage,
     fetchNextPage,
@@ -72,26 +74,31 @@ export default function EntireSection() {
         <CategorySection selectedCategory={categorys} onSelectCategory={setCategorys} />
       </div>
 
-      {isLoading && <p>로딩 중…</p>}
-      {isError && <p className="text-red-500">에러: {error?.message}</p>}
+      {isLoading && <LoadingState />}
+      {isError && <ErrorState message={error?.message} />}
 
       <div className="p-4">
         {data && (
           <>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-8">
-              {data.pages
-                .flatMap(page => page.content)
-                .map((brand: BrandContent) => (
-                  <DynamicCard
-                    key={brand.brandId}
-                    data={brand}
-                    variant="horizontal"
-                  />
-                ))}
-            </div>
-
-            {/* 이 div가 보일 때마다 다음 페이지를 불러옵니다 */}
-            <div ref={loadMoreRef} className="h-1" />
+            {data.pages.every(page => page.content.length === 0) ? (
+              <EmptyState />
+            ) : (
+              <>
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-8">
+                  {data.pages
+                    .flatMap(page => page.content)
+                    .map((brand: BrandContent) => (
+                      <DynamicCard
+                        key={brand.brandId}
+                        data={brand}
+                        variant="horizontal"
+                      />
+                    ))}
+                </div>
+                {/* 이 div가 보일 때마다 다음 페이지를 불러옵니다 */}
+                <div ref={loadMoreRef} className="h-1" />
+              </>
+            )}
           </>
         )}
       </div>
