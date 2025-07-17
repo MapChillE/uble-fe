@@ -1,7 +1,8 @@
 "use client";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { fetchBrands } from "@/service/brand";
 
 import { useState, useMemo, useRef, useEffect } from "react";
-import { useInfiniteQuery } from "@tanstack/react-query";
 import SectionHeader from "@/components/ui/SectionHeader";
 import DynamicCard from "@/components/ui/DynamicCard";
 import type {
@@ -9,7 +10,8 @@ import type {
   BrandListData,
   FetchBrandsParams,
 } from "@/types/brand";
-import { fetchBrands } from "@/service/brand";
+import { Category } from "@/types/category";
+import CategorySection from "@/components/common/CategorySection";
 
 const PAGE_SIZE = 8;
 
@@ -21,14 +23,22 @@ function calcSeason(date: Date) {
   return "WINTER";
 }
 
+const ALL_CATEGORY: Category = { categoryId: 0, categoryName: "전체" };
 export default function EntireSection() {
-  const [categoryId, setCategoryId] = useState<number | undefined>(undefined);
+  const [categorys, setCategorys] = useState<Category>(ALL_CATEGORY);
   const [season, setSeason] = useState<string | undefined>(undefined);
   const [type, setType] = useState<string | undefined>(undefined);
 
   const params = useMemo<FetchBrandsParams>(
-    () => ({ categoryId, season, type, size: PAGE_SIZE }),
-    [categoryId, season, type]
+    () => ({
+      ...(typeof categorys.categoryId === "number" && categorys.categoryId !== 0
+        ? { categoryId: categorys.categoryId }
+        : {}),
+      season,
+      type,
+      size: PAGE_SIZE,
+    }),
+    [categorys.categoryId, season, type]
   );
   const queryKey = useMemo(() => ["brands", params] as const, [params]);
 
@@ -73,42 +83,31 @@ export default function EntireSection() {
       <SectionHeader title="전체 제휴처" />
 
       {/* 필터 UI */}
-      <div className="flex gap-2 mb-4">
-        <button onClick={() => { setCategoryId(1); setSeason(undefined); setType(undefined); }}>
-          푸드
-        </button>
-        <button onClick={() => { setCategoryId(undefined); setSeason(calcSeason(new Date())); setType(undefined); }}>
-          계절
-        </button>
-        <button onClick={() => { setCategoryId(undefined); setSeason(undefined); setType("VIP"); }}>
-          VIP콕
-        </button>
-        <button onClick={() => { setCategoryId(undefined); setSeason(undefined); setType(undefined); }}>
-          전체
-        </button>
-      </div>
+      <CategorySection selectedCategory={categorys} onSelectCategory={setCategorys} />
 
       {isLoading && <p>로딩 중…</p>}
       {isError && <p className="text-red-500">에러: {error?.message}</p>}
 
-      {data && (
-        <>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-8">
-            {data.pages
-              .flatMap(page => page.content)
-              .map((brand: BrandContent) => (
-                <DynamicCard
-                  key={brand.brandId}
-                  data={brand}
-                  variant="horizontal"
-                />
-              ))}
-          </div>
+      <div className="p-4">
+        {data && (
+          <>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-8">
+              {data.pages
+                .flatMap(page => page.content)
+                .map((brand: BrandContent) => (
+                  <DynamicCard
+                    key={brand.brandId}
+                    data={brand}
+                    variant="horizontal"
+                  />
+                ))}
+            </div>
 
-          {/* 이 div가 보일 때마다 다음 페이지를 불러옵니다 */}
-          <div ref={loadMoreRef} className="h-1" />
-        </>
-      )}
+            {/* 이 div가 보일 때마다 다음 페이지를 불러옵니다 */}
+            <div ref={loadMoreRef} className="h-1" />
+          </>
+        )}
+      </div>
     </div>
   );
 }
