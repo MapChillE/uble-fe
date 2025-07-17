@@ -1,10 +1,10 @@
-'use client'
+import React, { Suspense } from 'react';
 import { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { kakaoLogin } from '@/service/user';
 import { apiHandler } from '@api/apiHandler';
 
-const Page = () => {
+function KakaoCallbackInner() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const login = async () => {
@@ -24,6 +24,7 @@ const Page = () => {
 
   useEffect(() => {
     login();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
   return (
@@ -34,6 +35,12 @@ const Page = () => {
       </>
     </div>
   );
-};
+}
 
-export default Page;
+export default function Page() {
+  return (
+    <Suspense fallback={<div>로그인 중입니다...</div>}>
+      <KakaoCallbackInner />
+    </Suspense>
+  );
+}
