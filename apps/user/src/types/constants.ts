@@ -1,5 +1,5 @@
 import { Coordinates } from "@/types/map";
-import { Category } from "./category";
+import { Category } from "@/types/category";
 
 export const GRADE_COLORS = {
   VIP콕: "#9869f1",
