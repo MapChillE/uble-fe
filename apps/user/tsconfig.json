@@ -20,7 +20,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/global.d.ts",
-    "../../packages/api/src/apiProxy.ts"
+    "../../packages/api/src/**/*.ts"
   ],
   "exclude": ["node_modules"]
 }
