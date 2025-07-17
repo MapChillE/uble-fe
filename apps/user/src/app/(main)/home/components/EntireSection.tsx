@@ -82,8 +82,9 @@ export default function EntireSection() {
     <div className="space-y-4">
       <SectionHeader title="전체 제휴처" />
 
-      {/* 필터 UI */}
-      <CategorySection selectedCategory={categorys} onSelectCategory={setCategorys} />
+      <div className="pl-4 pr-4">
+        <CategorySection selectedCategory={categorys} onSelectCategory={setCategorys} />
+      </div>
 
       {isLoading && <p>로딩 중…</p>}
       {isError && <p className="text-red-500">에러: {error?.message}</p>}
