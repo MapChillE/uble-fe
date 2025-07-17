@@ -1,4 +1,4 @@
-export default function ErrorState({ message }: { message?: string }) {
+export default function ErrorState() {
   return (
     <div className="flex flex-col items-center justify-center min-h-[200px] text-red-500">
       <div className="text-lg font-medium">제휴처 정보를 불러오는 중 오류가 발생했습니다.</div>
