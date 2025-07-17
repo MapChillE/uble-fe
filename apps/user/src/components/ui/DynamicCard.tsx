@@ -1,12 +1,11 @@
 
 
 import { Card, CardContent } from "@workspace/ui/components/card";
-import { Badge } from "@workspace/ui/components/badge";
-import { Heart } from "lucide-react";
 import MembershipGrade from "../../app/(main)/home/components/ui/MembershipGrade";
 import { BrandContent } from "@/types/brand";
 import classNames from "classnames";
 import FavoriteBtn from "../FavoriteBtn";
+import { memo } from "react";
 
 type Variant = "vertical" | "horizontal";
 interface DynamicCardProps {
@@ -84,4 +83,4 @@ const DynamicCard = ({ data, variant = "vertical" }: DynamicCardProps) => {
   );
 };
 
-export default DynamicCard;
+export default memo(DynamicCard);
