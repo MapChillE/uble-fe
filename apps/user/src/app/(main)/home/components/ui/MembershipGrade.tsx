@@ -1,19 +1,20 @@
 const GRADE_COLORS = {
-  VIP콕: "#9869f1",
+  VIP콕: "#c07dff",
   VVIP: "#eb3f88",
   VIP: "#9869f1",
   우수: "#93aefe",
   일반: "#b5b3c2",
 };
 interface MembershipGradeProps {
-  rank: "NONE" | "NORMAL" | "PREMIUM";
+  rank: "NONE" | "NORMAL" | "PREMIUM" | "VIP";
   isVIPcock: boolean;
 }
 
 const RANK_MAP: Record<MembershipGradeProps["rank"], string[]> = {
-  NONE: ["일반", "우수", "VIP", "VVIP"],
-  NORMAL: ["우수", "VIP", "VVIP"],
-  PREMIUM: ["VIP", "VVIP"],
+  NONE: [],
+  NORMAL: ["일반", "우수", "VIP", "VVIP"],
+  PREMIUM: ["우수", "VIP", "VVIP"],
+  VIP: ["VIP", "VVIP"],
 };
 
 const MembershipGrade = ({ rank, isVIPcock }: MembershipGradeProps) => {
@@ -23,9 +24,9 @@ const MembershipGrade = ({ rank, isVIPcock }: MembershipGradeProps) => {
   const getGradeBackgroundColor = (grade: string) => {
     const color = getGradeColor(grade);
     const hex = color.replace("#", "");
-    const r = Number.parseInt(hex.substr(0, 2), 16);
-    const g = Number.parseInt(hex.substr(2, 2), 16);
-    const b = Number.parseInt(hex.substr(4, 2), 16);
+    const r = Number.parseInt(hex.slice(0, 2), 16);
+    const g = Number.parseInt(hex.slice(2, 4), 16);
+    const b = Number.parseInt(hex.slice(4, 6), 16);
     return `rgba(${r}, ${g}, ${b}, 0.2)`;
   };
 

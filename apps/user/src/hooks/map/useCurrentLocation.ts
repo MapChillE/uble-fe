@@ -24,7 +24,6 @@ export function useCurrentLocation() {
         const coords: Coordinates = [position.coords.longitude, position.coords.latitude];
         setLocation(coords);
         setLoading(false);
-        console.log("현재 위치:", coords);
       },
       // TODO : error, loading 처리
       (error) => {

@@ -25,7 +25,7 @@ export interface BrandContent {
 /**
  * 브랜드 목록 응답 내 데이터 타입
  */
-interface BrandListData {
+export interface BrandListData {
   /** 현재 페이지에 포함된 브랜드 콘텐츠 배열 */
   content: BrandContent[];
   /** 다음 요청 시 더 가져올 목록이 존재하는지 여부 */
@@ -54,4 +54,13 @@ export interface BrandListResponse extends responseStatus {
  */
 export interface BrandDetailResponse extends responseStatus {
   data: BrandDetailData;
+}
+
+/** 브랜드 목록을 가져오기 위한 파라미터 */
+export interface FetchBrandsParams {
+  categoryId?: number;
+  season?: string;
+  type?: string;
+  lastBrandId?: number;
+  size?: number;
 }

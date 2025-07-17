@@ -11,8 +11,7 @@ import { Category } from "@/types/category";
 import { getCategories } from "@/service/category";
 import { useCategoryStore } from "@/store/useCategoryStore";
 import { apiHandler } from "@api/apiHandler";
-
-const ALL_CATEGORY: Category = { categoryId: 0, categoryName: "전체" };
+import { ALL_CATEGORY, ANY_CATEGORYS } from "@/types/constants";
 
 export default function MapContainer() {
   const [selectedCategory, setSelectedCategory] = useState<Category>(ALL_CATEGORY);
@@ -32,6 +31,7 @@ export default function MapContainer() {
           categoryId: category.categoryId,
           categoryName: category.categoryName,
         })),
+        ...ANY_CATEGORYS
       ]);
     }
   };
@@ -57,7 +57,9 @@ export default function MapContainer() {
       <div className="absolute left-0 right-0 top-0 z-10">
         <SearchSection />
       </div>
-      <CategorySection selectedCategory={selectedCategory} onSelectCategory={setSelectedCategory} />
+      <div className="absolute left-4 right-4 top-16 z-10">
+        <CategorySection selectedCategory={selectedCategory} onSelectCategory={setSelectedCategory} />
+      </div>
       {/* <MyPlaceSheet trigger={trigger} /> */}
     </div>
   );

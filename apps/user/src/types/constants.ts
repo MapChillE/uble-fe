@@ -1,4 +1,5 @@
 import { Coordinates } from "@/types/map";
+import { Category } from "@/types/category";
 
 export const GRADE_COLORS = {
   VIP콕: "#9869f1",
@@ -10,22 +11,6 @@ export const GRADE_COLORS = {
 
 /** 사용자 추가 정보 입력 단계 */
 export const TOTAL_STEPS = 5;
-
-export const CATEGORIES = [
-  "전체",
-  "계절",
-  "액티비티",
-  "뷰티/건강",
-  "쇼핑",
-  "생활/편의",
-  "푸드",
-  "문화여가",
-  "교육",
-  "여행/교통",
-  "우리동네멤버십",
-] as const;
-
-export type Category = (typeof CATEGORIES)[number];
 
 interface periodType {
   label: string;
@@ -40,3 +25,10 @@ export const periodOptions: periodType[] = [
 ];
 
 export const DEFAULT_LOCATION: Coordinates = [126.978, 37.5665]; // 서울시청
+
+export const ALL_CATEGORY: Category = { categoryId: 0, categoryName: "전체" };
+export const ANY_CATEGORYS: Category[] = [
+  { categoryId: "LOCAL", categoryName: "우리동네멤버십" },
+  { categoryId: "SEASON", categoryName: "계절" },
+  { categoryId: "VIP", categoryName: "VIP콕" },
+]
