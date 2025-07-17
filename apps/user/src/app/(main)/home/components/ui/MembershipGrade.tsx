@@ -1,7 +1,3 @@
-
-// import { GRADE_COLORS } from '@/types/constants';
-import { BrandContent } from "@/types/brand";
-
 const GRADE_COLORS = {
   VIP콕: "#9869f1",
   VVIP: "#eb3f88",

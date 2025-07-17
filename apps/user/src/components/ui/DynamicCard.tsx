@@ -1,8 +1,6 @@
 
 
 import { Card, CardContent } from "@workspace/ui/components/card";
-import { Badge } from "@workspace/ui/components/badge";
-import { Heart } from "lucide-react";
 import MembershipGrade from "../../app/(main)/home/components/ui/MembershipGrade";
 import { BrandContent } from "@/types/brand";
 import classNames from "classnames";
