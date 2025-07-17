@@ -2,7 +2,7 @@
 
 import { Star } from "lucide-react";
 import { Button } from "@workspace/ui/components/button";
-import SearchSection from "../../home/components/SearchSection";
+import SearchSection from "@/app/(main)/home/components/SearchSection";
 import CurrentLocationMap from "@/app/(main)/map/components/MapWithBaseLocation";
 // import MyPlaceSheet from "@/app/(main)/map/components/MyPlaceSheet";
 import CategorySection from "@/components/common/CategorySection";

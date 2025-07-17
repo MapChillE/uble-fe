@@ -26,3 +26,11 @@ export interface GeocodingResult {
   roadAddress?: string;
   jibunAddress?: string;
 }
+
+export interface MyPlace {
+  id: string;
+  name: string;
+  address?: string;
+  lng?: number;
+  lat?: number;
+}
