@@ -1,8 +1,9 @@
 "use client";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { fetchBrands } from "@/service/brand";
+import useInfiniteScroll from "@/hooks/useInfiniteScroll";
 
-import { useState, useMemo, useRef, useEffect } from "react";
+import { useState, useMemo } from "react";
 import SectionHeader from "@/components/ui/SectionHeader";
 import DynamicCard from "@/components/ui/DynamicCard";
 import type {
@@ -12,33 +13,29 @@ import type {
 } from "@/types/brand";
 import { Category } from "@/types/category";
 import CategorySection from "@/components/common/CategorySection";
+import { getCurrentSeason } from "@/utils/season";
 
 const PAGE_SIZE = 8;
-
-function calcSeason(date: Date) {
-  const m = date.getMonth() + 1;
-  if (m >= 3 && m <= 5) return "SPRING";
-  if (m >= 6 && m <= 8) return "SUMMER";
-  if (m >= 9 && m <= 11) return "AUTUMN";
-  return "WINTER";
-}
 
 const ALL_CATEGORY: Category = { categoryId: 0, categoryName: "전체" };
 export default function EntireSection() {
   const [categorys, setCategorys] = useState<Category>(ALL_CATEGORY);
-  const [season, setSeason] = useState<string | undefined>(undefined);
-  const [type, setType] = useState<string | undefined>(undefined);
 
   const params = useMemo<FetchBrandsParams>(
     () => ({
       ...(typeof categorys.categoryId === "number" && categorys.categoryId !== 0
         ? { categoryId: categorys.categoryId }
         : {}),
-      season,
-      type,
+      season: categorys.categoryId === "SEASON" ? getCurrentSeason() : undefined,
+      type:
+        categorys.categoryId === "VIP"
+          ? "VIP"
+          : categorys.categoryId === "LOCAL"
+            ? "LOCAL"
+            : undefined,
       size: PAGE_SIZE,
     }),
-    [categorys.categoryId, season, type]
+    [categorys.categoryId]
   );
   const queryKey = useMemo(() => ["brands", params] as const, [params]);
 
@@ -46,7 +43,6 @@ export default function EntireSection() {
     data,
     fetchNextPage,
     hasNextPage,
-    isFetchingNextPage,
     isLoading,
     isError,
     error,
@@ -63,20 +59,10 @@ export default function EntireSection() {
   });
 
   // ─── infinite scroll sentinel setup ─────────────────────
-  const loadMoreRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    if (!loadMoreRef.current || !hasNextPage) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (entry && entry.isIntersecting && hasNextPage && !isFetchingNextPage) {
-          fetchNextPage();
-        }
-      },
-      { rootMargin: "200px" }
-    );
-    obs.observe(loadMoreRef.current);
-    return () => { obs.disconnect(); };
-  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+  const loadMoreRef = useInfiniteScroll({
+    hasNextPage,
+    fetchNextPage,
+  });
 
   return (
     <div className="space-y-4">
