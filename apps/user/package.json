@@ -17,6 +17,8 @@
     "classnames": "^2.5.1",
     "date-fns": "^4.1.0",
     "lucide-react": "^0.475.0",
+    "motion": "^12.23.6",
+    "react-modal-sheet": "^4.4.0",
     "vaul": "^1.1.2",
     "zustand": "^5.0.6"
   },
