@@ -17,6 +17,7 @@ const ProfileEditModal = () => {
   const { isOpen, close } = useProfileEditModalStore();
   const { user } = useUserStore();
   if (!user) {
+    /** 만약 유저 정보가 없다면 무언가 알림 필요 */
     return null;
   }
   const { rank, gender, birthDate, categoryIds, barcodeNumber } = user;
