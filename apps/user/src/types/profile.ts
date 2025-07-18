@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from "react";
 import { responseStatus } from "./api";
 
 export interface UserInfo {
-  nickname: string;
+  nickname?: string;
   rank: string;
   gender: "MALE" | "FEMALE";
   birthDate: string;

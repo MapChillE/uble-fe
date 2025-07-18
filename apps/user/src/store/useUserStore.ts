@@ -1,8 +1,5 @@
+import { UserInfo } from '@/types/profile';
 import { create } from 'zustand';
-import type { UserInfo as OriginalUserInfo } from '@/types/profile';
-
-// 초기 store에서만 gender를 null 허용으로 확장
-export type UserInfo = Omit<OriginalUserInfo, 'gender'> & { gender: 'MALE' | 'FEMALE' | null };
 
 interface UserStore {
   user: UserInfo;
@@ -12,11 +9,12 @@ interface UserStore {
 
 const useUserStore = create<UserStore>((set) => ({
   user: {
-    nickname: '',
-    rank: '',
-    gender: null,
-    birthDate: '',
+    nickname: "",
+    rank: "",
+    gender: "MALE",
+    birthDate: "",
     categoryIds: [],
+    barcodeNumber: "",
   },
   setUser: (user) => set({ user }),
   updateUser: (fields) => set((state) => ({ user: { ...state.user, ...fields } })),

@@ -7,6 +7,7 @@ import FeedbackBtn from './components/FeedbackBtn';
 import LogoutBtn from './components/LogoutBtn';
 import WithdrawBtn from './components/WithdrawBtn';
 import FeedbackModal from '@/components/modal/FeedbackModal';
+import ProfileEditModal from '@/components/modal/ProfileEditModal';
 
 const page = () => {
   return (
@@ -33,6 +34,7 @@ const page = () => {
           </ProfileCard>
 
           <FeedbackModal />
+          <ProfileEditModal />
         </div>
       </div>
     </div>
