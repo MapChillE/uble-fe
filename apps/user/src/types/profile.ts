@@ -4,9 +4,10 @@ import { responseStatus } from "./api";
 export interface UserInfo {
   nickname: string;
   rank: string;
-  gender: string;
+  gender: "MALE" | "FEMALE";
   birthDate: string;
   categoryIds: number[];
+  barcodeNumber?: string;
 }
 
 export interface UserStatistics {
