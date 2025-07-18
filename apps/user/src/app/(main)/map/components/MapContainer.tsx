@@ -1,23 +1,30 @@
 "use client";
 
+import { useEffect, useMemo, useState } from "react";
 import { Star } from "lucide-react";
 import { Button } from "@workspace/ui/components/button";
+
 import SearchSection from "@/app/(main)/home/components/SearchSection";
-import CurrentLocationMap from "@/app/(main)/map/components/MapWithBaseLocation";
-// import MyPlaceSheet from "@/app/(main)/map/components/MyPlaceSheet";
+import MapWithBaseLocation from "@/app/(main)/map/components/MapWithBaseLocation";
+import MyPlaceSheet from "@/app/(main)/map/components/MyPlaceSheet";
 import CategorySection from "@/components/common/CategorySection";
-import { useEffect, useMemo, useState } from "react";
 import { Category } from "@/types/category";
 import { getCategories } from "@/service/category";
 import { useCategoryStore } from "@/store/useCategoryStore";
 import { apiHandler } from "@api/apiHandler";
-
-const ALL_CATEGORY: Category = { categoryId: 0, categoryName: "전체" };
+import { ALL_CATEGORY, ANY_CATEGORYS } from "@/types/constants";
+import { StoreDetail, StoreSummary } from "@/types/store";
+import StoreDetailSheet, { mockdata } from "@/app/(main)/map/components/StoreDetailSheet";
 
 export default function MapContainer() {
   const [selectedCategory, setSelectedCategory] = useState<Category>(ALL_CATEGORY);
   const setCategories = useCategoryStore((s) => s.setCategories);
   // const categories = useCategoryStore((s) => s.categories);
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [snapIndex, setSnapIndex] = useState(1);
+  const [storeDetail, setStoreDetail] = useState<StoreDetail | null>(null);
+
   // TODO: useCategoryStore에서 카테고리 존재 여부 if문 확인해서 추가 or api + 추가
   const handleFetchCategories = async () => {
     const { data, error } = await apiHandler(() => getCategories());
@@ -32,6 +39,7 @@ export default function MapContainer() {
           categoryId: category.categoryId,
           categoryName: category.categoryName,
         })),
+        ...ANY_CATEGORYS,
       ]);
     }
   };
@@ -40,6 +48,24 @@ export default function MapContainer() {
     handleFetchCategories();
     setSelectedCategory({ ...ALL_CATEGORY });
   }, []);
+
+  const handlePinClick = async ({
+    storeId,
+    coords,
+  }: {
+    storeId: number;
+    coords: [number, number];
+  }) => {
+    // TODO: 상세정보 API 호출
+    // const response = await getStoreDetail({ storeId, latitude: coords[1], longitude: coords[0] });
+    // if (response.data) {
+    //  setStoreDetail(response.data);
+    if (mockdata) {
+      setStoreDetail(mockdata.data);
+      setIsOpen(true);
+      setSnapIndex(1);
+    }
+  };
 
   const trigger = useMemo(
     () => (
@@ -52,13 +78,29 @@ export default function MapContainer() {
   return (
     <div className="relative h-screen w-full">
       {/* {categories.length > 0 && ( */}
-      <CurrentLocationMap zoom={15} selectedCategory={selectedCategory} />
+      <MapWithBaseLocation
+        zoom={15}
+        selectedCategory={selectedCategory}
+        onPinClick={handlePinClick}
+      />
       {/* )} */}
+      <StoreDetailSheet
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        detail={storeDetail}
+        snapIndex={snapIndex}
+        setSnapIndex={setSnapIndex}
+      />
       <div className="absolute left-0 right-0 top-0 z-10">
         <SearchSection />
       </div>
-      <CategorySection selectedCategory={selectedCategory} onSelectCategory={setSelectedCategory} />
-      {/* <MyPlaceSheet trigger={trigger} /> */}
+      <div className="absolute left-4 right-4 top-16 z-10">
+        <CategorySection
+          selectedCategory={selectedCategory}
+          onSelectCategory={setSelectedCategory}
+        />
+      </div>
+      <MyPlaceSheet trigger={trigger} />
     </div>
   );
 }

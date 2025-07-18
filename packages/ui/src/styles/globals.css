@@ -207,4 +207,18 @@
   .animate-accordion-up {
     animation: accordion-up 0.2s ease-out;
   }
+
+  .react-modal-sheet-container {
+    width: 100%;
+    left: 0;
+    right: 0;
+  }
+
+  @media (min-width: 768px) {
+    .react-modal-sheet-container {
+      width: 448px;
+      left: 0;
+      right: 0;
+    }
+  }
 }

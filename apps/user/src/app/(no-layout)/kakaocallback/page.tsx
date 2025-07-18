@@ -13,7 +13,6 @@ function KakaoCallbackInner() {
     const code = searchParams.get('code');
     if (code) {
       const { data } = await apiHandler(() => kakaoLogin(code));
-      console.log(data);
       if (data) {
         data.role === "TMP_USER" ? router.push("/signup") : router.push("/map");
       }
