@@ -1,19 +1,20 @@
 "use client";
 
+import { useEffect, useMemo, useState } from "react";
 import { Star } from "lucide-react";
 import { Button } from "@workspace/ui/components/button";
+
 import SearchSection from "@/app/(main)/home/components/SearchSection";
 import MapWithBaseLocation from "@/app/(main)/map/components/MapWithBaseLocation";
 import MyPlaceSheet from "@/app/(main)/map/components/MyPlaceSheet";
 import CategorySection from "@/components/common/CategorySection";
-import { useEffect, useMemo, useState } from "react";
 import { Category } from "@/types/category";
 import { getCategories } from "@/service/category";
 import { useCategoryStore } from "@/store/useCategoryStore";
 import { apiHandler } from "@api/apiHandler";
 import { ALL_CATEGORY, ANY_CATEGORYS } from "@/types/constants";
 import { StoreDetail, StoreSummary } from "@/types/store";
-import StoreDetailSheet, { mockdata } from "./StoreDetailSheet";
+import StoreDetailSheet, { mockdata } from "@/app/(main)/map/components/StoreDetailSheet";
 
 export default function MapContainer() {
   const [selectedCategory, setSelectedCategory] = useState<Category>(ALL_CATEGORY);
