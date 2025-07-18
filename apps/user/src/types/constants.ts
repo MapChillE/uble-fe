@@ -11,19 +11,17 @@ export const GRADE_COLORS = {
 /** 사용자 추가 정보 입력 단계 */
 export const TOTAL_STEPS = 5;
 
+/** 개발 단계에서 사용할 기본 카테고리 목록 */
 export const CATEGORIES = [
-  "전체",
-  "계절",
-  "액티비티",
-  "뷰티/건강",
-  "쇼핑",
-  "생활/편의",
-  "푸드",
-  "문화여가",
-  "교육",
-  "여행/교통",
-  "우리동네멤버십",
-] as const;
+  { categoryId: 1, categoryName: '액티비티' },
+  { categoryId: 2, categoryName: '뷰티/건강' },
+  { categoryId: 3, categoryName: '쇼핑' },
+  { categoryId: 4, categoryName: '생활/편의' },
+  { categoryId: 5, categoryName: '푸드' },
+  { categoryId: 6, categoryName: '문화여가' },
+  { categoryId: 7, categoryName: '교육' },
+  { categoryId: 8, categoryName: '여행/교통' },
+];
 
 export type Category = (typeof CATEGORIES)[number];
 
@@ -40,3 +38,5 @@ export const periodOptions: periodType[] = [
 ];
 
 export const DEFAULT_LOCATION: Coordinates = [126.978, 37.5665]; // 서울시청
+
+export const MEMBERSHIP_GRADES = ["VVIP", "VIP", "우수", "일반"];

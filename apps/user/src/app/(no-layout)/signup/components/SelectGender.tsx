@@ -1,11 +1,8 @@
 import { StepProps } from "@/types/profile";
+import { selectToEng } from "@/utils/gender";
 
 
 const SelectGender = ({ info, setInfo }: StepProps) => {
-  const selectToEng = (gender: string) => {
-    return gender === "남성" ? "MALE" : "FEMALE";
-  }
-
   return (
     <div className="space-y-8">
       <div className="space-y-2">

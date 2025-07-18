@@ -1,9 +1,8 @@
+import { MEMBERSHIP_GRADES } from "@/types/constants";
 import { StepProps } from "@/types/profile";
 import { Button } from "@workspace/ui/components/button";
 
 const SelectMembership = ({ info, setInfo }: StepProps) => {
-  const MEMBERSHIP_GRADES = ["VVIP", "VIP", "우수", "일반"];
-
   return (
     <div className="space-y-8">
       <div className="space-y-2">
