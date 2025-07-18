@@ -41,6 +41,7 @@ export interface StoreSummary {
   storeName: string;
   description: string;
   address: string;
+  imageUrl?: string;
   phoneNumber: string;
   distance: number;
   category: string;
@@ -60,6 +61,7 @@ export interface StoreBenefit {
 
 /**
  * 매장(스토어) 상세 API 응답 타입
+ * // TODO: 간략 정보 API 응답 타입 확정 후 extends StoreSummary 할 예정
  */
 export interface StoreDetail {
   brandId: number;
