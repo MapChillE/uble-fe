@@ -6,11 +6,7 @@ import useInfiniteScroll from "@/hooks/useInfiniteScroll";
 import { useState, useMemo } from "react";
 import SectionHeader from "@/components/ui/SectionHeader";
 import DynamicCard from "@/components/ui/DynamicCard";
-import type {
-  BrandContent,
-  BrandListData,
-  FetchBrandsParams,
-} from "@/types/brand";
+import type { BrandContent, BrandListData, FetchBrandsParams } from "@/types/brand";
 import { Category } from "@/types/category";
 import CategorySection from "@/components/common/CategorySection";
 import { getCurrentSeason } from "@/utils/season";
@@ -42,17 +38,9 @@ export default function EntireSection() {
   );
   const queryKey = useMemo(() => ["brands", params] as const, [params]);
 
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isLoading,
-    isError,
-    error,
-  } = useInfiniteQuery({
+  const { data, fetchNextPage, hasNextPage, isLoading, isError, error } = useInfiniteQuery({
     queryKey,
-    queryFn: ({ pageParam = undefined }) =>
-      fetchBrands({ ...params, lastBrandId: pageParam }),
+    queryFn: ({ pageParam = undefined }) => fetchBrands({ ...params, lastBrandId: pageParam }),
     getNextPageParam: (lastPage: BrandListData) =>
       lastPage.hasNext ? lastPage.lastCursorId : undefined,
     staleTime: 1000 * 60 * 5,
@@ -75,24 +63,20 @@ export default function EntireSection() {
       </div>
 
       {isLoading && <LoadingState />}
-      {isError && <ErrorState message={error?.message} />}
+      {isError && <ErrorState />}
 
       <div className="p-4">
         {data && (
           <>
-            {data.pages.every(page => page.content.length === 0) ? (
+            {data.pages.every((page) => page.content.length === 0) ? (
               <EmptyState />
             ) : (
               <>
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-8">
+                <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                   {data.pages
-                    .flatMap(page => page.content)
+                    .flatMap((page) => page.content)
                     .map((brand: BrandContent) => (
-                      <DynamicCard
-                        key={brand.brandId}
-                        data={brand}
-                        variant="horizontal"
-                      />
+                      <DynamicCard key={brand.brandId} data={brand} variant="horizontal" />
                     ))}
                 </div>
                 {/* 이 div가 보일 때마다 다음 페이지를 불러옵니다 */}
