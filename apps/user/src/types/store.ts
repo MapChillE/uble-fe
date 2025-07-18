@@ -53,7 +53,7 @@ export interface StoreSummary {
 export interface StoreBenefit {
   benefitId: number;
   type: string;
-  minRank: string;
+  minRank: "NONE" | "NORMAL" | "PREMIUM";
   content: string;
   manual: string;
   provisionCount: string;
@@ -81,8 +81,7 @@ export interface StoreDetail {
 
 /**
  * 매장 상세 정보 API
- */ export interface StoreDetailResponse {
+ */
+export interface StoreDetailResponse extends responseStatus {
   data: StoreDetail;
-  statusCode: number;
-  message?: string;
 }
