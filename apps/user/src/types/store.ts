@@ -16,8 +16,6 @@ export interface StoreContent {
  */
 export interface StoreListData {
   data: StoreContent[];
-  status: string;
-  message?: string;
 }
 
 /**
@@ -25,9 +23,7 @@ export interface StoreListData {
  */
 export interface StoreListResponse extends responseStatus {
   data: {
-    data: {
-      storeList: StoreContent[];
-    };
+    storeList: StoreContent[];
   };
 }
 

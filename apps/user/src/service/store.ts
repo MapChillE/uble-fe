@@ -1,8 +1,7 @@
 import api from "@api/http-commons";
-import { apiHandler } from "@api/apiHandler";
-import { StoreListResponse } from "@/types/store";
+import { StoreContent, StoreListResponse } from "@/types/store";
 
-export interface GetStoresParams {
+export interface GetNearbyStoresParams {
   latitude: number;
   longitude: number;
   distance: number;
@@ -12,5 +11,7 @@ export interface GetStoresParams {
   type?: string;
 }
 
-export const getStores = (params: GetStoresParams) =>
-  apiHandler<StoreListResponse>(() => api.get("/api/stores", { params }));
+export const getNearbyStores = async (params: GetNearbyStoresParams): Promise<StoreContent[]> => {
+  const res = await api.get<StoreListResponse>("/api/stores", { params });
+  return res.data.data.storeList;
+};
