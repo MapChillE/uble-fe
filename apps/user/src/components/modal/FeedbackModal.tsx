@@ -6,11 +6,12 @@ import { Label } from "@workspace/ui/components/label";
 import { Textarea } from "@workspace/ui/components/textarea";
 import useFeedbackModalStore from "@/store/useFeedbackModalStore";
 import { useState } from "react";
+import { Star } from "lucide-react";
 
 const FeedbackModal = () => {
   const { isOpen, close } = useFeedbackModalStore();
 
-  const [formData, setFormData] = useState({ title: "", content: "" })
+  const [formData, setFormData] = useState({ title: "", content: "", score: 0 })
 
   const canSubmit = formData.title.trim() && formData.content.trim();
 
@@ -28,6 +29,28 @@ const FeedbackModal = () => {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* 안내 문구 */}
           <p className="text-sm text-gray-600 text-center">서비스 개선을 위한 소중한 의견을 들려주세요.</p>
+
+          {/* 별점 */}
+          <div className="flex flex-col items-start space-y-1">
+            <Label className="text-sm font-medium">별점</Label>
+            <div className="flex space-x-1">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <button
+                  type="button"
+                  key={star}
+                  onClick={() => setFormData((prev) => ({ ...prev, score: star }))}
+                  aria-label={`${star}점`}
+                  className="focus:outline-none"
+                >
+                  <Star
+                    fill={star <= formData.score ? "#FFD600" : "none"}
+                    stroke="#FFD600"
+                    className="w-7 h-7 transition-colors"
+                  />
+                </button>
+              ))}
+            </div>
+          </div>
 
           {/* 제목 */}
           <div className="space-y-2">
