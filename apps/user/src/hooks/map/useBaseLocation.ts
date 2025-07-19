@@ -17,8 +17,8 @@ export function useBaseLocation(currentLocation: Coordinates) {
       setBaseLocation(currentLocation);
     } else {
       const selected = myPlaces.find((p) => p.id === selectedPlaceId);
-      if (selected && selected.lng && selected.lat) {
-        setBaseLocation([selected.lng, selected.lat]);
+      if (selected && selected.coordinates) {
+        setBaseLocation(selected.coordinates);
       }
     }
   }, [selectedPlaceId, currentLocation, myPlaces]);

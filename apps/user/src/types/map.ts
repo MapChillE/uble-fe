@@ -30,7 +30,6 @@ export interface GeocodingResult {
 export interface MyPlace {
   id: string;
   name: string;
-  address?: string;
-  lng?: number;
-  lat?: number;
+  address: string;
+  coordinates: Coordinates;
 }
