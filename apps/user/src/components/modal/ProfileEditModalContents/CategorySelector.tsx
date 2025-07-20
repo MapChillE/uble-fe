@@ -38,7 +38,7 @@ const CategorySelector = ({ categoryIds, onChange }: CategorySelectorProps) => {
       </div>
       {categoryIds.length > 0 && (
         <div className="text-center">
-          <span className="text-xs text-[#41d596] font-medium">{categoryIds.length}/3개 선택됨</span>
+          <span className="text-xs text-action-green font-medium">{categoryIds.length}/3개 선택됨</span>
         </div>
       )}
     </div>
