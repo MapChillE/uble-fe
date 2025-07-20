@@ -11,8 +11,11 @@ import { DEFAULT_LOCATION } from "@/types/constants";
 export function useStorePins(baseLocation: Coordinates | null, selectedCategory: Category) {
   const selectedPlaceId = useMapStore((s) => s.selectedPlaceId);
   const [pins, setPins] = useState<Pin[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchPins = async (baseLocation: Coordinates) => {
+    if (isLoading) return;
+    setIsLoading(true);
     try {
       const stores = await getNearbyStores({
         latitude: baseLocation[1],
@@ -46,13 +49,15 @@ export function useStorePins(baseLocation: Coordinates | null, selectedCategory:
           name: selectedPlaceId === "current" ? "현위치" : "저장위치",
         },
       ]);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
     if (!baseLocation || baseLocation == DEFAULT_LOCATION) return;
     fetchPins(baseLocation);
-  }, [baseLocation, selectedCategory, selectedPlaceId]);
+  }, [baseLocation, selectedCategory.categoryId]);
 
   return pins;
 }
