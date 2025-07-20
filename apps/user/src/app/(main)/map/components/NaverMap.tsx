@@ -47,6 +47,22 @@ export default function NaverMap({ loc, zoom = 15, pins }: NaverMapProps) {
   useEffect(() => {
     if (mapRef.current && loc) {
       mapRef.current.setCenter(new window.naver.maps.LatLng(lat, lng));
+
+      if (!pins?.length) return;
+      markerRefs.current.forEach((marker) => marker.setMap(null));
+      markerRefs.current = [];
+
+      pins.forEach((pin) => {
+        const marker = new window.naver.maps.Marker({
+          position: new window.naver.maps.LatLng(pin.coords[1], pin.coords[0]),
+          map: mapRef.current!,
+          title: pin.name || "",
+        });
+        if (pin.onClick) {
+          window.naver.maps.Event.addListener(marker, "click", pin.onClick);
+        }
+        markerRefs.current.push(marker);
+      });
     }
   }, [loc]);
 
