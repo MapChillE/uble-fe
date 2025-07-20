@@ -35,3 +35,5 @@ yarn-error.log*
 
 *storybook.log
 storybook-static
+
+certificates
