@@ -108,9 +108,6 @@ const MyPlaceForm = ({ onAdd, onCancel, serviceReady }: MyPlaceFormProps) => {
           <p>
             <strong>주소:</strong> {geocode.address}
           </p>
-          <p>
-            <strong>위도/경도:</strong> {geocode.coordinates[1]}, {geocode.coordinates[0]}
-          </p>
           <input
             type="text"
             placeholder="장소 이름"
