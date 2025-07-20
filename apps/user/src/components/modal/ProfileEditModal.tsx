@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { Button } from "@workspace/ui/components/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@workspace/ui/components/dialog";
 import useProfileEditModalStore from "@/store/useProfileEditModalStore";
@@ -12,14 +12,9 @@ import CategorySelector from "./ProfileEditModalContents/CategorySelector";
 import BarcodeInput from "./ProfileEditModalContents/BarcodeInput";
 import SaveButton from "./ProfileEditModalContents/SaveButton";
 
-
 const ProfileEditModal = () => {
   const { isOpen, close } = useProfileEditModalStore();
   const { user } = useUserStore();
-  if (!user) {
-    /** 만약 유저 정보가 없다면 무언가 알림 필요 */
-    return null;
-  }
   const { rank, gender, birthDate, categoryIds, barcodeNumber } = user;
 
 
@@ -47,46 +42,54 @@ const ProfileEditModal = () => {
         <DialogHeader className="flex-shrink-0">
           <DialogTitle className="text-lg font-semibold">프로필 수정</DialogTitle>
         </DialogHeader>
-
-        <div className="flex-1 overflow-y-auto px-1">
-          <div className="space-y-6 py-4">
-            {/* 요금제 등급 */}
-            <MembershipGradeSelector
-              grade={formData.rank}
-              onChange={handleRankChange}
-            />
-            {/* 성별 */}
-            <GenderSelector
-              gender={formData.gender as "MALE" | "FEMALE"}
-              onChange={handleGenderChange}
-            />
-            {/* 생년월일 */}
-            <BirthDateSelector
-              value={formData.birthDate}
-              onChange={handleBirthDateChange}
-            />
-            {/* 관심 분야 */}
-            <CategorySelector
-              categoryIds={formData.categoryIds}
-              onChange={(ids) => setFormData((prev) => ({ ...prev, categoryIds: ids }))}
-            />
-            {/* 멤버십 바코드 번호 */}
-            <BarcodeInput
-              value={formData.barcodeNumber || ""}
-              onChange={handleBarcodeChange}
-            />
+        {user.nickname === "" ? (
+          <div className="flex flex-col items-center justify-center py-12">
+            <p className="text-gray-500">사용자 정보를 불러올 수 없습니다.</p>
+            <Button className="mt-4" onClick={close}>닫기</Button>
           </div>
-        </div>
+        ) : (
+          <Fragment>
+            <div className="flex-1 overflow-y-auto px-1">
+              <div className="space-y-6 py-4">
+                {/* 요금제 등급 */}
+                <MembershipGradeSelector
+                  grade={formData.rank}
+                  onChange={handleRankChange}
+                />
+                {/* 성별 */}
+                <GenderSelector
+                  gender={formData.gender as "MALE" | "FEMALE"}
+                  onChange={handleGenderChange}
+                />
+                {/* 생년월일 */}
+                <BirthDateSelector
+                  value={formData.birthDate}
+                  onChange={handleBirthDateChange}
+                />
+                {/* 관심 분야 */}
+                <CategorySelector
+                  categoryIds={formData.categoryIds}
+                  onChange={(ids) => setFormData((prev) => ({ ...prev, categoryIds: ids }))}
+                />
+                {/* 멤버십 바코드 번호 */}
+                <BarcodeInput
+                  value={formData.barcodeNumber || ""}
+                  onChange={handleBarcodeChange}
+                />
+              </div>
+            </div>
 
-        <div className="flex-shrink-0 flex space-x-3 pt-4">
-          <Button variant="outline" onClick={close} className="flex-1 bg-transparent">
-            취소
-          </Button>
-          <SaveButton
-            formData={formData}
-            user={user}
-          />
-        </div>
+            <div className="flex-shrink-0 flex space-x-3 pt-4">
+              <Button variant="outline" onClick={close} className="flex-1 bg-transparent">
+                취소
+              </Button>
+              <SaveButton
+                formData={formData}
+                user={user}
+              />
+            </div>
+          </Fragment>
+        )}
       </DialogContent>
     </Dialog>
   );
