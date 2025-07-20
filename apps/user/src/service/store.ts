@@ -1,7 +1,7 @@
 import api from "@api/http-commons";
-import { StoreContent, StoreListResponse } from "@/types/store";
+import { StoreContent, StoreDetail, StoreDetailResponse, StoreListResponse } from "@/types/store";
 
-export interface GetNearbyStoresParams {
+interface GetNearbyStoresParams {
   latitude: number;
   longitude: number;
   distance: number;
@@ -14,4 +14,15 @@ export interface GetNearbyStoresParams {
 export const getNearbyStores = async (params: GetNearbyStoresParams): Promise<StoreContent[]> => {
   const res = await api.get<StoreListResponse>("/api/stores", { params });
   return res.data.data.storeList;
+};
+
+interface GetStoreDetailParams {
+  latitude: number;
+  longitude: number;
+  storeId: number;
+}
+export const getStoreDetail = async (params: GetStoreDetailParams): Promise<StoreDetail> => {
+  const res = await api.get<StoreDetailResponse>(`/api/stores/${params.storeId}`, { params });
+  console.log(res.data.data);
+  return res.data.data;
 };

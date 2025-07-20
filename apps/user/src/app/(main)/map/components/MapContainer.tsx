@@ -1,20 +1,28 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Star } from "lucide-react";
-import { Button } from "@workspace/ui/components/button";
+
+import { apiHandler } from "@api/apiHandler";
 
 import SearchSection from "@/app/(main)/home/components/SearchSection";
 import MapWithBaseLocation from "@/app/(main)/map/components/MapWithBaseLocation";
-import MyPlaceSheet from "@/app/(main)/map/components/MyPlaceSheet";
+import StoreDetailDrawer from "@/app/(main)/map/components/StoreDetailDrawer";
+import MyPlaceDrawer from "@/app/(main)/map/components/MyPlaceDrawer";
+import MyPlaceTriggerBtn from "@/app/(main)/map/components/MyPlaceTriggerBtn";
+
 import CategorySection from "@/components/common/CategorySection";
-import { Category } from "@/types/category";
 import { getCategories } from "@/service/category";
+import { getStoreDetail } from "@/service/store";
+import { useBaseLocation } from "@/hooks/map/useBaseLocation";
+import { useCurrentLocation } from "@/hooks/map/useCurrentLocation";
 import { useCategoryStore } from "@/store/useCategoryStore";
-import { apiHandler } from "@api/apiHandler";
-import { ALL_CATEGORY, ANY_CATEGORYS } from "@/types/constants";
+import { useMapStore } from "@/store/useMapStore";
+
+import { ALL_CATEGORY, ANY_CATEGORYS, DEFAULT_LOCATION } from "@/types/constants";
+import { Category } from "@/types/category";
+import { Coordinates } from "@/types/map";
 import { StoreDetail, StoreSummary } from "@/types/store";
-import StoreDetailSheet, { mockdata } from "@/app/(main)/map/components/StoreDetailSheet";
+import { Pin } from "@/app/(main)/map/components/NaverMap";
 
 export default function MapContainer() {
   const [selectedCategory, setSelectedCategory] = useState<Category>(ALL_CATEGORY);
@@ -49,32 +57,28 @@ export default function MapContainer() {
     setSelectedCategory({ ...ALL_CATEGORY });
   }, []);
 
-  const handlePinClick = async ({
-    storeId,
-    coords,
-  }: {
-    storeId: number;
-    coords: [number, number];
-  }) => {
-    // TODO: 상세정보 API 호출
-    // const response = await getStoreDetail({ storeId, latitude: coords[1], longitude: coords[0] });
-    // if (response.data) {
-    //  setStoreDetail(response.data);
-    if (mockdata) {
-      setStoreDetail(mockdata.data);
+  const { location: currentLocation, getCurrentLocation } = useCurrentLocation();
+  useEffect(() => {
+    getCurrentLocation();
+  }, [getCurrentLocation]);
+
+  const baseLocation = useBaseLocation(currentLocation ?? DEFAULT_LOCATION);
+
+  const handlePinClick = async (pin: Pin) => {
+    if (!pin.id) return;
+    const data = await getStoreDetail({
+      latitude: baseLocation[1],
+      longitude: baseLocation[0],
+      storeId: pin.id,
+    });
+
+    if (data) {
+      setStoreDetail(data);
       setIsOpen(true);
       setSnapIndex(1);
     }
   };
 
-  const trigger = useMemo(
-    () => (
-      <Button variant="circle_outline" size="icon" aria-label="내 장소">
-        <Star className="h-6 w-6 fill-yellow-400 text-yellow-400" />
-      </Button>
-    ),
-    []
-  );
   return (
     <div className="relative h-screen w-full">
       {/* {categories.length > 0 && ( */}
@@ -84,13 +88,6 @@ export default function MapContainer() {
         onPinClick={handlePinClick}
       />
       {/* )} */}
-      <StoreDetailSheet
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        detail={storeDetail}
-        snapIndex={snapIndex}
-        setSnapIndex={setSnapIndex}
-      />
       <div className="absolute left-0 right-0 top-0 z-10">
         <SearchSection />
       </div>
@@ -100,7 +97,14 @@ export default function MapContainer() {
           onSelectCategory={setSelectedCategory}
         />
       </div>
-      <MyPlaceSheet trigger={trigger} />
+      <MyPlaceDrawer trigger={<MyPlaceTriggerBtn />} />
+      <StoreDetailDrawer
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        detail={storeDetail}
+        snapIndex={snapIndex}
+        setSnapIndex={setSnapIndex}
+      />
     </div>
   );
 }
