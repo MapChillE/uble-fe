@@ -38,3 +38,16 @@ export interface SetUserInfo extends responseStatus {
 export interface LogoutRes extends responseStatus {
   data: null;
 }
+
+export interface FeedbackForm {
+  title: string;
+  content: string;
+  score: number;
+}
+
+interface FeedbackId {
+  feedbackId: number;
+}
+export interface FeedbackRegistRes extends responseStatus {
+  data: FeedbackId;
+}
