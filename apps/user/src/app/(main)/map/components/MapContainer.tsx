@@ -30,7 +30,7 @@ export default function MapContainer() {
   // const categories = useCategoryStore((s) => s.categories);
 
   const [isOpen, setIsOpen] = useState(false);
-  const [snapIndex, setSnapIndex] = useState(1);
+  const [snapIndex, setSnapIndex] = useState(0);
   const [storeDetail, setStoreDetail] = useState<StoreDetail | null>(null);
 
   // TODO: useCategoryStore에서 카테고리 존재 여부 if문 확인해서 추가 or api + 추가
