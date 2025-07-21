@@ -12,8 +12,8 @@ interface GetNearbyStoresParams {
 }
 
 export const getNearbyStores = async (params: GetNearbyStoresParams): Promise<StoreContent[]> => {
-  const res = await api.get<StoreListResponse>("/api/stores", { params });
-  return res.data.data.storeList;
+  const { data } = await api.get<StoreListResponse>("/api/stores", { params });
+  return data.data.storeList;
 };
 
 interface GetStoreDetailParams {
@@ -21,7 +21,8 @@ interface GetStoreDetailParams {
   longitude: number;
   storeId: number;
 }
+
 export const getStoreDetail = async (params: GetStoreDetailParams): Promise<StoreDetail> => {
-  const res = await api.get<StoreDetailResponse>(`/api/stores/${params.storeId}`, { params });
-  return res.data.data;
+  const { data } = await api.get<StoreDetailResponse>(`/api/stores/${params.storeId}`, { params });
+  return data.data;
 };
