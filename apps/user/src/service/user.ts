@@ -1,4 +1,4 @@
-import { InfoForm, LogoutRes, SetUserInfo, UserRole } from "@/types/profile";
+import { FeedbackForm, FeedbackRegistRes, InfoForm, LogoutRes, SetUserInfo, UserRole } from "@/types/profile";
 import api from "@api/http-commons";
 
 export const kakaoLogin = async (code: string): Promise<UserRole> => {
@@ -26,5 +26,10 @@ export const setUserInfo = async (params: InfoForm): Promise<SetUserInfo> => {
 
 export const logout = async (): Promise<LogoutRes> => {
   const { data } = await api.post("api/auth/logout");
+  return data;
+}
+
+export const registFeedback = async (params: FeedbackForm): Promise<FeedbackRegistRes> => {
+  const { data } = await api.post("api/users/feedback", params);
   return data;
 }

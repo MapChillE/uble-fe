@@ -7,16 +7,24 @@ import { Textarea } from "@workspace/ui/components/textarea";
 import useFeedbackModalStore from "@/store/useFeedbackModalStore";
 import { useState } from "react";
 import { Star } from "lucide-react";
+import { FeedbackForm } from "@/types/profile";
+import { apiHandler } from "@api/apiHandler";
+import { registFeedback } from "@/service/user";
 
 const FeedbackModal = () => {
   const { isOpen, close } = useFeedbackModalStore();
 
-  const [formData, setFormData] = useState({ title: "", content: "", score: 0 })
+  const [formData, setFormData] = useState<FeedbackForm>({ title: "", content: "", score: 0 })
 
-  const canSubmit = formData.title.trim() && formData.content.trim();
+  const canSubmit = formData.title.trim() && formData.content.trim() && formData.score > 0;
 
   const handleSubmit = async () => {
-    //향후 여기에 피드백 저장 요청 하면됨
+    const { data } = await apiHandler(() => registFeedback(formData));
+    if (data?.statusCode === 0) {
+      alert("소중한 의견 감사합니다.");
+      close();
+    }
+    else alert("오류가 발생했습니다.");
   }
 
   return (
