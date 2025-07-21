@@ -10,30 +10,30 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "font-semibold bg-[#41d596] text-white border-[#41d596] hover:bg-[#14B470] shadow-lg",
+          "font-semibold bg-action-green text-white border-action-green hover:bg-hover-green shadow-lg",
         filter_select:
-          "font-semibold bg-[#41d596] text-white border-[#41d596] hover:bg-[#14B470] shadow-lg",
+          "font-semibold bg-action-green text-white border-action-green hover:bg-hover-green shadow-lg",
         filter_unselect:
           "font-semibold bg-white text-gray-700 border border-gray-300 hover:bg-gray-50",
         disabled: "font-semibold bg-gray-200 text-gray-400",
 
         onb_unselected:
-          "rounded-lg bg-gray-100 text-gray-600 hover:bg-[#41d596]/10 hover:text-[#41d596]",
-        onb_selected: "rounded-lg bg-[#41d596]/10 text-[#41d596]",
-        onb_enabled: "font-semibold rounded-lg bg-[#41d596] hover:bg-[#14B470] text-white",
+          "rounded-lg bg-gray-100 text-gray-600 hover:bg-action-green/10 hover:text-action-green",
+        onb_selected: "rounded-lg bg-action-green/10 text-action-green",
+        onb_enabled: "font-semibold rounded-lg bg-action-green hover:bg-hover-green text-white",
         onb_disabled: "font-semibold rounded-lg bg-gray-200 text-gray-400 cursor-not-allowed",
 
         unselected:
-          "rounded-lg bg-gray-100 text-gray-600 hover:bg-[#41d596]/10 hover:text-[#41d596]",
+          "rounded-lg bg-gray-100 text-gray-600 hover:bg-action-green/10 hover:text-action-green",
         period_selected:
-          "font-semibold bg-[#41d596] text-white border-[#41d596] hover:bg-[#41d596]/90 shadow-lg",
+          "font-semibold bg-action-green text-white border-action-green hover:bg-action-green/90 shadow-lg",
         kakao: "bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold rounded-xl",
         black: "bg-black hover:bg-gray-800 text-white",
         outline: "border border-gray-300 bg-white shadow-xs hover:bg-gray-50 hover:text-gray-900",
 
         modal_cancel:
           "bg-transparent border border-gray-300 bg-white shadow-xs hover:bg-gray-50 hover:text-gray-900",
-        modal_submit: "bg-[#41d596] hover:bg-[#3bc085] text-white disabled:bg-gray-300",
+        modal_submit: "bg-action-green hover:bg-[#3bc085] text-white disabled:bg-gray-300",
 
         circle_outline:
           "rounded-full border border-gray-300 bg-white shadow-lg hover:bg-gray-50 hover:text-gray-900",

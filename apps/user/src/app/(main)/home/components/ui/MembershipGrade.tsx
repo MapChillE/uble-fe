@@ -30,9 +30,15 @@ const MembershipGrade = ({ rank, isVIPcock }: MembershipGradeProps) => {
     return `rgba(${r}, ${g}, ${b}, 0.2)`;
   };
 
-  const grades = [...RANK_MAP[rank]];
-  if (isVIPcock) {
+  const grades = [];
+
+  if (isVIPcock && rank === "VIP") {
     grades.push("VIP콕");
+  } else {
+    grades.push(...RANK_MAP[rank]);
+    if (isVIPcock) {
+      grades.push("VIP콕");
+    }
   }
 
   return (

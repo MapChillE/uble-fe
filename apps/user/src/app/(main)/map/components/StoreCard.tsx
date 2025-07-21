@@ -3,6 +3,7 @@ import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
 import { MapPin, Phone, Heart } from "lucide-react";
 import MembershipGrade from "@/app/(main)/home/components/ui/MembershipGrade";
+import Image from "next/image";
 
 // 공통 헤더 컴포넌트
 const StoreCardHeader = ({
@@ -16,10 +17,12 @@ const StoreCardHeader = ({
 }) => (
   <div className="flex items-start justify-between">
     <div className="flex flex-col items-start space-y-4">
-      <img
+      <Image
         src={data.imageUrl || "/placeholder.svg"}
         alt={data.storeName}
-        className="h-24 w-24 flex-shrink-0 rounded object-cover"
+        width={96}
+        height={96}
+        className="flex-shrink-0 rounded object-fill"
       />
       <div className="w-full space-y-1">
         <Badge className="text-xs font-semibold">{data.category}</Badge>
@@ -68,16 +71,16 @@ export const DetailCard = ({
   onRouteClick?: () => void;
   onFavoriteToggle?: () => void;
 }) => (
-  <div className="space-y-4 overflow-y-auto px-4 pb-6">
+  <div className="space-y-4 overflow-y-auto px-4">
     <StoreCardHeader data={data} onRouteClick={onRouteClick} onFavoriteToggle={onFavoriteToggle} />
     <StoreInfoSection data={data} />
     <div className="m-4 space-y-2">
       <div>
         {data.benefitList.map((benefit) => (
-          <div key={benefit.benefitId} className="flex flex-col space-y-2 pb-4">
+          <div key={benefit.benefitId} className="flex flex-col space-y-2 pb-2">
             <h3 className="font-semibold">혜택 내용</h3>
             <div className="flex flex-col space-y-2">
-              <MembershipGrade rank={benefit.minRank} isVIPcock={benefit.type == "VIP"} />
+              <MembershipGrade rank={benefit.minRank} isVIPcock={benefit.type === "VIP"} />
               <span className="text-sm font-medium text-gray-900">{benefit.content}</span>
             </div>
             <div className="space-y-2 py-4">
@@ -102,7 +105,7 @@ export const SummaryCard = ({
   onRouteClick?: () => void;
   onFavoriteToggle?: () => void;
 }) => (
-  <div className="space-y-4 overflow-y-auto px-4 pb-6">
+  <div className="space-y-4 overflow-y-auto px-4">
     <StoreCardHeader data={data} onRouteClick={onRouteClick} onFavoriteToggle={onFavoriteToggle} />
     <StoreInfoSection data={data} />
   </div>
