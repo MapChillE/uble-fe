@@ -19,7 +19,7 @@ const PersonalSection = () => {
   const nickname = useUserStore((state) => state.user.nickname);
   return (
     <div className="space-y-4">
-      {nickname ? <SectionHeader title={`${nickname}님을 위한 혜택`} /> : <SectionHeader title="Error" />}
+      {nickname ? <SectionHeader title={`${nickname}님을 위한 혜택`} /> : <SectionHeader title="네트워크 문제가 발생했습니다." />}
 
       <div
         className="scrollbar-hide flex gap-4 overflow-x-auto px-4 pb-2"
