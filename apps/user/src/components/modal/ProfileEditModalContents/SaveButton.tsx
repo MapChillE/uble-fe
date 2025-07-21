@@ -1,6 +1,9 @@
 import { Button } from "@workspace/ui/components/button";
 import { UserInfo } from "@/types/profile";
 import useProfileEditModalStore from "@/store/useProfileEditModalStore";
+import { apiHandler } from "@api/apiHandler";
+import { setUserInfo } from "@/service/user";
+import useUserStore from "@/store/useUserStore";
 
 interface SaveButtonProps {
   formData: UserInfo;
@@ -9,6 +12,7 @@ interface SaveButtonProps {
 
 const SaveButton = ({ formData, user }: SaveButtonProps) => {
   const { close } = useProfileEditModalStore();
+  const { setUser } = useUserStore();
   const isChanged =
     formData.rank !== user.rank ||
     formData.gender !== user.gender ||
@@ -26,8 +30,13 @@ const SaveButton = ({ formData, user }: SaveButtonProps) => {
 
   const handleEditUserInfo = async () => {
     // 여기에 유저 정보 수정 로직 구현 후 모달 닫음
-    console.log(formData);
-    close();
+    const { data } = await apiHandler(() => setUserInfo(formData));
+    if (data?.statusCode === 0) {
+      setUser(formData);
+      alert("정보가 수정되었습니다.");
+      close();
+    }
+    else alert("사용자 정보 수정에 실패했습니다.");
   }
 
   return (

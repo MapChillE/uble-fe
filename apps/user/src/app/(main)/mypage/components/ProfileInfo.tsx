@@ -1,9 +1,7 @@
-
-
-import { UserInfo } from '@/types/profile';
+"use client"
 import { Badge } from '@workspace/ui/components/badge';
-import { Edit3 } from 'lucide-react';
 import ProfileEditBtn from './ProfileEditBtn';
+import useUserStore from '@/store/useUserStore';
 
 const gradeColors = {
   VIP: "#FFD700",
@@ -13,16 +11,14 @@ const gradeColors = {
 }
 
 const ProfileInfo = () => {
-  const userData: UserInfo = {
-    nickname: "김유블",
-    rank: "VIP",
-    gender: "FEMALE",
-    birthDate: "2025-07-11",
-    categoryIds: [
-      1,
-      3,
-      5
-    ]
+  const { user } = useUserStore();
+  const { nickname, rank, gender, birthDate } = user;
+  if (!nickname || nickname === "") {
+    return (
+      <div className="flex items-center justify-center w-full h-20 text-gray-400 text-sm">
+        유저 정보가 존재하지 않습니다.
+      </div>
+    );
   }
   return (
     <div className="flex items-center justify-between">
@@ -32,16 +28,16 @@ const ProfileInfo = () => {
         </div>
         <div>
           <div className="flex items-center space-x-2 mb-1">
-            <h2 className="text-lg font-semibold text-gray-900">{userData.nickname}</h2>
+            <h2 className="text-lg font-semibold text-gray-900">{nickname}</h2>
             <Badge
               className="text-xs font-medium text-white border-0"
-              style={{ backgroundColor: gradeColors[userData.rank as keyof typeof gradeColors] }}
+              style={{ backgroundColor: gradeColors[rank as keyof typeof gradeColors] }}
             >
-              {userData.rank}
+              {rank}
             </Badge>
           </div>
           <p className="text-xs text-gray-400">
-            {userData.gender} • {userData.birthDate.replace(/-/g, ".")}
+            {gender === "MALE" ? "남성" : "여성"} • {birthDate.replace(/-/g, ".")}
           </p>
         </div>
       </div>
