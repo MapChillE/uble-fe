@@ -12,6 +12,20 @@ export const GRADE_COLORS = {
 /** 사용자 추가 정보 입력 단계 */
 export const TOTAL_STEPS = 5;
 
+/** 개발 단계에서 사용할 기본 카테고리 목록 */
+export const CATEGORIES = [
+  { categoryId: 1, categoryName: '액티비티' },
+  { categoryId: 2, categoryName: '뷰티/건강' },
+  { categoryId: 3, categoryName: '쇼핑' },
+  { categoryId: 4, categoryName: '생활/편의' },
+  { categoryId: 5, categoryName: '푸드' },
+  { categoryId: 6, categoryName: '문화여가' },
+  { categoryId: 7, categoryName: '교육' },
+  { categoryId: 8, categoryName: '여행/교통' },
+];
+
+// export type Category = (typeof CATEGORIES)[number];
+
 interface periodType {
   label: string;
   value: string;

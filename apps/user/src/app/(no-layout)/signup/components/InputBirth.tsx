@@ -3,6 +3,7 @@ import { DatePickerPopover } from "@/components/user/DatePickerPopover";
 import { StepProps } from "@/types/profile";
 import { Input } from "@workspace/ui/components/input";
 import { useState } from "react";
+import useCalendarModalStore from "@/store/useCalendarModalStore";
 
 const formatDate = (date: Date) => {
   const yyyy = date.getFullYear();
@@ -12,7 +13,7 @@ const formatDate = (date: Date) => {
 }
 
 const InputBirth = ({ info, setInfo }: StepProps) => {
-  const [open, setOpen] = useState(false);
+  const { isOpen, open, close } = useCalendarModalStore();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     info.birthDate ? new Date(info.birthDate) : undefined
   );
@@ -36,17 +37,18 @@ const InputBirth = ({ info, setInfo }: StepProps) => {
             placeholder="YYYY.MM.DD"
             value={selectedDate ? formatDate(selectedDate) : ''}
             readOnly
+            onClick={open}
           />
           <DatePickerPopover
             isModal={false}
-            open={open}
-            onOpenChange={setOpen}
+            open={isOpen}
+            onOpenChange={(v) => v ? open() : close()}
             date={selectedDate}
             month={month}
             onMonthChange={setMonth}
             onSelect={(date) => {
               setSelectedDate(date);
-              setOpen(false);
+              close();
               // info.birthDate에 yyyy-mm-dd 형식으로 저장
               setInfo({
                 ...info,

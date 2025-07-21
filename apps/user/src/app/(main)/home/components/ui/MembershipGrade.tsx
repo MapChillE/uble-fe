@@ -38,7 +38,7 @@ const MembershipGrade = ({ rank, isVIPcock }: MembershipGradeProps) => {
   return (
     <div className="flex flex-col gap-1 space-y-1">
       <div className="flex space-x-2">
-        {grades.map((row, rowIdx) => (
+        {grades.map((row) => (
           <span
             key={row}
             className="rounded px-1.5 py-0.5 text-xs font-normal"

@@ -3,6 +3,7 @@
 import { UserInfo } from '@/types/profile';
 import { Badge } from '@workspace/ui/components/badge';
 import { Edit3 } from 'lucide-react';
+import ProfileEditBtn from './ProfileEditBtn';
 
 const gradeColors = {
   VIP: "#FFD700",
@@ -44,12 +45,7 @@ const ProfileInfo = () => {
           </p>
         </div>
       </div>
-      <button
-        // onClick={() => setIsEditModalOpen(true)}
-        className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
-      >
-        <Edit3 className="w-5 h-5" />
-      </button>
+      <ProfileEditBtn />
     </div>
   );
 };
