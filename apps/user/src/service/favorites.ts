@@ -7,7 +7,6 @@ export interface FetchFavoritesParams {
 }
 
 export const fetchFavorites = async (params: FetchFavoritesParams): Promise<BrandListData> => {
-  const res = await api.get<BrandListResponse>("api/bookmarks", { params });
-  console.log(res);
-  return res.data.data;
+  const { data } = await api.get<BrandListResponse>("api/bookmarks", { params });
+  return data.data;
 };
