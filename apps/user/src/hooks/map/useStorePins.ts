@@ -38,6 +38,7 @@ export function useStorePins(baseLocation: Coordinates | null, selectedCategory:
           id: 0,
           coords: baseLocation,
           name: selectedPlaceId === "current" ? "현위치" : "저장위치",
+          type: "current",
         },
         ...storePins,
       ]);
@@ -47,6 +48,7 @@ export function useStorePins(baseLocation: Coordinates | null, selectedCategory:
           id: 0,
           coords: baseLocation,
           name: selectedPlaceId === "current" ? "현위치" : "저장위치",
+          type: "current",
         },
       ]);
     } finally {
