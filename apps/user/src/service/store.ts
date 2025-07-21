@@ -23,6 +23,5 @@ interface GetStoreDetailParams {
 }
 export const getStoreDetail = async (params: GetStoreDetailParams): Promise<StoreDetail> => {
   const res = await api.get<StoreDetailResponse>(`/api/stores/${params.storeId}`, { params });
-  console.log(res.data.data);
   return res.data.data;
 };

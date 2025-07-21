@@ -72,7 +72,7 @@ const MyPlaceDrawer = ({ trigger }: MyPlaceDrawerProps) => {
               />
             )}
             {/* 등록 버튼 */}
-            {!showForm && places.length == 1 && (
+            {!showForm && places.length === 1 && (
               <div className="mt-4 text-center">
                 <Button variant="outline" size="sm" onClick={() => setShowForm(true)}>
                   + 장소 추가하기

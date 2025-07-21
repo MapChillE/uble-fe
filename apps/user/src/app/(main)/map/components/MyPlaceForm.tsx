@@ -56,25 +56,28 @@ const MyPlaceForm = ({ onAdd, onCancel, serviceReady }: MyPlaceFormProps) => {
       return;
     }
     dispatch({ type: "SET_LOADING", payload: true });
-    window.naver.maps.Service.geocode({ query: addressInput }, (status: any, response: any) => {
-      dispatch({ type: "SET_LOADING", payload: false });
-      if (status !== window.naver.maps.Service.Status.OK) {
-        alert(`지오코딩 오류: ${status}`);
-        return;
+    window.naver.maps.Service.geocode(
+      { query: addressInput },
+      (status: naver.maps.Service.Status, response: naver.maps.Service.GeocodeResponse) => {
+        dispatch({ type: "SET_LOADING", payload: false });
+        if (status !== window.naver.maps.Service.Status.OK) {
+          alert(`지오코딩 오류: ${status}`);
+          return;
+        }
+        const result = response.v2.addresses[0];
+        if (result) {
+          dispatch({
+            type: "SET_GEOCODE",
+            payload: {
+              address: result.roadAddress || result.jibunAddress,
+              coordinates: [parseFloat(result.x), parseFloat(result.y)],
+            },
+          });
+        } else {
+          alert("해당 주소를 찾을 수 없습니다.");
+        }
       }
-      const result = response.v2.addresses[0];
-      if (result) {
-        dispatch({
-          type: "SET_GEOCODE",
-          payload: {
-            address: result.roadAddress || result.jibunAddress,
-            coordinates: [parseFloat(result.x), parseFloat(result.y)],
-          },
-        });
-      } else {
-        alert("해당 주소를 찾을 수 없습니다.");
-      }
-    });
+    );
   }, [addressInput]);
 
   const handleAdd = () => {

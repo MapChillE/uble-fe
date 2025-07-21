@@ -84,7 +84,7 @@ export default function NaverMap({ loc, zoom = 15, pins }: NaverMapProps) {
       }
       markerRefs.current.push(marker);
     });
-  }, [pins, mapRef.current]);
+  }, [pins]);
 
   return <div id={mapId} style={{ width: "100%", height: "100%" }} />;
 }

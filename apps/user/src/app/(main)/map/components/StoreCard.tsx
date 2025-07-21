@@ -80,7 +80,7 @@ export const DetailCard = ({
           <div key={benefit.benefitId} className="flex flex-col space-y-2 pb-2">
             <h3 className="font-semibold">혜택 내용</h3>
             <div className="flex flex-col space-y-2">
-              <MembershipGrade rank={benefit.minRank} isVIPcock={benefit.type == "VIP"} />
+              <MembershipGrade rank={benefit.minRank} isVIPcock={benefit.type === "VIP"} />
               <span className="text-sm font-medium text-gray-900">{benefit.content}</span>
             </div>
             <div className="space-y-2 py-4">

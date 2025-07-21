@@ -66,16 +66,21 @@ export default function MapContainer() {
 
   const handlePinClick = async (pin: Pin) => {
     if (!pin.id) return;
-    const data = await getStoreDetail({
-      latitude: baseLocation[1],
-      longitude: baseLocation[0],
-      storeId: pin.id,
-    });
+    try {
+      const data = await getStoreDetail({
+        latitude: baseLocation[1],
+        longitude: baseLocation[0],
+        storeId: pin.id,
+      });
 
-    if (data) {
-      setStoreDetail(data);
-      setIsOpen(true);
-      setSnapIndex(1);
+      if (data) {
+        setStoreDetail(data);
+        setIsOpen(true);
+        setSnapIndex(1);
+      }
+    } catch (error) {
+      // TODO: 에러 처리
+      alert("가맹점 상세 정보 로딩 실패: " + error);
     }
   };
 

@@ -45,7 +45,7 @@ export default function MapWithBaseLocation({
           onPinClick(pin); // TODO: coords 수정
         },
       })),
-    [storePins, baseLocation, selectedCategory]
+    [storePins, onPinClick]
   );
   return (
     <div className="flex h-full w-full">

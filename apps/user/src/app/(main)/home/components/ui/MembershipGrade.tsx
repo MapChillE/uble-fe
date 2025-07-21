@@ -32,7 +32,7 @@ const MembershipGrade = ({ rank, isVIPcock }: MembershipGradeProps) => {
 
   const grades = [];
 
-  if (isVIPcock && rank == "VIP") {
+  if (isVIPcock && rank === "VIP") {
     grades.push("VIP콕");
   } else {
     grades.push(...RANK_MAP[rank]);
