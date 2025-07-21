@@ -6,7 +6,7 @@ export default function FavoritePage() {
       {/* <hr className="border-gray-300" /> */}
       <div className="space-y-4 p-4">
         <h3 className="text-lg font-semibold">즐겨찾기</h3>
-        {/* <FavoriteSectionProvider /> */}
+        <FavoriteSectionProvider />
       </div>
     </section>
   );
