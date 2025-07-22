@@ -35,7 +35,8 @@ const MembershipGrade = ({ rank, isVIPcock }: MembershipGradeProps) => {
   if (isVIPcock && rank === "VIP") {
     grades.push("VIP콕");
   } else {
-    grades.push(...RANK_MAP[rank]);
+    // TODO: 수정된 즐겨찾기 api 연결시 || [] 삭제
+    grades.push(...(RANK_MAP[rank] || []));
     if (isVIPcock) {
       grades.push("VIP콕");
     }

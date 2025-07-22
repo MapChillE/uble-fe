@@ -1,11 +1,10 @@
-
-
 import { Card, CardContent } from "@workspace/ui/components/card";
 import MembershipGrade from "../../app/(main)/home/components/ui/MembershipGrade";
 import { BrandContent } from "@/types/brand";
 import classNames from "classnames";
 import FavoriteBtn from "../FavoriteBtn";
 import { memo } from "react";
+import Image from "next/image";
 
 type Variant = "vertical" | "horizontal";
 interface DynamicCardProps {
@@ -20,7 +19,7 @@ const DynamicCard = ({ data, variant = "vertical", onClick }: DynamicCardProps) 
     <Card
       onClick={onClick}
       className={classNames(
-        "cursor-pointer border-gray-200 bg-white transition-all duration-200 hover:border-[#41d596] hover:shadow-lg",
+        "cursor-pointer border-gray-200 bg-white object-fill transition-all duration-200 hover:border-[#41d596] hover:shadow-lg",
         {
           // 세로형: 고정 너비 & 세로 레이아웃
           "w-64 flex-shrink-0": variant === "vertical",
@@ -34,8 +33,10 @@ const DynamicCard = ({ data, variant = "vertical", onClick }: DynamicCardProps) 
           // --- Vertical Layout ---
           <>
             <div className="relative">
-              <img
+              <Image
                 src={imgUrl || "/placeholder.png"}
+                width={32}
+                height={32}
                 alt={name}
                 className="h-32 w-full rounded-t-lg object-cover"
               />
@@ -57,10 +58,12 @@ const DynamicCard = ({ data, variant = "vertical", onClick }: DynamicCardProps) 
         ) : (
           // --- Horizontal Layout ---
           <div className="flex items-center space-x-4">
-            <img
+            <Image
               src={imgUrl || "/placeholder.png"}
+              width={32}
+              height={32}
               alt={name}
-              className="h-16 w-16 flex-shrink-0 rounded-lg object-cover"
+              className="h-16 w-16 flex-shrink-0 rounded-lg object-fill"
             />
             <div className="min-w-0 flex-1">
               <div className="mb-2 flex items-start justify-between">
