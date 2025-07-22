@@ -10,7 +10,7 @@ export default function Footer() {
   const navItems = [
     { path: "/home", icon: Home, label: "홈" },
     { path: "/map", icon: MapPin, label: "지도" },
-    { path: "/favorite", icon: Heart, label: "즐겨찾기" },
+    { path: "/favorites", icon: Heart, label: "즐겨찾기" },
     { path: "/mypage", icon: UserIcon, label: "마이페이지" },
   ];
 
