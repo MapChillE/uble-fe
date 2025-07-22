@@ -3,11 +3,10 @@
 import { useMemo } from "react";
 
 import { BrandContent, BrandListData } from "@/types/brand";
-import EmptyState from "@/app/(main)/home/components/ui/EmptyState";
 import DynamicCard from "@/components/ui/DynamicCard";
 import useInfiniteScroll from "@/hooks/useInfiniteScroll";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { fetchFavorites, FetchFavoritesParams } from "@/service/favorites";
+import { FetchFavoritesParams, fetchFavoritesQuery } from "@/service/favorites";
 
 export default function FavoriteBrandSection() {
   // 즐겨찾기 데이터 받아오기
@@ -20,8 +19,7 @@ export default function FavoriteBrandSection() {
   const queryKey = ["favoriteBrands", params];
   const { data, fetchNextPage, hasNextPage, isLoading, isError, error } = useInfiniteQuery({
     queryKey,
-    queryFn: ({ pageParam }) =>
-      fetchFavorites({ ...params, lastBookmarkId: pageParam ? pageParam : undefined }),
+    queryFn: ({ pageParam }) => fetchFavoritesQuery({ ...params, lastBookmarkId: pageParam }),
     getNextPageParam: (lastPage: BrandListData) =>
       lastPage.hasNext ? lastPage.lastCursorId : undefined,
     staleTime: 1000 * 60 * 5,
@@ -36,12 +34,7 @@ export default function FavoriteBrandSection() {
   });
 
   if (isLoading) {
-    return (
-      <div className="flex h-48 items-center justify-center">
-        {/* <CircleLoader color="#F89520" /> */}
-        로딩중...
-      </div>
-    );
+    return <div className="flex h-48 items-center justify-center">로딩중...</div>;
   }
 
   if (isError) {
@@ -49,8 +42,6 @@ export default function FavoriteBrandSection() {
   }
 
   const favoriteBrands = data?.pages.flatMap((page) => page.content) || [];
-  if (!favoriteBrands) return <div>로딩중...</div>;
-
   if (favoriteBrands.length === 0) {
     return (
       <div className="py-12 text-center">
