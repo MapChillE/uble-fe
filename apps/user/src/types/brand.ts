@@ -1,7 +1,7 @@
 import { responseStatus } from "./api";
 
 export enum Grade {
-  None = "NONE",
+  NONE = "NONE",
   NORMAL = "NORMAL",
   PREMIUM = "PREMIUM",
   VIP = "VIP"
