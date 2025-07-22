@@ -14,11 +14,13 @@ import LoadingState from "./ui/LoadingState";
 import ErrorState from "./ui/ErrorState";
 import EmptyState from "./ui/EmptyState";
 import { ALL_CATEGORY } from "@/types/constants";
+import { useRouter } from "next/navigation";
 
 const PAGE_SIZE = 8;
 
 export default function EntireSection() {
   const [categorys, setCategorys] = useState<Category>(ALL_CATEGORY);
+  const router = useRouter();
 
   const params = useMemo<FetchBrandsParams>(
     () => ({
@@ -76,7 +78,7 @@ export default function EntireSection() {
                   {data.pages
                     .flatMap((page) => page.content)
                     .map((brand: BrandContent) => (
-                      <DynamicCard key={brand.brandId} data={brand} variant="horizontal" />
+                      <DynamicCard key={brand.brandId} data={brand} variant="horizontal" onClick={() => router.push(`/partnerships/${brand.brandId}`)} />
                     ))}
                 </div>
                 {/* 이 div가 보일 때마다 다음 페이지를 불러옵니다 */}
