@@ -19,7 +19,7 @@ export interface BrandContent {
   /** 혜택을 사용할 수 있는 최소 등급 */
   minRank: "NONE" | "NORMAL" | "PREMIUM";
   /** 사용자가 북마크했는지 여부 */
-  bookmarked?: boolean;
+  isBookmarked?: boolean;
 }
 
 /**
@@ -34,11 +34,26 @@ export interface BrandListData {
   lastCursorId?: number;
 }
 
-interface BrandDetailData extends BrandContent {
+export interface BrandBenefit {
+  benefitId: number;
+  type: string;
+  minRank: "NONE" | "NORMAL" | "PREMIUM" | "VIP";
+  content: string;
+  manual: string;
+  provisionCount: string;
+}
+export interface BrandDetailData {
+  brandId: number;
+  name: string;
   csrNumber: string;
   description: string;
+  imgUrl: string;
   season: string;
   categoryName: string;
+  bookmarkId?: number;
+  benefits: BrandBenefit[];
+  isBookmarked: boolean;
+  isVIPcock: boolean;
 }
 
 /**
