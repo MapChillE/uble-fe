@@ -51,7 +51,6 @@ export default function FavoriteBrandSection() {
   const favoriteBrands = data?.pages.flatMap((page) => page.content) || [];
   if (!favoriteBrands) return <div>로딩중...</div>;
 
-  console.log(favoriteBrands);
   if (favoriteBrands.length === 0) {
     return (
       <div className="py-12 text-center">
@@ -62,18 +61,12 @@ export default function FavoriteBrandSection() {
   }
   return (
     <div>
-      {favoriteBrands.length === 0 ? (
-        <EmptyState />
-      ) : (
-        <>
-          <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {favoriteBrands.map((brand: BrandContent) => (
-              <DynamicCard key={brand.brandId} data={brand} variant="horizontal" />
-            ))}
-          </div>
-          <div ref={loadMoreRef} className="h-1" />
-        </>
-      )}
+      <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {favoriteBrands.map((brand: BrandContent) => (
+          <DynamicCard key={brand.brandId} data={brand} variant="horizontal" />
+        ))}
+      </div>
+      <div ref={loadMoreRef} className="h-1" />
     </div>
   );
 }
