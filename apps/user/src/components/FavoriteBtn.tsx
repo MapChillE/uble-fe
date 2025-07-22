@@ -15,7 +15,7 @@ const FavoriteBtn = ({ brandId, bookmarked, variant }: FavoriteBtnProps) => {
       <Heart
         className={classNames(
           variant === 'vertical' ? 'w-4 h-4' : 'w-5 h-5',
-          bookmarked ? 'text-[#FD7563]' : 'text-gray-400'
+          bookmarked ? 'text-[#FD7563]' : 'text-gray-400 hover:text-gray-600'
         )}
         fill={bookmarked ? '#FD7563' : 'none'}
       />

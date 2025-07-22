@@ -13,7 +13,7 @@ const PersonalSection = () => {
     imgUrl: "",
     isVIPcock: true,
     minRank: "NONE",
-    bookmarked: false,
+    isBookmarked: false,
   };
 
   const nickname = useUserStore((state) => state.user.nickname);
