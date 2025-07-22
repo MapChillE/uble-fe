@@ -2,7 +2,7 @@ import { BrandListData, BrandListResponse } from "@/types/brand";
 import api from "@api/http-commons";
 
 export interface FetchFavoritesParams {
-  lastBookmarkId?: string;
+  lastBookmarkId?: number;
   size?: number;
 }
 

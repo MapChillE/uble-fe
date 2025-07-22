@@ -21,7 +21,7 @@ export default function FavoriteBrandSection() {
   const { data, fetchNextPage, hasNextPage, isLoading, isError, error } = useInfiniteQuery({
     queryKey,
     queryFn: ({ pageParam }) =>
-      fetchFavorites({ ...params, lastBookmarkId: pageParam ? String(pageParam) : undefined }),
+      fetchFavorites({ ...params, lastBookmarkId: pageParam ? pageParam : undefined }),
     getNextPageParam: (lastPage: BrandListData) =>
       lastPage.hasNext ? lastPage.lastCursorId : undefined,
     staleTime: 1000 * 60 * 5,
