@@ -1,12 +1,12 @@
-import FavoriteSectionProvider from "@/app/(main)/favorite/components/FavoriteSectionProvider";
+import FavoriteBrandSection from "@/app/(main)/favorites/components/FavoriteBrandSection";
 
-export default function FavoritePage() {
+export default function FavoritesPage() {
   return (
     <section>
       {/* <hr className="border-gray-300" /> */}
       <div className="space-y-4 p-4">
         <h3 className="text-lg font-semibold">즐겨찾기</h3>
-        <FavoriteSectionProvider />
+        <FavoriteBrandSection />
       </div>
     </section>
   );

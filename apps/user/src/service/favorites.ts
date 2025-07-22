@@ -18,7 +18,7 @@ export const fetchFavoritesQuery = async (params: FetchFavoritesParams): Promise
   const { data, error } = await fetchFavorites(params);
 
   if (error || !data) {
-    throw new Error(error || "즐겨찾기 불러오기 실패");
+    throw new Error(error || "즐겨찾기 불러오기에 실패했습니다.");
   }
 
   return data;
@@ -30,7 +30,17 @@ interface PostFavoritesParams {
 
 export const postFavorites = async (params: PostFavoritesParams) => {
   return await apiHandler(async () => {
-    const { data } = await api.post<FavoritesResponse>("api/bookmarks", params);
+    const { data } = await api.post<FavoritesResponse>("api/bookmarks", null, { params });
     return data.data;
   });
+};
+
+export const postFavoritesMutation = async (params: PostFavoritesParams): Promise<number> => {
+  const { data, error } = await postFavorites(params);
+
+  if (error || data === null) {
+    throw new Error(error || "즐겨찾기 등록에 실패했습니다.");
+  }
+
+  return data;
 };
