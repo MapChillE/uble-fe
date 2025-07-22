@@ -17,7 +17,7 @@ export interface BrandContent {
   /** VIP콕 혜택이 존재하는지 여부 */
   isVIPcock: boolean;
   /** 혜택을 사용할 수 있는 최소 등급 */
-  minRank: "NONE" | "NORMAL" | "PREMIUM";
+  minRank: "NONE" | "NORMAL" | "PREMIUM" | "VIP";
   /** 사용자가 북마크했는지 여부 */
   isBookmarked?: boolean;
 }
@@ -36,7 +36,7 @@ export interface BrandListData {
 
 export interface BrandBenefit {
   benefitId: number;
-  type: string;
+  type: "NORMAL" | "VIP";
   minRank: "NONE" | "NORMAL" | "PREMIUM" | "VIP";
   content: string;
   manual: string;
