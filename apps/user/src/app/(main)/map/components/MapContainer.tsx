@@ -18,7 +18,7 @@ import { useCurrentLocation } from "@/hooks/map/useCurrentLocation";
 import { useCategoryStore } from "@/store/useCategoryStore";
 import { useMapStore } from "@/store/useMapStore";
 
-import { ALL_CATEGORY, ANY_CATEGORYS, DEFAULT_LOCATION } from "@/types/constants";
+import { ALL_CATEGORY, ANY_CATEGORIES, DEFAULT_LOCATION } from "@/types/constants";
 import { Category } from "@/types/category";
 import { Coordinates } from "@/types/map";
 import { StoreDetail, StoreSummary } from "@/types/store";
@@ -30,7 +30,7 @@ export default function MapContainer() {
   // const categories = useCategoryStore((s) => s.categories);
 
   const [isOpen, setIsOpen] = useState(false);
-  const [snapIndex, setSnapIndex] = useState(1);
+  const [snapIndex, setSnapIndex] = useState(0);
   const [storeDetail, setStoreDetail] = useState<StoreDetail | null>(null);
 
   // TODO: useCategoryStore에서 카테고리 존재 여부 if문 확인해서 추가 or api + 추가
@@ -47,7 +47,7 @@ export default function MapContainer() {
           categoryId: category.categoryId,
           categoryName: category.categoryName,
         })),
-        ...ANY_CATEGORYS,
+        ...ANY_CATEGORIES,
       ]);
     }
   };
@@ -76,7 +76,7 @@ export default function MapContainer() {
       if (data) {
         setStoreDetail(data);
         setIsOpen(true);
-        setSnapIndex(1);
+        setSnapIndex(0);
       }
     } catch (error) {
       // TODO: 에러 처리
