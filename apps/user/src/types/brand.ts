@@ -1,5 +1,12 @@
 import { responseStatus } from "./api";
 
+export enum Grade {
+  None = "NONE",
+  NORMAL = "NORMAL",
+  PREMIUM = "PREMIUM",
+  VIP = "VIP"
+}
+
 /**
  * 브랜드 단일 항목 타입
  */
@@ -17,7 +24,7 @@ export interface BrandContent {
   /** VIP콕 혜택이 존재하는지 여부 */
   isVIPcock: boolean;
   /** 혜택을 사용할 수 있는 최소 등급 */
-  minRank: "NONE" | "NORMAL" | "PREMIUM" | "VIP";
+  minRank: Grade;
   /** 사용자가 북마크했는지 여부 */
   isBookmarked?: boolean;
 }
@@ -37,7 +44,7 @@ export interface BrandListData {
 export interface BrandBenefit {
   benefitId: number;
   type: "NORMAL" | "VIP";
-  minRank: "NONE" | "NORMAL" | "PREMIUM" | "VIP";
+  minRank: Grade;
   content: string;
   manual: string;
   provisionCount: string;
