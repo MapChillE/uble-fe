@@ -10,7 +10,7 @@ const PartnershipBenefitList = (data: BrandDetailData) => {
       <div className="space-y-6">
         {benefits.map((benefit, idx) => (
           <div
-            key={idx}
+            key={benefit.benefitId}
             className="rounded-xl border border-gray-200 bg-white shadow-sm p-5 space-y-3"
           >
             {/* 등급 뱃지와 혜택명 한 줄에 */}
