@@ -4,7 +4,7 @@ export enum Grade {
   NONE = "NONE",
   NORMAL = "NORMAL",
   PREMIUM = "PREMIUM",
-  VIP = "VIP"
+  VIP = "VIP",
 }
 
 /**
@@ -27,6 +27,8 @@ export interface BrandContent {
   minRank: Grade;
   /** 사용자가 북마크했는지 여부 */
   isBookmarked?: boolean;
+  /** 북마크 ID */
+  bookmarkId?: number;
 }
 
 /**
