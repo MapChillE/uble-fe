@@ -24,12 +24,13 @@ export interface InfoForm {
   gender: string;
   birthDate: string;
   categoryIds: number[];
+  barcodeNumber?: string;
 }
 
 export interface StepProps {
   info: InfoForm;
   setInfo: Dispatch<SetStateAction<InfoForm>>;
-};
+}
 
 export interface SetUserInfo extends responseStatus {
   data: InfoForm;

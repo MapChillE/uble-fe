@@ -17,7 +17,7 @@ const SaveButton = ({ formData, user }: SaveButtonProps) => {
     formData.rank !== user.rank ||
     formData.gender !== user.gender ||
     formData.birthDate !== user.birthDate ||
-    formData.barcodeNumber !== (user.barcodeNumber || '') ||
+    formData.barcodeNumber !== (user.barcodeNumber || "") ||
     formData.categoryIds?.length !== user.categoryIds?.length ||
     !formData.categoryIds.every((id) => user.categoryIds.includes(id));
 
@@ -26,6 +26,9 @@ const SaveButton = ({ formData, user }: SaveButtonProps) => {
     !!formData.gender &&
     !!formData.birthDate &&
     formData.categoryIds?.length > 0 &&
+    (!formData.barcodeNumber ||
+      formData.barcodeNumber.length === 0 ||
+      formData.barcodeNumber.length > 15) &&
     isChanged;
 
   const handleEditUserInfo = async () => {
@@ -35,9 +38,8 @@ const SaveButton = ({ formData, user }: SaveButtonProps) => {
       setUser(formData);
       alert("정보가 수정되었습니다.");
       close();
-    }
-    else alert("사용자 정보 수정에 실패했습니다.");
-  }
+    } else alert("사용자 정보 수정에 실패했습니다.");
+  };
 
   return (
     <Button
@@ -50,4 +52,4 @@ const SaveButton = ({ formData, user }: SaveButtonProps) => {
   );
 };
 
-export default SaveButton; 
+export default SaveButton;
