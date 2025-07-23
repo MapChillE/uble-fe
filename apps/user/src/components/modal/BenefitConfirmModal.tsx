@@ -2,7 +2,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@workspace/ui/components/dialog";
 import { Button } from "@workspace/ui/components/button";
 import useBenefitConfirmModalStore from "@/store/useBenefitConfirmModalStore";
-import { UsageRegistReq } from "@/types/usage";
+import { UsageRegistRequest } from "@/types/usage";
 import { apiHandler } from "@api/apiHandler";
 import { setUsage } from "@/service/usage";
 import { toast } from "sonner";
@@ -19,7 +19,7 @@ const BenefitConfirmModal = () => {
   const handleYes = async (benefitType: "NORMAL" | "VIP" = "NORMAL") => {
     if (storeId !== null) {
       setIsLoading(true);
-      const params: UsageRegistReq = { benefitType };
+      const params: UsageRegistRequest = { benefitType };
       const { data } = await apiHandler(() => setUsage(storeId, params));
       setIsLoading(false);
       if (data?.statusCode === 0) {
