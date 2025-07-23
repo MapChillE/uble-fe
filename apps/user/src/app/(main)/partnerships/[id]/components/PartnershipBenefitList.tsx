@@ -1,46 +1,116 @@
+"use client";
 import MembershipGrade from "@/app/(main)/home/components/ui/MembershipGrade";
 import { BrandDetailData } from "@/types/brand";
+import { Badge } from "@workspace/ui/components/badge";
+import { Card, CardContent, CardHeader } from "@workspace/ui/components/card";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@workspace/ui/components/collapsible";
+import { AlertCircle, ChevronDown, Gift, Info } from "lucide-react";
+import { useState } from "react";
 
 const PartnershipBenefitList = (data: BrandDetailData) => {
   const { benefits } = data;
-
+  const [openItems, setOpenItems] = useState<number[]>([]);
+  const toggleItem = (index: number) => {
+    setOpenItems((prev) =>
+      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
+    );
+  };
   return (
     <div className="space-y-4 pt-4">
-      <h1 className="font-bold text-xl">혜택 내용</h1>
-      <div className="space-y-6">
+      <div className="flex items-center justify-start gap-3">
+        {/* <div className="p-3 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-full">
+          <Gift className="w-6 h-6 text-white" />
+        </div> */}
+        <h2 className="text-xl font-bold text-gray-900">혜택 내용</h2>
+      </div>
+      {/* 혜택 카드 목록 */}
+      <div className="grid gap-6">
         {benefits.map((benefit, idx) => (
-          <div
+          <Card
             key={benefit.benefitId}
-            className="rounded-xl border border-gray-200 bg-white shadow-sm p-5 space-y-3"
+            className="overflow-hidden border-0 bg-gradient-to-r from-white to-gray-50 p-6 shadow-lg transition-all duration-300 hover:shadow-xl"
           >
-            {/* 등급 뱃지와 혜택명 한 줄에 */}
-            <div className="flex items-center space-x-2">
-              <MembershipGrade rank={benefit.minRank} isVIPcock={benefit.type === "VIP"} />
-            </div>
-            {/* 혜택 설명 */}
-            {benefit.content.split('\n').map((item, idx) => (
-              <div key={idx} className={idx === 0 ? "text-lg font-semibold text-gray-900" : "text-sm text-gray-700"}>
-                {item}
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <MembershipGrade rank={benefit.minRank} isVIPcock={benefit.type === "VIP"} />
+                </div>
+                <Badge
+                  variant="outline"
+                  className="border-emerald-200 bg-emerald-50 text-emerald-700"
+                >
+                  혜택 {idx + 1}
+                </Badge>
               </div>
-            ))}
-            {/* 이용방법 - 토글 UI */}
-            <details className="bg-gray-50 rounded-lg p-3">
-              <summary className="flex items-center justify-between text-sm font-medium mb-1 text-gray-900 cursor-pointer list-none">
-                이용방법 및 유의사항
-                {/* 화살표는 CSS로 바꿀 수도 있고, 간단히 summary 뒤에 텍스트로 표시해도 됨 */}
-                <span className="ml-2 text-xs">▼</span>
-              </summary>
-              <ul className="text-xs text-gray-600 space-y-1 mt-2">
-                {benefit.manual.split('\n').map((item, j) => (
-                  <li key={j}>{item}</li>
-                ))}
-              </ul>
-            </details>
-            {/* 이용 제한 */}
-            <div className="pt-2">
-              <p className="text-xs text-gray-500">이용 제한: {benefit.provisionCount}</p>
-            </div>
-          </div>
+            </CardHeader>
+
+            <CardContent className="space-y-6">
+              {/* 혜택 내용 */}
+              <div className="space-y-4">
+                {benefit.content.split("\n").map((item, contentIdx) => {
+                  const isTitle =
+                    contentIdx === 0 ||
+                    item.includes(":") ||
+                    item.includes("②") ||
+                    item.includes("우수");
+                  return (
+                    <div
+                      key={contentIdx}
+                      className={
+                        isTitle
+                          ? "text-xl font-bold leading-relaxed text-gray-900"
+                          : "border-l-2 border-emerald-200 pl-4 text-base leading-relaxed text-gray-700"
+                      }
+                    >
+                      {item}
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* 이용방법 토글 */}
+              <Collapsible open={openItems.includes(idx)} onOpenChange={() => toggleItem(idx)}>
+                <CollapsibleTrigger className="w-full">
+                  <div className="hover:to-gray-150 flex items-center justify-between rounded-xl bg-gradient-to-r from-gray-50 to-gray-100 p-4 transition-colors hover:from-gray-100">
+                    <div className="flex items-center gap-3">
+                      <Info className="h-5 w-5 text-blue-600" />
+                      <span className="font-semibold text-gray-900">이용방법 및 유의사항</span>
+                    </div>
+                    <ChevronDown
+                      className={`h-5 w-5 text-gray-500 transition-transform ${
+                        openItems.includes(idx) ? "rotate-180" : ""
+                      }`}
+                    />
+                  </div>
+                </CollapsibleTrigger>
+
+                <CollapsibleContent className="mt-4">
+                  <div className="rounded-xl border border-blue-100 bg-blue-50 p-6">
+                    <ul className="space-y-3">
+                      {benefit.manual.split("\n").map((item, j) => (
+                        <li key={j} className="flex items-start gap-3 text-sm text-gray-700">
+                          <span className="leading-relaxed">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </CollapsibleContent>
+              </Collapsible>
+
+              {/* 이용 제한 */}
+              <div className="flex items-center gap-3 p-4">
+                <AlertCircle className="h-5 w-5 flex-shrink-0 text-amber-600" />
+                <div>
+                  <p className="font-medium text-amber-800">이용 제한</p>
+                  <p className="text-sm text-amber-700">{benefit.provisionCount}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         ))}
       </div>
     </div>
