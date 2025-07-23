@@ -37,6 +37,7 @@ const DynamicCard = ({ data, variant = "vertical", onClick }: DynamicCardProps) 
                 src={imgUrl || "/placeholder.png"}
                 width={32}
                 height={32}
+                quality={100}
                 alt={name}
                 className="h-32 w-full rounded-t-lg object-cover"
               />
@@ -62,6 +63,7 @@ const DynamicCard = ({ data, variant = "vertical", onClick }: DynamicCardProps) 
               src={imgUrl || "/placeholder.png"}
               width={32}
               height={32}
+              quality={100}
               alt={name}
               className="h-16 w-16 flex-shrink-0 rounded-lg object-fill"
             />
