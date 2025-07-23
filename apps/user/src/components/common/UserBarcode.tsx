@@ -12,6 +12,7 @@ const UserBarcode = () => {
           width={2}
           height={80}
           fontSize={18}
+          background="#F9FAFB"
         />
       </div>
     );
