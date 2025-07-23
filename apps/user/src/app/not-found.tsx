@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { Button } from "@workspace/ui/components/button";
-// import "@/styles/globals.css";
 
 export default function NotFound() {
   return (
