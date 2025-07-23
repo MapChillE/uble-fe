@@ -6,7 +6,6 @@ import { apiHandler } from "@api/apiHandler";
 import { fetchBrandDetail } from "@/service/brand";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import UserBarcode from "@/components/common/UserBarcode";
 import BarcodeContainer from "./BarcodeContainer";
 
 const PartnershipContainer = ({ id }: { id: string }) => {
