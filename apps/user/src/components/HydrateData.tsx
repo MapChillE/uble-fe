@@ -3,19 +3,12 @@ import { useEffect } from "react";
 import useUserStore from "@/store/useUserStore";
 import { getUserInfo } from "@/service/user";
 import { apiHandler } from "@api/apiHandler";
-import { useCategoryStore } from "@/store/useCategoryStore";
-import { getCategories } from "@/service/category";
-import { ALL_CATEGORY, ANY_CATEGORIES } from "@/types/constants";
-import { useLocationStore } from "@/store/useLocationStore";
-import { useCurrentLocation } from "@/hooks/map/useCurrentLocation";
+import { useHydrateLocation } from "@/hooks/map/useHydrateLocation";
+import { useHydrateCategories } from "@/hooks/map/useHydrateCategories";
 
 /** 사용자 정보, 카테고리를 가져와서 store에 저장하기 위한 컴포넌트 */
 const HydrateData = () => {
   const { setUser, user } = useUserStore();
-  const setCategories = useCategoryStore((s) => s.setCategories);
-  const setUserCategories = useCategoryStore((s) => s.setUserCategories);
-  const setCurrentLocation = useLocationStore((s) => s.setCurrentLocation);
-  const { location, getCurrentLocation } = useCurrentLocation();
 
   useEffect(() => {
     (async () => {
@@ -28,33 +21,8 @@ const HydrateData = () => {
     })();
   }, [setUser]);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const { data } = await apiHandler(() => getCategories());
-        if (data && data.categoryList) {
-          setCategories([
-            ALL_CATEGORY,
-            ...data.categoryList.map((category) => ({ ...category })),
-            ...ANY_CATEGORIES,
-          ]);
-          setUserCategories(data.categoryList);
-        }
-      } catch (e) {
-        // alert("카테고리 불러오기 실패");
-      }
-    })();
-  }, []);
-
-  useEffect(() => {
-    getCurrentLocation();
-  }, [getCurrentLocation]);
-
-  useEffect(() => {
-    if (location) {
-      setCurrentLocation(location);
-    }
-  }, [location, setCurrentLocation]);
+  useHydrateCategories();
+  useHydrateLocation();
 
   return null;
 };
