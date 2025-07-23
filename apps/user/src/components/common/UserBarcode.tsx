@@ -4,7 +4,7 @@ const UserBarcode = () => {
   const { user } = useUserStore();
   if (user.barcode)
     return (
-      <div className="flex justify-center">
+      <div className="flex justify-center" aria-label={`멤버십 바코드: ${user.barcode}`}>
         <Barcode
           value={user.barcode}
           font="pretendard"
@@ -16,6 +16,7 @@ const UserBarcode = () => {
         />
       </div>
     );
+  else return null;
 };
 
 export default UserBarcode;
