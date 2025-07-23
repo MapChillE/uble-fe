@@ -1,10 +1,12 @@
 "use client";
 import UserBarcode from "@/components/common/UserBarcode";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import BarcodeBlur from "./BarcodeBlur";
+import useUserStore from "@/store/useUserStore";
 
 const BarcodeContainer = () => {
   const [isBarcodeRevealed, setIsBarcodeRevealed] = useState(false);
+  const { barcode } = useUserStore((state) => state.user);
 
   const handleBarcodeClick = () => {
     if (!isBarcodeRevealed) {
@@ -16,17 +18,28 @@ const BarcodeContainer = () => {
       <h3 className="font-semibold">멤버십 바코드</h3>
       <div
         className={`relative cursor-pointer rounded-lg bg-gray-50 p-6 transition-all duration-300 ${
-          !isBarcodeRevealed ? "hover:bg-gray-100" : ""
+          !isBarcodeRevealed && barcode ? "hover:bg-gray-100" : ""
         }`}
         onClick={handleBarcodeClick}
       >
         <div className="text-center">
-          <UserBarcode />
-          <div className="space-y-1">
-            <p className="text-xs text-[#41d596]">매장에서 이 바코드를 제시해주세요</p>
-          </div>
+          {barcode ? (
+            <Fragment>
+              <UserBarcode />
+              <div className="space-y-1">
+                <p className="text-xs text-[#41d596]">매장에서 이 바코드를 제시해주세요</p>
+              </div>
+            </Fragment>
+          ) : (
+            <div className="space-y-1">
+              <p className="text-xs text-[#41d596]">
+                바코드를 등록하신 후 LGU+의 다양한 혜택을 이용하세요!
+              </p>
+              <p className="text-xs text-[#41d596]">혜택 사용 시 사용자 맞춤 제휴처가 추천됩니다</p>
+            </div>
+          )}
         </div>
-        {!isBarcodeRevealed && <BarcodeBlur />}
+        {!isBarcodeRevealed && barcode && <BarcodeBlur />}
       </div>
     </div>
   );
