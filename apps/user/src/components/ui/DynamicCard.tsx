@@ -13,17 +13,7 @@ interface DynamicCardProps {
   onClick?: () => void;
 }
 const DynamicCard = ({ data, variant = "vertical", onClick }: DynamicCardProps) => {
-  const {
-    brandId,
-    name,
-    category,
-    description,
-    imgUrl,
-    isVIPcock,
-    minRank,
-    isBookmarked,
-    bookmarkId,
-  } = data;
+  const { brandId, name, category, description, imgUrl, isVIPcock, minRank, isBookmarked } = data;
 
   return (
     <Card
@@ -57,12 +47,7 @@ const DynamicCard = ({ data, variant = "vertical", onClick }: DynamicCardProps) 
                 <span className="rounded bg-gray-100 px-2 py-1 text-xs font-semibold text-gray-500">
                   {category}
                 </span>
-                <FavoriteBtn
-                  brandId={brandId}
-                  bookmarked={isBookmarked}
-                  bookmarkId={bookmarkId}
-                  variant={variant}
-                />
+                <FavoriteBtn brandId={brandId} bookmarked={isBookmarked} variant={variant} />
               </div>
               <h3 className="line-clamp-1 text-sm font-semibold text-gray-900">{name}</h3>
               <h5 className="line-clamp-1 text-sm text-gray-900">{description}</h5>
@@ -88,12 +73,7 @@ const DynamicCard = ({ data, variant = "vertical", onClick }: DynamicCardProps) 
                   <p className="mb-1 text-xs font-semibold text-gray-500">{category}</p>
                   <h4 className="truncate text-sm font-bold leading-tight text-gray-900">{name}</h4>
                 </div>
-                <FavoriteBtn
-                  brandId={brandId}
-                  bookmarked={isBookmarked}
-                  bookmarkId={bookmarkId}
-                  variant={variant}
-                />
+                <FavoriteBtn brandId={brandId} bookmarked={isBookmarked} variant={variant} />
               </div>
               <h5 className="mb-2 line-clamp-2 text-sm text-gray-900">{description}</h5>
               {/* 등급별 배치 */}

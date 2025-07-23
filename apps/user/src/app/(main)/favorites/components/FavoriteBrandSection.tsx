@@ -22,7 +22,6 @@ export default function FavoriteBrandSection() {
     queryFn: ({ pageParam }) => fetchFavoritesQuery({ ...params, lastBookmarkId: pageParam }),
     getNextPageParam: (lastPage: BrandListData) =>
       lastPage.hasNext ? lastPage.lastCursorId : undefined,
-    staleTime: 1000 * 60 * 5,
     refetchOnMount: true,
     refetchOnWindowFocus: false,
     initialPageParam: undefined,

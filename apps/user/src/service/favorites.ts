@@ -46,12 +46,12 @@ export const postFavoritesMutation = async (params: PostFavoritesParams): Promis
 };
 
 interface DeleteFavoriteParams {
-  bookmarkId: number;
+  brandId: number;
 }
 
 export const deleteFavorite = async (params: DeleteFavoriteParams): Promise<void> => {
   const { error } = await apiHandler(async () => {
-    await api.delete(`/api/bookmarks/${params.bookmarkId}`);
+    await api.delete(`api/bookmarks/${params.brandId}`);
   });
 
   if (error) {
@@ -61,5 +61,5 @@ export const deleteFavorite = async (params: DeleteFavoriteParams): Promise<void
 
 export const deleteFavoriteMutation = async (params: DeleteFavoriteParams) => {
   await deleteFavorite(params);
-  return params.bookmarkId;
+  return params.brandId;
 };
