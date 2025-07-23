@@ -3,14 +3,14 @@ import { Input } from "@workspace/ui/components/input";
 import { useState } from "react";
 
 const InputBarcode = () => {
-  const [barcode, setbarcode] = useState("");
+  const [barcode, setBarcode] = useState("");
 
   const handleBarcodeChange = (value: string) => {
     // 숫자만 추출 음수 입력 방지
     const numbers = value.replace(/\D/g, "");
     // 0으로 시작하는 경우도 허용, 빈 값도 허용
     if (numbers === "" || /^[0-9]+$/.test(numbers)) {
-      setbarcode(numbers);
+      setBarcode(numbers);
     }
   };
   return (
