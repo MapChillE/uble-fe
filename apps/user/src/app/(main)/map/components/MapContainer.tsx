@@ -23,6 +23,7 @@ import { Category } from "@/types/category";
 import { Coordinates } from "@/types/map";
 import { StoreDetail, StoreSummary } from "@/types/store";
 import { Pin } from "@/app/(main)/map/components/NaverMap";
+import BenefitConfirmModal from "@/components/modal/BenefitConfirmModal";
 
 export default function MapContainer() {
   const [selectedCategory, setSelectedCategory] = useState<Category>(ALL_CATEGORY);
@@ -110,6 +111,7 @@ export default function MapContainer() {
         snapIndex={snapIndex}
         setSnapIndex={setSnapIndex}
       />
+      <BenefitConfirmModal />
     </div>
   );
 }
