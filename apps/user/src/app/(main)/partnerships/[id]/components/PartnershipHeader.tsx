@@ -5,25 +5,24 @@ import { Badge } from "@workspace/ui/components/badge";
 const PartnershipHeader = (props: BrandDetailData) => {
   const { imgUrl, name, categoryName, description, brandId, isBookmarked, csrNumber } = props;
   return (
-    <div className="flex items-start justify-between mb-4">
+    <div className="mb-4 flex items-start justify-between">
       <div className="flex flex-col items-start space-y-4">
         <img
           src={imgUrl || "/placeholder.png"}
           alt={name}
-          className="w-24 h-24 rounded object-cover flex-shrink-0"
+          className="h-24 w-24 flex-shrink-0 rounded object-cover"
         />
-        <div className="space-y-1 w-full">
+        <div className="w-full space-y-1">
           <Badge variant="default">{categoryName}</Badge>
           <h1 className="text-2xl font-bold">{name}</h1>
-          <div className="flex items-center justify-between w-full">
-            <p className="text-gray-600 flex-1">{description}</p>
+          <div className="flex w-full items-center justify-between">
+            <p className="flex-1 text-gray-600">{description}</p>
           </div>
-          <p className="text-gray-600 flex-1">{csrNumber}</p>
-
+          <p className="flex-1 text-gray-600">{csrNumber}</p>
         </div>
       </div>
       <div className="flex space-x-2">
-        <div className="p-0 bg-transparent border-none cursor-pointer">
+        <div className="cursor-pointer border-none bg-transparent p-0">
           <FavoriteBtn brandId={brandId} bookmarked={isBookmarked} variant="default" />
         </div>
       </div>

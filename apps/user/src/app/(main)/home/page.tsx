@@ -4,6 +4,7 @@ import TimeSection from "@/app/(main)/home/components/TimeSection";
 import SearchSection from "@/app/(main)/home/components/SearchSection";
 import EntireSection from "@/app/(main)/home/components/EntireSection";
 
+
 const page = () => {
   return (
     <section className="space-y-8">
