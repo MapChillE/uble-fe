@@ -5,6 +5,7 @@ import useBenefitConfirmModalStore from "@/store/useBenefitConfirmModalStore";
 import { UsageRegistReq } from "@/types/usage";
 import { apiHandler } from "@api/apiHandler";
 import { setUsage } from "@/service/usage";
+import { toast } from "sonner";
 
 const BenefitConfirmModal = () => {
   const { isOpen, close, storeId, isVIPcock, resetInfo } = useBenefitConfirmModalStore();
@@ -14,10 +15,18 @@ const BenefitConfirmModal = () => {
     resetInfo();
   };
 
-  const handleYes = (benefitType: "NORMAL" | "VIP" = "NORMAL") => {
+  const handleYes = async (benefitType: "NORMAL" | "VIP" = "NORMAL") => {
     if (storeId !== null) {
       const params: UsageRegistReq = { benefitType };
-      apiHandler(() => setUsage(storeId, params));
+      const { data } = await apiHandler(() => setUsage(storeId, params));
+      console.log(data);
+      if (data?.statusCode === 0) {
+        toast.info("사용 완료 되었습니다.");
+      } else if (data?.statusCode === 2001) {
+        toast.warning("해당 제휴처의 사용 가능 횟수를 초과했습니다.");
+      } else {
+        toast.error("사용 중 오류가 발생했습니다.");
+      }
     } else {
       alert("혜택 사용 실패");
     }
