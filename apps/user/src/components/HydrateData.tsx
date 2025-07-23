@@ -1,12 +1,15 @@
-"use client"
+"use client";
 import { useEffect } from "react";
 import useUserStore from "@/store/useUserStore";
 import { getUserInfo } from "@/service/user";
 import { apiHandler } from "@api/apiHandler";
+import { useHydrateLocation } from "@/hooks/map/useHydrateLocation";
+import { useHydrateCategories } from "@/hooks/map/useHydrateCategories";
 
 /** 사용자 정보, 카테고리를 가져와서 store에 저장하기 위한 컴포넌트 */
 const HydrateData = () => {
   const { setUser, user } = useUserStore();
+
   useEffect(() => {
     (async () => {
       try {
@@ -17,6 +20,9 @@ const HydrateData = () => {
       }
     })();
   }, [setUser]);
+
+  useHydrateCategories();
+  useHydrateLocation();
 
   return null;
 };
