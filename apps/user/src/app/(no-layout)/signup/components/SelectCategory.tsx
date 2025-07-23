@@ -10,7 +10,7 @@ const CATEGORIES = {
   5: "푸드",
   6: "문화여가",
   7: "교육",
-  8: "여행/교통"
+  8: "여행/교통",
 } as const;
 const CATEGORY_KEYS = Object.keys(CATEGORIES).map(Number); // [1,2,3,4,5,6,7,8]
 const SelectCategory = ({ info, setInfo }: StepProps) => {
@@ -28,12 +28,12 @@ const SelectCategory = ({ info, setInfo }: StepProps) => {
   return (
     <div className="space-y-6">
       <div className="space-y-2">
-        <h1 className="text-xl font-semibold text-gray-900 leading-tight">
+        <h1 className="text-xl font-semibold leading-tight text-gray-900">
           관심 있는 분야를
           <br />
           선택해주세요
         </h1>
-        <p className="text-sm text-gray-500 font-medium">관심 있는 분야를 선택해주세요</p>
+        <p className="text-sm font-medium text-gray-500">관심 있는 분야를 선택해주세요</p>
       </div>
 
       <div className="space-y-4">
@@ -47,20 +47,21 @@ const SelectCategory = ({ info, setInfo }: StepProps) => {
                 key={key}
                 onClick={() => toggleInterest(key)}
                 disabled={isDisabled}
-                variant={isSelected
-                  ? "onb_selected"
-                  : "onb_unselected"
-                }
+                variant={isSelected ? "onb_selected" : "onb_unselected"}
               >
-                <span className="text-sm font-semibold">{CATEGORIES[key as keyof typeof CATEGORIES]}</span>
+                <span className="text-sm font-semibold">
+                  {CATEGORIES[key as keyof typeof CATEGORIES]}
+                </span>
               </Button>
-            )
+            );
           })}
         </div>
 
         {categoryIds.length > 0 && (
           <div className="text-center">
-            <span className="text-sm text-[#41d596] font-semibold">{categoryIds.length}/3개 선택됨</span>
+            <span className="text-action-green text-sm font-semibold">
+              {categoryIds.length}/3개 선택됨
+            </span>
           </div>
         )}
       </div>

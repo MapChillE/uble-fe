@@ -1,21 +1,21 @@
-"use client"
-import { Badge } from '@workspace/ui/components/badge';
-import ProfileEditBtn from './ProfileEditBtn';
-import useUserStore from '@/store/useUserStore';
+"use client";
+import { Badge } from "@workspace/ui/components/badge";
+import ProfileEditBtn from "./ProfileEditBtn";
+import useUserStore from "@/store/useUserStore";
 
 const gradeColors = {
   VIP: "#FFD700",
   VVIP: "#FF6B6B",
   우수: "#FFA500",
   일반: "#C0C0C0",
-}
+};
 
 const ProfileInfo = () => {
   const { user } = useUserStore();
   const { nickname, rank, gender, birthDate } = user;
   if (!nickname || nickname === "") {
     return (
-      <div className="flex items-center justify-center w-full h-20 text-gray-400 text-sm">
+      <div className="flex h-20 w-full items-center justify-center text-sm text-gray-400">
         유저 정보가 존재하지 않습니다.
       </div>
     );
@@ -23,14 +23,14 @@ const ProfileInfo = () => {
   return (
     <div className="flex items-center justify-between">
       <div className="flex items-center space-x-4">
-        <div className="w-16 h-16 bg-[#41d596] rounded-full flex items-center justify-center">
-          <span className="text-white font-semibold text-xl"></span>
+        <div className="bg-action-green flex h-16 w-16 items-center justify-center rounded-full">
+          <span className="text-xl font-semibold text-white"></span>
         </div>
         <div>
-          <div className="flex items-center space-x-2 mb-1">
+          <div className="mb-1 flex items-center space-x-2">
             <h2 className="text-lg font-semibold text-gray-900">{nickname}</h2>
             <Badge
-              className="text-xs font-medium text-white border-0"
+              className="border-0 text-xs font-medium text-white"
               style={{ backgroundColor: gradeColors[rank as keyof typeof gradeColors] }}
             >
               {rank}
