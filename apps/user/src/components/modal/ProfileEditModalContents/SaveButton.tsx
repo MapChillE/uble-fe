@@ -35,8 +35,8 @@ const SaveButton = ({ formData, user }: SaveButtonProps) => {
     // 여기에 유저 정보 수정 로직 구현 후 모달 닫음
     const { data } = await apiHandler(() => setUserInfo(formData));
     if (data?.statusCode === 0) {
-      setUser(formData);
       alert("정보가 수정되었습니다.");
+      setUser({ ...formData, nickname: user.nickname });
       close();
     } else alert("사용자 정보 수정에 실패했습니다.");
   };
