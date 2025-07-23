@@ -1,6 +1,9 @@
 import { responseStatus } from "./api";
+
+export type BenefitType = "NORMAL" | "VIP";
+
 export interface UsageRegistReq {
-  benefitType: string;
+  benefitType: BenefitType;
 }
 export interface UsageRegistData {
   id: number;
