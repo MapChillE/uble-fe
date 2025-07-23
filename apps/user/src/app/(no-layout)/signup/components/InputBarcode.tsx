@@ -2,7 +2,7 @@
 import { Input } from "@workspace/ui/components/input";
 import { useState } from "react";
 
-const Inputbarcode = () => {
+const InputBarcode = () => {
   const [barcode, setbarcode] = useState("");
 
   const handleBarcodeChange = (value: string) => {
@@ -54,4 +54,4 @@ const Inputbarcode = () => {
   );
 };
 
-export default Inputbarcode;
+export default InputBarcode;

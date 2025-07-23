@@ -4,7 +4,7 @@ import SelectMembership from "./SelectMembership";
 import SelectGender from "./SelectGender";
 import InputBirth from "./InputBirth";
 import SelectCategory from "./SelectCategory";
-import Inputbarcode from "./InputBarcode";
+import InputBarcode from "./InputBarcode";
 import ProgressHeader from "./ProgressHeader";
 import { InfoForm, StepProps } from "@/types/profile";
 import NextStepBtn from "./NextStepBtn";
@@ -14,7 +14,7 @@ const stepComponentMap: Record<number, React.ComponentType<StepProps>> = {
   2: SelectGender,
   3: InputBirth,
   4: SelectCategory,
-  5: Inputbarcode,
+  5: InputBarcode,
 };
 
 const SignupContainer = () => {
