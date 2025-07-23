@@ -4,7 +4,7 @@ export enum Grade {
   NONE = "NONE",
   NORMAL = "NORMAL",
   PREMIUM = "PREMIUM",
-  VIP = "VIP"
+  VIP = "VIP",
 }
 
 /**

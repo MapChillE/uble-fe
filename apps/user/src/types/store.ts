@@ -32,8 +32,8 @@ export interface StoreListResponse extends responseStatus {
  */
 export interface StoreSummary {
   // TODO: 상세 API 요청시 storeId로 보낼 수 있으니까 필요 여부 확인.
-  // brandId: number;
-  // storeId: number;
+  brandId: number;
+  storeId: number;
   storeName: string;
   description: string;
   address: string;
@@ -41,6 +41,7 @@ export interface StoreSummary {
   phoneNumber: string;
   distance: number;
   category: string;
+  isBookmarked: boolean;
 }
 
 /**
@@ -57,18 +58,8 @@ export interface StoreBenefit {
 
 /**
  * 매장(스토어) 상세 API 응답 타입
- * // TODO: 간략 정보 API 응답 타입 확정 후 extends StoreSummary 할 예정
  */
-export interface StoreDetail {
-  brandId: number;
-  storeId: number;
-  storeName: string;
-  description: string;
-  address: string;
-  phoneNumber: string;
-  distance: number;
-  category: string;
-  imageUrl?: string;
+export interface StoreDetail extends StoreSummary {
   benefitList: StoreBenefit[];
   normalAvailable: boolean;
   vipAvailable: boolean;

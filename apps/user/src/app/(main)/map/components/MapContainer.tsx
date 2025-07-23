@@ -23,6 +23,8 @@ import { Category } from "@/types/category";
 import { Coordinates } from "@/types/map";
 import { StoreDetail, StoreSummary } from "@/types/store";
 import { Pin } from "@/app/(main)/map/components/NaverMap";
+import { useHydrateCategories } from "@/hooks/map/useHydrateCategories";
+import { useHydrateLocation } from "@/hooks/map/useHydrateLocation";
 
 export default function MapContainer() {
   const [selectedCategory, setSelectedCategory] = useState<Category>(ALL_CATEGORY);
@@ -34,29 +36,8 @@ export default function MapContainer() {
   const [snapIndex, setSnapIndex] = useState(1);
   const [storeDetail, setStoreDetail] = useState<StoreDetail | null>(null);
 
-  useEffect(() => {
-    if (categories.length === 0) {
-      const handleFetchCategories = async () => {
-        const { data, error } = await apiHandler(() => getCategories());
-        if (error) {
-          console.log("카테고리 로딩 실패: ", error);
-          // TODO: 에러 상태 관리 또는 토스트 알림 추가
-        }
-        if (data?.categoryList) {
-          setCategories([
-            ALL_CATEGORY,
-            ...data.categoryList.map((category) => ({
-              ...category,
-            })),
-            ...ANY_CATEGORYS,
-          ]);
-          setUserCategories(data.categoryList);
-        }
-      };
-
-      handleFetchCategories();
-    }
-  }, [categories, setCategories]);
+  useHydrateCategories();
+  useHydrateLocation();
 
   const { location: currentLocation, getCurrentLocation } = useCurrentLocation();
   useEffect(() => {

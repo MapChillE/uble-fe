@@ -1,9 +1,11 @@
+"use client";
 import { StoreDetail, StoreSummary } from "@/types/store";
 import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
 import { MapPin, Phone, Heart } from "lucide-react";
 import MembershipGrade from "@/app/(main)/home/components/ui/MembershipGrade";
 import Image from "next/image";
+import FavoriteBtn from "@/components/FavoriteBtn";
 
 // 공통 헤더 컴포넌트
 const StoreCardHeader = ({
@@ -41,9 +43,7 @@ const StoreCardHeader = ({
         </div>
       </div>
     </div>
-    <button onClick={onFavoriteToggle} className="ml-2 flex-shrink-0">
-      <Heart className="h-6 w-6 text-gray-400 hover:text-gray-600" />
-    </button>
+    <FavoriteBtn brandId={data.brandId} bookmarked={data.isBookmarked} variant="horizontal" />
   </div>
 );
 
