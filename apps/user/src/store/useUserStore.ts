@@ -1,5 +1,5 @@
-import { UserInfo } from '@/types/profile';
-import { create } from 'zustand';
+import { UserInfo } from "@/types/profile";
+import { create } from "zustand";
 
 interface UserStore {
   user: UserInfo;
@@ -14,10 +14,10 @@ const useUserStore = create<UserStore>((set) => ({
     gender: "MALE",
     birthDate: "",
     categoryIds: [],
-    barcodeNumber: "",
+    barcode: "",
   },
   setUser: (user) => set({ user }),
   updateUser: (fields) => set((state) => ({ user: { ...state.user, ...fields } })),
 }));
 
-export default useUserStore; 
+export default useUserStore;

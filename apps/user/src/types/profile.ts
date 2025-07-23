@@ -7,7 +7,7 @@ export interface UserInfo {
   gender: "MALE" | "FEMALE";
   birthDate: string;
   categoryIds: number[];
-  barcodeNumber?: string;
+  barcode?: string;
 }
 
 export interface UserStatistics {
@@ -24,7 +24,7 @@ export interface InfoForm {
   gender: string;
   birthDate: string;
   categoryIds: number[];
-  barcodeNumber?: string;
+  barcode?: string;
 }
 
 export interface StepProps {

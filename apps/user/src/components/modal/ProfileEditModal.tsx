@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { Fragment, useState } from "react";
 import { Button } from "@workspace/ui/components/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@workspace/ui/components/dialog";
@@ -15,8 +15,7 @@ import SaveButton from "./ProfileEditModalContents/SaveButton";
 const ProfileEditModal = () => {
   const { isOpen, close } = useProfileEditModalStore();
   const { user } = useUserStore();
-  const { rank, gender, birthDate, categoryIds, barcodeNumber } = user;
-
+  const { rank, gender, birthDate, categoryIds, barcode } = user;
 
   // formData 객체로 state 관리
   const [formData, setFormData] = useState<UserInfo>({
@@ -24,69 +23,60 @@ const ProfileEditModal = () => {
     gender: gender,
     birthDate: birthDate,
     categoryIds: categoryIds ?? [],
-    barcodeNumber: barcodeNumber || '',
+    barcode: barcode || "",
   });
-
 
   // 핸들러들
   const handleRankChange = (grade: string) => setFormData((prev) => ({ ...prev, rank: grade }));
-  const handleGenderChange = (korGender: "MALE" | "FEMALE") => setFormData((prev) => ({ ...prev, gender: korGender }));
+  const handleGenderChange = (korGender: "MALE" | "FEMALE") =>
+    setFormData((prev) => ({ ...prev, gender: korGender }));
   const handleBirthDateChange = (date: string | undefined) => {
-    setFormData((prev) => ({ ...prev, birthDate: date ? date : '' }));
+    setFormData((prev) => ({ ...prev, birthDate: date ? date : "" }));
   };
-  const handleBarcodeChange = (value: string) => setFormData((prev) => ({ ...prev, barcodeNumber: value }));
+  const handleBarcodeChange = (value: string) =>
+    setFormData((prev) => ({ ...prev, barcode: value }));
 
   return (
     <Dialog open={isOpen} onOpenChange={close}>
-      <DialogContent className="max-w-md max-h-[90vh] overflow-hidden flex flex-col">
+      <DialogContent className="flex max-h-[90vh] max-w-md flex-col overflow-hidden">
         <DialogHeader className="flex-shrink-0">
           <DialogTitle className="text-lg font-semibold">프로필 수정</DialogTitle>
         </DialogHeader>
         {user.nickname === "" ? (
           <div className="flex flex-col items-center justify-center py-12">
             <p className="text-gray-500">사용자 정보를 불러올 수 없습니다.</p>
-            <Button className="mt-4" onClick={close}>닫기</Button>
+            <Button className="mt-4" onClick={close}>
+              닫기
+            </Button>
           </div>
         ) : (
           <Fragment>
             <div className="flex-1 overflow-y-auto px-1">
               <div className="space-y-6 py-4">
                 {/* 요금제 등급 */}
-                <MembershipGradeSelector
-                  grade={formData.rank}
-                  onChange={handleRankChange}
-                />
+                <MembershipGradeSelector grade={formData.rank} onChange={handleRankChange} />
                 {/* 성별 */}
                 <GenderSelector
                   gender={formData.gender as "MALE" | "FEMALE"}
                   onChange={handleGenderChange}
                 />
                 {/* 생년월일 */}
-                <BirthDateSelector
-                  value={formData.birthDate}
-                  onChange={handleBirthDateChange}
-                />
+                <BirthDateSelector value={formData.birthDate} onChange={handleBirthDateChange} />
                 {/* 관심 분야 */}
                 <CategorySelector
                   categoryIds={formData.categoryIds}
                   onChange={(ids) => setFormData((prev) => ({ ...prev, categoryIds: ids }))}
                 />
                 {/* 멤버십 바코드 번호 */}
-                <BarcodeInput
-                  value={formData.barcodeNumber || ""}
-                  onChange={handleBarcodeChange}
-                />
+                <BarcodeInput value={formData.barcode || ""} onChange={handleBarcodeChange} />
               </div>
             </div>
 
-            <div className="flex-shrink-0 flex space-x-3 pt-4">
+            <div className="flex flex-shrink-0 space-x-3 pt-4">
               <Button variant="outline" onClick={close} className="flex-1 bg-transparent">
                 취소
               </Button>
-              <SaveButton
-                formData={formData}
-                user={user}
-              />
+              <SaveButton formData={formData} user={user} />
             </div>
           </Fragment>
         )}
