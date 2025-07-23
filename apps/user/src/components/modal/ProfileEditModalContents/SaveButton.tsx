@@ -17,7 +17,7 @@ const SaveButton = ({ formData, user }: SaveButtonProps) => {
     formData.rank !== user.rank ||
     formData.gender !== user.gender ||
     formData.birthDate !== user.birthDate ||
-    formData.barcodeNumber !== (user.barcodeNumber || "") ||
+    formData.barcode !== (user.barcode || "") ||
     formData.categoryIds?.length !== user.categoryIds?.length ||
     !formData.categoryIds.every((id) => user.categoryIds.includes(id));
 
@@ -26,9 +26,7 @@ const SaveButton = ({ formData, user }: SaveButtonProps) => {
     !!formData.gender &&
     !!formData.birthDate &&
     formData.categoryIds?.length > 0 &&
-    (!formData.barcodeNumber ||
-      formData.barcodeNumber.length === 0 ||
-      formData.barcodeNumber.length > 15) &&
+    (!formData.barcode || formData.barcode.length === 0 || formData.barcode.length > 15) &&
     isChanged;
 
   const handleEditUserInfo = async () => {

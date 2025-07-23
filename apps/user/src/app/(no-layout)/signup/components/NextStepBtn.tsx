@@ -24,7 +24,7 @@ const NextStepBtn = ({ currentStep, canProceed, setCurrentStep, info }: NextStep
 
   const handleNext = async () => {
     // 바코드 번호가 1~15자리면 진행 불가
-    if (info.barcodeNumber && info.barcodeNumber.length > 0 && info.barcodeNumber.length <= 15) {
+    if (info.barcode && info.barcode.length > 0 && info.barcode.length <= 15) {
       alert("바코드 번호는 16자리 입니다.");
       return;
     }
