@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { Button } from "@workspace/ui/components/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@workspace/ui/components/dialog";
 import { Input } from "@workspace/ui/components/input";
@@ -14,7 +14,7 @@ import { registFeedback } from "@/service/user";
 const FeedbackModal = () => {
   const { isOpen, close } = useFeedbackModalStore();
 
-  const [formData, setFormData] = useState<FeedbackForm>({ title: "", content: "", score: 0 })
+  const [formData, setFormData] = useState<FeedbackForm>({ title: "", content: "", score: 0 });
 
   const canSubmit = formData.title.trim() && formData.content.trim() && formData.score > 0;
 
@@ -23,20 +23,21 @@ const FeedbackModal = () => {
     if (data?.statusCode === 0) {
       alert("소중한 의견 감사합니다.");
       close();
-    }
-    else alert("오류가 발생했습니다.");
-  }
+    } else alert("오류가 발생했습니다.");
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={close}>
       <DialogContent className="w-full max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-lg font-semibold text-center">피드백</DialogTitle>
+          <DialogTitle className="text-center text-lg font-semibold">피드백</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* 안내 문구 */}
-          <p className="text-sm text-gray-600 text-center">서비스 개선을 위한 소중한 의견을 들려주세요.</p>
+          <p className="text-center text-sm text-gray-600">
+            서비스 개선을 위한 소중한 의견을 들려주세요.
+          </p>
 
           {/* 별점 */}
           <div className="flex flex-col items-start space-y-1">
@@ -53,7 +54,7 @@ const FeedbackModal = () => {
                   <Star
                     fill={star <= formData.score ? "#FFD600" : "none"}
                     stroke="#FFD600"
-                    className="w-7 h-7 transition-colors"
+                    className="h-7 w-7 transition-colors"
                   />
                 </button>
               ))}
@@ -68,7 +69,7 @@ const FeedbackModal = () => {
               value={formData.title}
               onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
               placeholder="피드백 제목을 입력해주세요"
-              className="h-11 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-action-green focus-visible:ring-offset-2"
+              className="focus-visible:ring-action-green h-11 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
             />
           </div>
 
@@ -86,13 +87,18 @@ const FeedbackModal = () => {
 
           {/* 버튼 */}
           <div className="flex space-x-3 pt-2">
-            <Button type="button" variant="outline" onClick={close} className="flex-1 bg-transparent">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={close}
+              className="flex-1 bg-transparent"
+            >
               취소
             </Button>
             <Button
               type="submit"
               disabled={!canSubmit}
-              className="flex-1 bg-[#41d596] hover:bg-[#3bc085] text-white disabled:bg-gray-300"
+              className="bg-action-green flex-1 text-white hover:bg-[#3bc085] disabled:bg-gray-300"
             >
               전송
             </Button>

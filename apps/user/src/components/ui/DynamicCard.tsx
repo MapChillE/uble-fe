@@ -19,7 +19,7 @@ const DynamicCard = ({ data, variant = "vertical", onClick }: DynamicCardProps) 
     <Card
       onClick={onClick}
       className={classNames(
-        "cursor-pointer border-gray-200 bg-white object-fill transition-all duration-200 hover:border-[#41d596] hover:shadow-lg",
+        "hover:border-action-green cursor-pointer border-gray-200 bg-white object-fill transition-all duration-200 hover:shadow-lg",
         {
           // 세로형: 고정 너비 & 세로 레이아웃
           "w-64 flex-shrink-0": variant === "vertical",

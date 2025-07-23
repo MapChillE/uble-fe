@@ -43,7 +43,7 @@ const SaveButton = ({ formData, user }: SaveButtonProps) => {
     <Button
       onClick={handleEditUserInfo}
       disabled={!canSave}
-      className="flex-1 bg-[#41d596] hover:bg-[#41d596]/90 disabled:bg-gray-300"
+      className="bg-action-green hover:bg-action-green/90 flex-1 disabled:bg-gray-300"
     >
       저장
     </Button>

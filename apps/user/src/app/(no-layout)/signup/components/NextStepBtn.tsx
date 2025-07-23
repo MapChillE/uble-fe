@@ -45,7 +45,7 @@ const NextStepBtn = ({ currentStep, canProceed, setCurrentStep, info }: NextStep
         disabled={!canProceed()}
         className={`h-12 w-full rounded-lg text-sm font-semibold transition-all ${
           canProceed()
-            ? "bg-[#41d596] text-white hover:bg-[#14B470]"
+            ? "bg-action-green text-white hover:bg-[#14B470]"
             : "cursor-not-allowed bg-gray-200 text-gray-400"
         }`}
       >

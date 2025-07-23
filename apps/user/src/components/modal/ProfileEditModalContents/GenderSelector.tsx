@@ -14,7 +14,7 @@ const GenderSelector = ({ gender, onChange }: GenderSelectorProps) => {
         {["남성", "여성"].map((korGender) => {
           const engGender = selectToEng(korGender);
           return (
-            <label key={engGender} className="flex items-center space-x-3 cursor-pointer">
+            <label key={engGender} className="flex cursor-pointer items-center space-x-3">
               <div className="relative">
                 <input
                   type="radio"
@@ -25,10 +25,10 @@ const GenderSelector = ({ gender, onChange }: GenderSelectorProps) => {
                   className="sr-only"
                 />
                 <div
-                  className={`w-4 h-4 rounded-full border-2 transition-all ${gender === engGender ? "border-[#41d596] bg-[#41d596]" : "border-gray-300"}`}
+                  className={`h-4 w-4 rounded-full border-2 transition-all ${gender === engGender ? "border-action-green bg-action-green" : "border-gray-300"}`}
                 >
                   {gender === engGender && (
-                    <div className="w-1.5 h-1.5 bg-white rounded-full absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+                    <div className="absolute left-1/2 top-1/2 h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 transform rounded-full bg-white" />
                   )}
                 </div>
               </div>
@@ -41,4 +41,4 @@ const GenderSelector = ({ gender, onChange }: GenderSelectorProps) => {
   );
 };
 
-export default GenderSelector; 
+export default GenderSelector;
