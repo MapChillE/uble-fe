@@ -3,14 +3,20 @@ import UserBarcode from "@/components/common/UserBarcode";
 import { Fragment, useState } from "react";
 import BarcodeBlur from "./BarcodeBlur";
 import useUserStore from "@/store/useUserStore";
+import useBenefitConfirmModalStore from "@/store/useBenefitConfirmModalStore";
 
-const BarcodeContainer = () => {
+const BarcodeContainer = ({ storeId, isVIPcock }: { storeId: number; isVIPcock: boolean }) => {
   const [isBarcodeRevealed, setIsBarcodeRevealed] = useState(false);
   const { barcode } = useUserStore((state) => state.user);
+  const { open, setInfo, setOnSuccess } = useBenefitConfirmModalStore();
 
   const handleBarcodeClick = () => {
     if (!isBarcodeRevealed) {
-      setIsBarcodeRevealed(true);
+      setInfo(storeId, isVIPcock);
+      setOnSuccess(() => {
+        setIsBarcodeRevealed(true);
+      });
+      open();
     }
   };
   return (

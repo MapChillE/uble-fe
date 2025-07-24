@@ -20,6 +20,7 @@ import { Pin } from "@/app/(main)/map/components/NaverMap";
 import { useHydrateCategories } from "@/hooks/map/useHydrateCategories";
 import { useHydrateLocation } from "@/hooks/map/useHydrateLocation";
 import { useLocationStore } from "@/store/useLocationStore";
+import BenefitConfirmModal from "@/components/modal/BenefitConfirmModal";
 
 export default function MapContainer() {
   const [selectedCategory, setSelectedCategory] = useState<Category>(ALL_CATEGORY);
@@ -86,6 +87,7 @@ export default function MapContainer() {
         snapIndex={snapIndex}
         setSnapIndex={setSnapIndex}
       />
+      <BenefitConfirmModal />
     </div>
   );
 }
