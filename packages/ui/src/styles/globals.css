@@ -117,7 +117,7 @@
   }
 
   html {
-    @apply scroll-smooth antialiased;
+    @apply scroll-auto antialiased;
   }
 
   body {
