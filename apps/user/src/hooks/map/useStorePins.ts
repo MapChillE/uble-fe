@@ -35,18 +35,20 @@ export function useStorePins(baseLocation: Coordinates | null, selectedCategory:
 
       setPins([
         {
-          id: 0,
+          id: -1,
           coords: baseLocation,
-          name: selectedPlaceId === "current" ? "현위치" : "저장위치",
+          name: selectedPlaceId === -1 ? "현위치" : "저장위치",
+          type: "current",
         },
         ...storePins,
       ]);
     } catch (error) {
       setPins([
         {
-          id: 0,
+          id: -1,
           coords: baseLocation,
-          name: selectedPlaceId === "current" ? "현위치" : "저장위치",
+          name: selectedPlaceId === -1 ? "현위치" : "저장위치",
+          type: "current",
         },
       ]);
     } finally {

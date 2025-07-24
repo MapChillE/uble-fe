@@ -48,3 +48,5 @@ export const ANY_CATEGORIES: Category[] = [
 ];
 
 export const MEMBERSHIP_GRADES = ["VVIP", "VIP", "우수", "일반"];
+
+export const CURRENT_LOCATION_ID = -1;
