@@ -1,16 +1,15 @@
 "use client";
+import { StepProps } from "@/types/profile";
 import { Input } from "@workspace/ui/components/input";
 import { useState } from "react";
 
-const InputBarcode = () => {
-  const [barcode, setBarcode] = useState("");
-
+const InputBarcode = ({ info, setInfo }: StepProps) => {
   const handleBarcodeChange = (value: string) => {
     // 숫자만 추출 음수 입력 방지
     const numbers = value.replace(/\D/g, "");
     // 0으로 시작하는 경우도 허용, 빈 값도 허용
     if (numbers === "" || /^[0-9]+$/.test(numbers)) {
-      setBarcode(numbers);
+      setInfo((info) => ({ ...info, barcode: value }));
     }
   };
   return (
@@ -33,7 +32,7 @@ const InputBarcode = () => {
             inputMode="numeric"
             pattern="[0-9]*"
             placeholder="바코드 번호 입력 (숫자만)"
-            value={barcode}
+            value={info.barcode}
             onChange={(e) => handleBarcodeChange(e.target.value)}
             variant="default"
             className="h-12 w-full text-base font-medium"
