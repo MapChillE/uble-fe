@@ -6,7 +6,6 @@ import { apiHandler } from "@api/apiHandler";
 import { fetchBrandDetail } from "@/service/brand";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import BarcodeContainer from "./BarcodeContainer";
 
 const PartnershipContainer = ({ id }: { id: string }) => {
   const router = useRouter();
@@ -48,7 +47,6 @@ const PartnershipContainer = ({ id }: { id: string }) => {
       <div className="space-y-4 p-4">
         <PartnershipHeader {...data} />
         <PartnershipBenefitList {...data} />
-        <BarcodeContainer />
       </div>
     </div>
   );
