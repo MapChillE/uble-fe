@@ -1,6 +1,7 @@
 import { useReducer, useCallback } from "react";
 import { Button } from "@workspace/ui/components/button";
 import { GeocodingResult } from "@/types/map";
+import { toast } from "sonner";
 
 export type MyPlaceFormProps = {
   onAdd: (name: string, geocode: GeocodingResult) => void;
@@ -52,7 +53,7 @@ const MyPlaceForm = ({ onAdd, onCancel, serviceReady }: MyPlaceFormProps) => {
 
   const handleGeocode = useCallback(() => {
     if (!addressInput.trim() || typeof window === "undefined" || !window.naver?.maps?.Service) {
-      alert("지오코딩 서비스를 사용할 수 없습니다.");
+      toast.error("오류가 발생했습니다. 잠시 후 다시 이용해 주세요.");
       return;
     }
     dispatch({ type: "SET_LOADING", payload: true });
@@ -61,7 +62,8 @@ const MyPlaceForm = ({ onAdd, onCancel, serviceReady }: MyPlaceFormProps) => {
       (status: naver.maps.Service.Status, response: naver.maps.Service.GeocodeResponse) => {
         dispatch({ type: "SET_LOADING", payload: false });
         if (status !== window.naver.maps.Service.Status.OK) {
-          alert(`지오코딩 오류: ${status}`);
+          toast.error("오류가 발생했습니다. 잠시 후 다시 이용해 주세요.");
+
           return;
         }
         const result = response.v2.addresses[0];
@@ -74,15 +76,15 @@ const MyPlaceForm = ({ onAdd, onCancel, serviceReady }: MyPlaceFormProps) => {
             },
           });
         } else {
-          alert("해당 주소를 찾을 수 없습니다.");
+          toast.warning("해당 주소를 찾을 수 없습니다.");
         }
       }
     );
   }, [addressInput]);
 
   const handleAdd = () => {
-    if (!name) return alert("내 장소 이름을 입력해주세요");
-    if (!geocode) return alert("주소 검색 후 장소명을 입력해주세요");
+    if (!name) return toast.warning("내 장소 이름을 입력해주세요");
+    if (!geocode) return toast.warning("주소 검색 후 장소명을 입력해주세요");
     onAdd(name, geocode);
     dispatch({ type: "RESET_FORM" });
   };

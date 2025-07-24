@@ -21,6 +21,7 @@ import { useHydrateCategories } from "@/hooks/map/useHydrateCategories";
 import { useHydrateLocation } from "@/hooks/map/useHydrateLocation";
 import { useLocationStore } from "@/store/useLocationStore";
 import BenefitConfirmModal from "@/components/modal/BenefitConfirmModal";
+import { toast } from "sonner";
 
 export default function MapContainer() {
   const [selectedCategory, setSelectedCategory] = useState<Category>(ALL_CATEGORY);
@@ -57,7 +58,7 @@ export default function MapContainer() {
       }
     } catch (error) {
       // TODO: 에러 처리
-      alert("가맹점 상세 정보 로딩 실패: " + error);
+      toast.error("가맹점 상세 정보를 불러오지 못했습니다.");
     }
   };
 

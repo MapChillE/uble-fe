@@ -4,6 +4,7 @@ import useProfileEditModalStore from "@/store/useProfileEditModalStore";
 import { apiHandler } from "@api/apiHandler";
 import { setUserInfo } from "@/service/user";
 import useUserStore from "@/store/useUserStore";
+import { toast } from "sonner";
 
 interface SaveButtonProps {
   formData: UserInfo;
@@ -33,10 +34,10 @@ const SaveButton = ({ formData, user }: SaveButtonProps) => {
     // 여기에 유저 정보 수정 로직 구현 후 모달 닫음
     const { data } = await apiHandler(() => setUserInfo(formData));
     if (data?.statusCode === 0) {
-      alert("정보가 수정되었습니다.");
+      toast.success("정보가 수정되었습니다.");
       setUser({ ...formData, nickname: user.nickname });
       close();
-    } else alert("사용자 정보 수정에 실패했습니다.");
+    } else toast.error("오류가 발생했습니다. 잠시 후 다시 이용해 주세요.");
   };
 
   return (
