@@ -26,7 +26,7 @@ const ProfileStatistics = () => {
   if (isError) {
     return (
       <div className="text-center text-red-500">
-        {`${month}월 통계 조회 중 에러 발생: ${(error as Error).message}`}
+        {`${month}월 통계를 불러올 수 없습니다. 잠시 후 다시 시도해 주세요.`}
       </div>
     );
   }
