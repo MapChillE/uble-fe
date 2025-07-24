@@ -59,7 +59,7 @@ export function useStorePins(baseLocation: Coordinates | null, selectedCategory:
   useEffect(() => {
     if (!baseLocation || baseLocation === DEFAULT_LOCATION) return;
     fetchPins(baseLocation);
-  }, [baseLocation, selectedCategory]);
+  }, [baseLocation, selectedCategory.categoryId]);
 
   return pins;
 }
