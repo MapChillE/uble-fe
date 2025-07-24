@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import { useState } from "react";
 
 const BenefitConfirmModal = () => {
-  const { isOpen, close, storeId, isVIPcock, resetInfo } = useBenefitConfirmModalStore();
+  const { isOpen, close, storeId, isVIPcock, resetInfo, onSuccess } = useBenefitConfirmModalStore();
   const [isLoading, setIsLoading] = useState(false);
   const handleClose = () => {
     close();
@@ -22,8 +22,10 @@ const BenefitConfirmModal = () => {
       const params: UsageRegistRequest = { benefitType };
       const { data } = await apiHandler(() => setUsage(storeId, params));
       setIsLoading(false);
+      handleClose();
       if (data?.statusCode === 0) {
         toast.info("사용 완료 되었습니다.");
+        if (onSuccess) onSuccess();
       } else if (data?.statusCode === 2001) {
         toast.warning("해당 제휴처의 사용 가능 횟수를 초과했습니다.");
       } else {
@@ -32,7 +34,7 @@ const BenefitConfirmModal = () => {
     } else {
       toast.error("네트워크 오류가 발생했습니다.");
     }
-    handleClose();
+
     // 필요시 추가 로직
   };
 

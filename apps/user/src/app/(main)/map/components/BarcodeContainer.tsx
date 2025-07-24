@@ -8,13 +8,15 @@ import useBenefitConfirmModalStore from "@/store/useBenefitConfirmModalStore";
 const BarcodeContainer = ({ storeId, isVIPcock }: { storeId: number; isVIPcock: boolean }) => {
   const [isBarcodeRevealed, setIsBarcodeRevealed] = useState(false);
   const { barcode } = useUserStore((state) => state.user);
-  const { open, setInfo } = useBenefitConfirmModalStore();
+  const { open, setInfo, setOnSuccess } = useBenefitConfirmModalStore();
 
   const handleBarcodeClick = () => {
     if (!isBarcodeRevealed) {
       setInfo(storeId, isVIPcock);
+      setOnSuccess(() => {
+        setIsBarcodeRevealed(true);
+      });
       open();
-      setIsBarcodeRevealed(true);
     }
   };
   return (
