@@ -27,7 +27,11 @@ const ProfileEditModal = () => {
   });
 
   // 핸들러들
-  const handleRankChange = (grade: string) => setFormData((prev) => ({ ...prev, rank: grade }));
+  const handleRankChange = (grade: string) =>
+    setFormData((prev) => ({
+      ...prev,
+      rank: grade === "일반" ? "NORMAL" : grade === "우수" ? "PREMIUM" : grade,
+    }));
   const handleGenderChange = (korGender: "MALE" | "FEMALE") =>
     setFormData((prev) => ({ ...prev, gender: korGender }));
   const handleBirthDateChange = (date: string | undefined) => {

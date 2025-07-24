@@ -18,9 +18,20 @@ const SelectMembership = ({ info, setInfo }: StepProps) => {
         {MEMBERSHIP_GRADES.map((rank) => (
           <Button
             key={rank}
-            onClick={() => setInfo({ ...info, rank: rank })}
+            onClick={() =>
+              setInfo({
+                ...info,
+                rank: rank === "일반" ? "NORMAL" : rank === "우수" ? "PREMIUM" : rank,
+              })
+            }
             className="rounded-lg px-4 py-3 transition-all"
-            variant={info.rank === rank ? "onb_selected" : "onb_unselected"}
+            variant={
+              (info.rank === "NORMAL" && rank === "일반") ||
+              (info.rank === "PREMIUM" && rank === "우수") ||
+              (info.rank !== "NORMAL" && info.rank !== "PREMIUM" && info.rank === rank)
+                ? "onb_selected"
+                : "onb_unselected"
+            }
           >
             <span className="text-sm font-semibold">{rank}</span>
           </Button>

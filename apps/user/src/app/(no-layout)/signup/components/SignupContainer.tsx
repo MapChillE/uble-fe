@@ -24,6 +24,7 @@ const SignupContainer = () => {
     gender: "",
     birthDate: "",
     categoryIds: [],
+    barcode: "",
   });
   const StepComponent = stepComponentMap[currentStep];
 
@@ -38,7 +39,7 @@ const SignupContainer = () => {
       case 4:
         return info.categoryIds.length > 0;
       case 5:
-        return true; // 바코드는 필수가 아님
+        return !info.barcode || info.barcode.length === 0 || info.barcode.length === 16;
       default:
         return false;
     }

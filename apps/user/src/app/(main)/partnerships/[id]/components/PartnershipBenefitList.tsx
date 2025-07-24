@@ -32,7 +32,7 @@ const PartnershipBenefitList = (data: BrandDetailData) => {
         {benefits.map((benefit, idx) => (
           <Card
             key={benefit.benefitId}
-            className="overflow-hidden border-0 bg-gradient-to-r from-white to-gray-50 p-6 shadow-lg transition-all duration-300 hover:shadow-xl"
+            className="overflow-hidden border-0 bg-gradient-to-r from-white to-gray-50 pb-6 pt-6 shadow-lg transition-all duration-300 hover:shadow-xl"
           >
             <CardHeader>
               <div className="flex items-center justify-between">

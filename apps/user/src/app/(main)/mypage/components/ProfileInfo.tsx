@@ -13,6 +13,7 @@ const gradeColors = {
 const ProfileInfo = () => {
   const { user } = useUserStore();
   const { nickname, rank, gender, birthDate } = user;
+  const displayRank = rank === "NORMAL" ? "일반" : rank === "PREMIUM" ? "우수" : rank;
   if (!nickname || nickname === "") {
     return (
       <div className="flex h-20 w-full items-center justify-center text-sm text-gray-400">
@@ -31,9 +32,9 @@ const ProfileInfo = () => {
             <h2 className="text-lg font-semibold text-gray-900">{nickname}</h2>
             <Badge
               className="border-0 text-xs font-medium text-white"
-              style={{ backgroundColor: gradeColors[rank as keyof typeof gradeColors] }}
+              style={{ backgroundColor: gradeColors[displayRank as keyof typeof gradeColors] }}
             >
-              {rank}
+              {displayRank}
             </Badge>
           </div>
           <p className="text-xs text-gray-400">
