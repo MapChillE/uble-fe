@@ -4,17 +4,14 @@ import { toast } from "sonner";
 
 const KakaoLoginBtn = () => {
   const login = () => {
-    const kakaoUrl =
-      process.env.NEXT_PUBLIC_KAKAO_URL +
-      "&client_id=" +
-      process.env.NEXT_PUBLIC_CLIENT_ID +
-      "&redirect_uri=" +
-      process.env.NEXT_PUBLIC_REDIRECT_URI;
-    if (!kakaoUrl) {
+    const kakaoBase = process.env.NEXT_PUBLIC_KAKAO_URL;
+    const clientId = process.env.NEXT_PUBLIC_CLIENT_ID;
+    const redirect = process.env.NEXT_PUBLIC_REDIRECT_URI;
+    if (!kakaoBase || !clientId || !redirect) {
       toast.error("오류가 발생했습니다. 잠시 후 다시 이용해 주세요.");
-
       return;
     }
+    const kakaoUrl = `${kakaoBase}&client_id=${clientId}&redirect_uri=${redirect}`;
     window.location.href = kakaoUrl;
     return;
   };
