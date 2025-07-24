@@ -18,8 +18,14 @@ const StoreCardHeader = ({
   onRouteClick?: () => void;
   onFavoriteToggle?: () => void;
 }) => (
-  <div className="flex items-start justify-between">
-    <div className="flex flex-col items-start space-y-4">
+  <div className="relative px-4 pt-4">
+    {/* 즐겨찾기 버튼 (우상단 고정) */}
+    <div className="absolute right-4 top-4">
+      <FavoriteBtn brandId={data.brandId} bookmarked={data.isBookmarked} variant="horizontal" />
+    </div>
+
+    <div className="flex gap-4">
+      {/* 이미지 */}
       <Image
         src={data.imageUrl || "/placeholder.svg"}
         alt={data.storeName}
@@ -27,16 +33,22 @@ const StoreCardHeader = ({
         height={96}
         className="flex-shrink-0 rounded object-fill"
       />
-      <div className="w-full space-y-1">
-        <Badge className="text-xs font-semibold">{data.category}</Badge>
-        <h1 className="text-2xl font-bold">{data.storeName}</h1>
-        <div className="flex w-full items-center justify-between">
-          <p className="flex-1 text-gray-600">{data.description}</p>
+
+      {/* 텍스트 정보 + 길찾기 버튼 */}
+      <div className="flex w-full flex-col justify-between space-y-2">
+        <div className="space-y-1">
+          <Badge className="w-fit text-xs font-semibold">{data.category}</Badge>
+          <h1 className="break-words text-2xl font-bold">{data.storeName}</h1>
+          <p className="break-words text-sm text-gray-600">{data.description}</p>
+        </div>
+
+        {/* 길찾기 */}
+        <div className="flex justify-end">
           <Button
             variant="outline"
             size="sm"
             onClick={onRouteClick}
-            className="ml-4 h-8 flex-shrink-0 px-3 text-xs hover:bg-gray-50"
+            className="h-8 px-3 text-xs hover:bg-gray-50"
           >
             <MapPin className="mr-1 h-3 w-3" />
             길찾기
@@ -44,14 +56,13 @@ const StoreCardHeader = ({
         </div>
       </div>
     </div>
-    <FavoriteBtn brandId={data.brandId} bookmarked={data.isBookmarked} variant="horizontal" />
   </div>
 );
 
 // 공통 매장 정보 섹션
 const StoreInfoSection = ({ data }: { data: StoreDetail | StoreSummary }) => (
-  <div className="space-y-2 rounded-lg border border-gray-200 p-4">
-    <h3 className="font-semibold text-gray-900">매장 정보</h3>
+  <div className="mx-4 space-y-2 rounded-lg border border-gray-200 p-4">
+    <h3 className="text-lg font-semibold text-gray-900">매장 정보</h3>
     <div className="flex items-start space-x-2">
       <MapPin className="mt-0.5 h-4 w-4 flex-shrink-0 text-gray-500" />
       <span className="text-sm text-gray-600">{data.address}</span>
@@ -72,21 +83,28 @@ export const DetailCard = ({
   onRouteClick?: () => void;
   onFavoriteToggle?: () => void;
 }) => (
-  <div className="space-y-4 overflow-y-auto px-4">
+  <div className="space-y-4 overflow-y-auto pb-4">
     <StoreCardHeader data={data} onRouteClick={onRouteClick} onFavoriteToggle={onFavoriteToggle} />
     <StoreInfoSection data={data} />
     <div className="m-4 space-y-2">
       <div>
         {data.benefitList.map((benefit, idx) => (
           <div key={benefit.benefitId} className="flex flex-col space-y-2 pb-2">
-            <h3 className="font-semibold">혜택 내용</h3>
+            <h3 className="text-lg font-semibold">혜택 내용</h3>
             <div className="flex flex-col space-y-2">
               <MembershipGrade rank={benefit.minRank} isVIPcock={benefit.type === "VIP"} />
               <span className="text-sm font-medium text-gray-900">{benefit.content}</span>
             </div>
             <div className="space-y-2 py-4">
-              <h3 className="font-semibold">이용 안내</h3>
-              <p className="text-sm font-medium text-gray-900">{benefit.manual}</p>
+              <h3 className="text-lg font-semibold">이용 안내</h3>
+              <p className="text-sm font-medium text-gray-900">
+                {benefit.manual.split("\n").map((line, idx) => (
+                  <span key={idx}>
+                    {line}
+                    <br />
+                  </span>
+                ))}
+              </p>
             </div>
             <p className="text-xs text-gray-600">이용 제한: {benefit.provisionCount}</p>
             <hr className="my-4 text-gray-200" />
@@ -109,7 +127,7 @@ export const SummaryCard = ({
   onRouteClick?: () => void;
   onFavoriteToggle?: () => void;
 }) => (
-  <div className="space-y-4 overflow-y-auto px-4">
+  <div className="space-y-4 overflow-y-auto pb-20">
     <StoreCardHeader data={data} onRouteClick={onRouteClick} onFavoriteToggle={onFavoriteToggle} />
     <StoreInfoSection data={data} />
   </div>
