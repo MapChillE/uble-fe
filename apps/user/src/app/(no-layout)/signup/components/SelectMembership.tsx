@@ -25,7 +25,13 @@ const SelectMembership = ({ info, setInfo }: StepProps) => {
               })
             }
             className="rounded-lg px-4 py-3 transition-all"
-            variant={info.rank === rank ? "onb_selected" : "onb_unselected"}
+            variant={
+              (info.rank === "NORMAL" && rank === "일반") ||
+              (info.rank === "PREMIUM" && rank === "우수") ||
+              (info.rank !== "NORMAL" && info.rank !== "PREMIUM" && info.rank === rank)
+                ? "onb_selected"
+                : "onb_unselected"
+            }
           >
             <span className="text-sm font-semibold">{rank}</span>
           </Button>
