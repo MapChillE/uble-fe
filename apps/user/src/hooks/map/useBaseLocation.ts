@@ -13,7 +13,7 @@ export function useBaseLocation(currentLocation: Coordinates) {
   const [baseLocation, setBaseLocation] = useState<Coordinates>(currentLocation);
 
   useEffect(() => {
-    if (selectedPlaceId === "current" && currentLocation) {
+    if (selectedPlaceId === -1 && currentLocation) {
       setBaseLocation(currentLocation);
     } else {
       const selected = myPlaces.find((p) => p.id === selectedPlaceId);
