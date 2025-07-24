@@ -1,3 +1,5 @@
+import { responseStatus } from "./api";
+
 // 좌표 타입 (사용자 정의)
 export type Coordinates = [number, number]; // [longitude, latitude]
 
@@ -28,8 +30,33 @@ export interface GeocodingResult {
 }
 
 export interface MyPlace {
-  id: string;
+  id: number;
   name: string;
   address: string;
   coordinates: Coordinates;
+}
+
+export interface RawMyPlaceFromGet {
+  id: number;
+  name: string;
+  longitude: number;
+  latitude: number;
+  address: string;
+}
+
+export interface RawMyPlaceFromPost {
+  pinId: number;
+  name: string;
+  longitude: number;
+  latitude: number;
+  address: string;
+}
+
+export interface PostMyPlacesResponse extends responseStatus {
+  data: RawMyPlaceFromPost;
+}
+export interface FetchMyPlacesResponse extends responseStatus {
+  data: {
+    locations: RawMyPlaceFromGet[];
+  };
 }
