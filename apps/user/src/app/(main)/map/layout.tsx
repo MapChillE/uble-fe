@@ -8,6 +8,7 @@ export default function MapLayout({ children }: { children: React.ReactNode }) {
         type="text/javascript"
         src={`https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${process.env.NEXT_PUBLIC_MAP_CLIENT_ID}&submodules=geocoder`}
       />
+      <Script strategy="afterInteractive" src="/MarkerClustering.js" />
       {children}
     </>
   );
