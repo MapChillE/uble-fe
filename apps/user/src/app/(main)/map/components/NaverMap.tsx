@@ -168,6 +168,7 @@ export default function NaverMap({ loc, zoom = 15, pins }: NaverMapProps) {
       clustererRef.current.setMap(null);
       clustererRef.current = null;
     }
+
     // 현위치 마커 분리
     const currentPin = pins.find((pin) => pin.type === "current");
     const otherPins = pins.filter((pin) => pin.type !== "current");
@@ -178,11 +179,12 @@ export default function NaverMap({ loc, zoom = 15, pins }: NaverMapProps) {
       currentMarker = createMarker(currentPin);
       currentMarker.setMap(mapRef.current);
     }
+
     // 나머지 마커 생성
     const newMarkers = otherPins.map((pin) => createMarker(pin));
     markerRefs.current = newMarkers;
 
-    // 클러스터러 생성
+    // 클러스터러 생성 (현위치 제외)
     const HTMLMARKER = {
       content:
         "<div style='width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#6BCB77,#4D96FF);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.15);font-weight:bold;font-size:18px;color:#fff;'><span id='cluster-count'></span></div>",
@@ -210,7 +212,7 @@ export default function NaverMap({ loc, zoom = 15, pins }: NaverMapProps) {
         currentMarker.setMap(null);
       }
     };
-  }, [pins, loc]);
+  }, [pins, loc, zoom]);
 
   return <div id={mapId} style={{ width: "100%", height: "100%" }} />;
 }
