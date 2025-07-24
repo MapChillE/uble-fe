@@ -31,7 +31,6 @@ const MyPlaceDrawer = ({ trigger }: MyPlaceDrawerProps) => {
       try {
         const places = await fetchMyPlaces();
         setMyPlaces(places);
-        console.log("places", places);
       } catch {
         toast.error("내 장소를 불러오지 못했습니다.");
       }
@@ -47,7 +46,6 @@ const MyPlaceDrawer = ({ trigger }: MyPlaceDrawerProps) => {
         latitude: geocode.coordinates[1],
         longitude: geocode.coordinates[0],
       });
-      console.log(newPlace);
       addPlace(newPlace);
       setShowForm(false);
     } catch {

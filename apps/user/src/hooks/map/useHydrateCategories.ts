@@ -3,6 +3,7 @@ import { useCategoryStore } from "@/store/useCategoryStore";
 import { apiHandler } from "@api/apiHandler";
 import { getCategories } from "@/service/category";
 import { ALL_CATEGORY, ANY_CATEGORIES } from "@/types/constants";
+import { toast } from "sonner";
 
 export const useHydrateCategories = () => {
   const categories = useCategoryStore((s) => s.categories);
@@ -14,8 +15,7 @@ export const useHydrateCategories = () => {
       const fetchCategories = async () => {
         const { data, error } = await apiHandler(() => getCategories());
         if (error) {
-          console.log("카테고리 로딩 실패: ", error);
-          // TODO: 에러 상태 관리 또는 토스트 알림 추가
+          toast.error("카테고리를 불러오지 못했습니다.");
         }
         if (data?.categoryList) {
           setUserCategories(data.categoryList);
