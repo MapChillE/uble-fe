@@ -65,11 +65,11 @@ export interface BrandStatistics {
   usageCount: number;
 }
 
-/** 사용자가 가장 많이 혜택을 사용한 날짜 요일, 시간 */
+/** 사용자가 가장 많이 혜택을 사용한 날짜 요일, 시간 (null 허용) */
 export interface UsagePatternStatistics {
-  mostUsedDay: string;
-  mostUsedWeekday: string;
-  mostUsedTime: string;
+  mostUsedDay: string | null;
+  mostUsedWeekday: string | null;
+  mostUsedTime: string | null;
 }
 /** 사용자가 전체 사용자중 몇% 정도의 혜택을 사용하는지 통계 */
 export interface UsageComparisonStatistics {
@@ -85,19 +85,29 @@ export interface UsageMonthlyStatistics {
   usageCount: number;
 }
 
-export interface StaticsData {
+export interface StaticsDetailData {
   /** 사용자가 가장 많이 사용한 카테고리 */
-  categoryRankList: CategoryStatistics;
+  categoryRankList: CategoryStatistics[];
   /** 사용자가 가장 많이 사용한 브랜드 */
-  brandRankList: BrandStatistics;
+  brandRankList: BrandStatistics[];
   /** 사용자가 가장 많이 혜택을 사용한 날짜 요일, 시간 */
   benefitUsagePattern: UsagePatternStatistics;
   /** 사용자가 전체 사용자중 몇% 정도의 혜택을 사용하는지 통계 */
   benefitUsageComparison: UsageComparisonStatistics;
   /** 사용자가 가장 많은 혜택을 사용한 년 월 그리고 횟수 */
-  monthlyBenefitUsageList: UsageMonthlyStatistics;
+  monthlyBenefitUsageList: UsageMonthlyStatistics[];
 }
 
-export interface StaticsDataResponse extends responseStatus {
-  data: StaticsData;
+export interface StaticsDetailDataResponse extends responseStatus {
+  data: StaticsDetailData;
+}
+
+export interface StaticsPreviewData {
+  mostUsedCategoryName: string | null;
+  mostUsedBrandName: string | null;
+  monthlyUsedCount: number;
+}
+
+export interface StaticsPreviewResponse extends responseStatus {
+  data: StaticsPreviewData;
 }
