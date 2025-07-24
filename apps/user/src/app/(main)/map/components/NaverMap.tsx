@@ -39,6 +39,7 @@ export default function NaverMap({ loc, zoom = 15, pins }: NaverMapProps) {
   const mapRef = useRef<NaverMapInstance | null>(null);
   const markerRefs = useRef<NaverMarker[]>([]);
   const clustererRef = useRef<any>(null);
+  const currentMarkerRef = useRef<NaverMarker | null>(null);
   const [lng, lat] = loc;
 
   // 마커 생성 함수 (재사용)
@@ -115,15 +116,20 @@ export default function NaverMap({ loc, zoom = 15, pins }: NaverMapProps) {
       clustererRef.current = null;
     }
 
+    // 기존 현위치 마커 제거
+    if (currentMarkerRef.current) {
+      currentMarkerRef.current.setMap(null);
+      currentMarkerRef.current = null;
+    }
+
     // 현위치 마커 분리
     const currentPin = pins.find((pin) => pin.type === "current");
     const otherPins = pins.filter((pin) => pin.type !== "current");
 
     // 현위치 마커 생성 및 지도에 표시
-    let currentMarker: NaverMarker | null = null;
     if (currentPin) {
-      currentMarker = createMarker(currentPin);
-      currentMarker.setMap(mapRef.current);
+      currentMarkerRef.current = createMarker(currentPin);
+      currentMarkerRef.current.setMap(mapRef.current);
     }
 
     // 나머지 마커 생성
@@ -154,8 +160,9 @@ export default function NaverMap({ loc, zoom = 15, pins }: NaverMapProps) {
 
     // 클린업 시 현위치 마커도 제거
     return () => {
-      if (currentMarker) {
-        currentMarker.setMap(null);
+      if (currentMarkerRef.current) {
+        currentMarkerRef.current.setMap(null);
+        currentMarkerRef.current = null;
       }
     };
   }, [pins, loc, zoom]);
