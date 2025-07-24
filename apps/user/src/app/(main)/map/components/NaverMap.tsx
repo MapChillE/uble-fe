@@ -3,7 +3,11 @@
 import { useEffect, useRef } from "react";
 import { Coordinates } from "@/types/map";
 import type { NaverMap as NaverMapInstance, NaverMapOptions, NaverMarker } from "@/types/map";
-import { CATEGORY_MARKER_STYLE, CategoryMarkerKey } from "@/constants/categoryMarkerStyle";
+import {
+  CATEGORY_MARKER_STYLE,
+  CategoryMarkerKey,
+  getCategoryIconHTML,
+} from "@/constants/categoryMarkerStyle";
 import { MarkerClustering } from "@/types/markerClustering";
 
 const mapId = "naver-map";
@@ -28,9 +32,11 @@ function getCategoryIcon(category?: string) {
 
   const key: CategoryMarkerKey = (category as CategoryMarkerKey) ?? "default";
   const style = CATEGORY_MARKER_STYLE[key] ?? CATEGORY_MARKER_STYLE["default"];
-  const { color, emoji } = style;
+  const { color, icon } = style;
+  const svgString = getCategoryIconHTML(icon);
+
   return {
-    content: `<div style="background:${color};width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;">${emoji}</div>`,
+    content: `<div style="background:${color};width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;">${svgString}</div>`,
     size: new window.naver.maps.Size(28, 28),
     anchor: new window.naver.maps.Point(14, 28),
   };
