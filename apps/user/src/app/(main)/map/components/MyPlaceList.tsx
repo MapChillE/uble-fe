@@ -8,7 +8,6 @@ interface MyPlaceListProps {
 }
 
 const MyPlaceList = ({ places, selectedPlaceId, onSelect }: MyPlaceListProps) => {
-  console.log(places);
   return (
     <>
       {places.map((place) => (
