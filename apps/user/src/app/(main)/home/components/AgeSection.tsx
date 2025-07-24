@@ -1,4 +1,3 @@
-
 import SectionHeader from "@/components/ui/SectionHeader";
 import DynamicCard from "@/components/ui/DynamicCard";
 import { BrandContent } from "@/types/brand";
@@ -12,7 +11,7 @@ const AgeSection = () => {
     imgUrl: "",
     isVIPcock: true,
     minRank: "NONE",
-    bookmarked: false,
+    isBookmarked: false,
   };
   return (
     <div className="space-y-4">

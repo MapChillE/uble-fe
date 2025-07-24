@@ -2,8 +2,6 @@
 
 import { useEffect, useMemo, useState } from "react";
 
-import { apiHandler } from "@api/apiHandler";
-
 import SearchSection from "@/app/(main)/home/components/SearchSection";
 import MapWithBaseLocation from "@/app/(main)/map/components/MapWithBaseLocation";
 import StoreDetailDrawer from "@/app/(main)/map/components/StoreDetailDrawer";
@@ -11,59 +9,37 @@ import MyPlaceDrawer from "@/app/(main)/map/components/MyPlaceDrawer";
 import MyPlaceTriggerBtn from "@/app/(main)/map/components/MyPlaceTriggerBtn";
 
 import CategorySection from "@/components/common/CategorySection";
-import { getCategories } from "@/service/category";
 import { getStoreDetail } from "@/service/store";
 import { useBaseLocation } from "@/hooks/map/useBaseLocation";
 import { useCurrentLocation } from "@/hooks/map/useCurrentLocation";
-import { useCategoryStore } from "@/store/useCategoryStore";
-import { useMapStore } from "@/store/useMapStore";
 
-import { ALL_CATEGORY, ANY_CATEGORIES, DEFAULT_LOCATION } from "@/types/constants";
+import { ALL_CATEGORY, DEFAULT_LOCATION } from "@/types/constants";
 import { Category } from "@/types/category";
-import { Coordinates } from "@/types/map";
 import { StoreDetail, StoreSummary } from "@/types/store";
 import { Pin } from "@/app/(main)/map/components/NaverMap";
+import { useHydrateCategories } from "@/hooks/map/useHydrateCategories";
+import { useHydrateLocation } from "@/hooks/map/useHydrateLocation";
+import { useLocationStore } from "@/store/useLocationStore";
 import BenefitConfirmModal from "@/components/modal/BenefitConfirmModal";
 
 export default function MapContainer() {
   const [selectedCategory, setSelectedCategory] = useState<Category>(ALL_CATEGORY);
-  const setCategories = useCategoryStore((s) => s.setCategories);
-  // const categories = useCategoryStore((s) => s.categories);
 
   const [isOpen, setIsOpen] = useState(false);
   const [snapIndex, setSnapIndex] = useState(0);
   const [storeDetail, setStoreDetail] = useState<StoreDetail | null>(null);
 
-  // TODO: useCategoryStore에서 카테고리 존재 여부 if문 확인해서 추가 or api + 추가
-  const handleFetchCategories = async () => {
-    const { data, error } = await apiHandler(() => getCategories());
-    if (error) {
-      console.log("카테고리 로딩 실패: ", error);
-      // TODO: 에러 상태 관리 또는 토스트 알림 추가
-    }
-    if (data && data.categoryList) {
-      setCategories([
-        ALL_CATEGORY,
-        ...data.categoryList.map((category) => ({
-          categoryId: category.categoryId,
-          categoryName: category.categoryName,
-        })),
-        ...ANY_CATEGORIES,
-      ]);
-    }
-  };
+  useHydrateCategories();
+  useHydrateLocation();
 
-  useEffect(() => {
-    handleFetchCategories();
-    setSelectedCategory({ ...ALL_CATEGORY });
-  }, []);
-
-  const { location: currentLocation, getCurrentLocation } = useCurrentLocation();
-  useEffect(() => {
-    getCurrentLocation();
-  }, [getCurrentLocation]);
+  const currentLocation = useLocationStore((s) => s.currentLocation);
 
   const baseLocation = useBaseLocation(currentLocation ?? DEFAULT_LOCATION);
+
+  if (!currentLocation) {
+    // TODO: 로딩 스피너 등으로 변경
+    return <div> 현재 위치를 불러오는 중입니다...</div>;
+  }
 
   const handlePinClick = async (pin: Pin) => {
     if (!pin.id) return;

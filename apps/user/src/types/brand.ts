@@ -1,11 +1,6 @@
 import { responseStatus } from "./api";
 
-export enum Grade {
-  NONE = "NONE",
-  NORMAL = "NORMAL",
-  PREMIUM = "PREMIUM",
-  VIP = "VIP",
-}
+export type Grade = "NONE" | "NORMAL" | "PREMIUM" | "VIP";
 
 /**
  * 브랜드 단일 항목 타입
