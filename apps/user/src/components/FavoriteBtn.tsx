@@ -5,6 +5,7 @@ import classNames from "classnames";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteFavoriteMutation, postFavoritesMutation } from "@/service/favorites";
 import { useState } from "react";
+import { toast } from "sonner";
 
 interface FavoriteBtnProps {
   /** brandId를 통해 향후 서버에 즐겨찾기 등록 요청 */
@@ -35,7 +36,7 @@ const FavoriteBtn = ({ brandId, bookmarked, variant }: FavoriteBtnProps) => {
     onSuccess: invalidate,
     onError: (error: Error) => {
       setIsLiked((prev) => !prev); // 실패했으면 상태 복구
-      alert(error.message);
+      toast.error("오류가 발생했습니다. 잠시 후 다시 이용해 주세요.");
     },
   });
 

@@ -10,6 +10,7 @@ import { Star } from "lucide-react";
 import { FeedbackForm } from "@/types/profile";
 import { apiHandler } from "@api/apiHandler";
 import { registFeedback } from "@/service/user";
+import { toast } from "sonner";
 
 const FeedbackModal = () => {
   const { isOpen, close } = useFeedbackModalStore();
@@ -21,9 +22,9 @@ const FeedbackModal = () => {
   const handleSubmit = async () => {
     const { data } = await apiHandler(() => registFeedback(formData));
     if (data?.statusCode === 0) {
-      alert("소중한 의견 감사합니다.");
+      toast.success("소중한 의견 감사합니다.");
       close();
-    } else alert("오류가 발생했습니다.");
+    } else toast.error("오류가 발생했습니다. 잠시 후 다시 이용해 주세요.");
   };
 
   return (

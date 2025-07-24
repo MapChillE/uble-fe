@@ -1,19 +1,23 @@
-'use client'
+"use client";
 
-import { apiHandler } from '@api/apiHandler';
-import { kakaoLogin } from '@/service/user';
+import { toast } from "sonner";
 
 const KakaoLoginBtn = () => {
-  const login = async () => {
-    const kakaoUrl = process.env.NEXT_PUBLIC_KAKAO_URL + "&client_id=" + process.env.NEXT_PUBLIC_CLIENT_ID + "&redirect_uri=" + process.env.NEXT_PUBLIC_REDIRECT_URI;
+  const login = () => {
+    const kakaoUrl =
+      process.env.NEXT_PUBLIC_KAKAO_URL +
+      "&client_id=" +
+      process.env.NEXT_PUBLIC_CLIENT_ID +
+      "&redirect_uri=" +
+      process.env.NEXT_PUBLIC_REDIRECT_URI;
     if (!kakaoUrl) {
-      alert("에러");
+      toast.error("오류가 발생했습니다. 잠시 후 다시 이용해 주세요.");
+
       return;
     }
     window.location.href = kakaoUrl;
-    // apiHandler(() => kakaoLogin());
     return;
-  }
+  };
 
   return (
     <div className="flex justify-center">
