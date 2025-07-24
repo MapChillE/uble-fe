@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { Coordinates } from "@/types/map";
 import type { NaverMap as NaverMapInstance, NaverMapOptions, NaverMarker } from "@/types/map";
 import { CATEGORY_MARKER_STYLE, CategoryMarkerKey } from "@/constants/categoryMarkerStyle";
+import { MarkerClustering } from "@/types/markerClustering";
 
 const mapId = "naver-map";
 
@@ -38,7 +39,7 @@ function getCategoryIcon(category?: string) {
 export default function NaverMap({ loc, zoom = 15, pins }: NaverMapProps) {
   const mapRef = useRef<NaverMapInstance | null>(null);
   const markerRefs = useRef<NaverMarker[]>([]);
-  const clustererRef = useRef<any>(null);
+  const clustererRef = useRef<MarkerClustering | null>(null);
   const currentMarkerRef = useRef<NaverMarker | null>(null);
   const [lng, lat] = loc;
 
