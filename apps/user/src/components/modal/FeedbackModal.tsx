@@ -19,7 +19,8 @@ const FeedbackModal = () => {
 
   const canSubmit = formData.title.trim() && formData.content.trim() && formData.score > 0;
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     const { data } = await apiHandler(() => registFeedback(formData));
     if (data?.statusCode === 0) {
       toast.success("소중한 의견 감사합니다.");
