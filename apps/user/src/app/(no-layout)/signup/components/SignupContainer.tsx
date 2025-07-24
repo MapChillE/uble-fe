@@ -39,7 +39,7 @@ const SignupContainer = () => {
       case 4:
         return info.categoryIds.length > 0;
       case 5:
-        return !info.barcode || info.barcode.length === 0 || info.barcode.length > 15;
+        return !info.barcode || info.barcode.length === 0 || info.barcode.length === 16;
       default:
         return false;
     }
