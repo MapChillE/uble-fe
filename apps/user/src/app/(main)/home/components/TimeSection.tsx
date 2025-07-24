@@ -11,7 +11,7 @@ const testData: BrandContent = {
   imgUrl: "",
   isVIPcock: true,
   minRank: "NONE",
-  bookmarked: true,
+  isBookmarked: true,
 };
 
 const TimeSection = () => {

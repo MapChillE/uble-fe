@@ -1,4 +1,4 @@
-import { BrandListData, BrandListResponse, FetchBrandsParams } from "@/types/brand";
+import { BrandDetailResponse, BrandListData, BrandListResponse, FetchBrandsParams } from "@/types/brand";
 import api from "@api/http-commons";
 
 export const fetchBrands = async (
@@ -10,3 +10,8 @@ export const fetchBrands = async (
   );
   return res.data.data;
 };
+
+export const fetchBrandDetail = async (params: string): Promise<BrandDetailResponse> => {
+  const { data } = await api.get(`/api/brands/${params}`);
+  return data;
+}

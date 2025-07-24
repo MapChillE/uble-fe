@@ -2,7 +2,8 @@ import AgeSection from "@/app/(main)/home/components/AgeSection";
 import PersonalSection from "@/app/(main)/home/components/PersonalSection";
 import TimeSection from "@/app/(main)/home/components/TimeSection";
 import SearchSection from "@/app/(main)/home/components/SearchSection";
-import EntireSectionProvider from "@/app/(main)/home/components/EntireSectionProvider";
+import EntireSection from "@/app/(main)/home/components/EntireSection";
+
 
 const page = () => {
   return (
@@ -11,7 +12,7 @@ const page = () => {
       <PersonalSection />
       <AgeSection />
       <TimeSection />
-      <EntireSectionProvider />
+      <EntireSection />
     </section>
   );
 };

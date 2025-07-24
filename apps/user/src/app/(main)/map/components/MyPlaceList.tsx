@@ -3,16 +3,18 @@ import { MyPlace } from "@/types/map";
 
 interface MyPlaceListProps {
   places: MyPlace[];
-  selectedPlaceId: string | null;
-  onSelect: (id: string) => void;
+  selectedPlaceId: number | null;
+  onSelect: (id: number) => void;
 }
 
 const MyPlaceList = ({ places, selectedPlaceId, onSelect }: MyPlaceListProps) => {
+  console.log(places);
   return (
     <>
       {places.map((place) => (
         <MyPlaceCard
           key={place.id}
+          placeId={place.id}
           name={place.name}
           address={place.address}
           selected={selectedPlaceId === place.id}

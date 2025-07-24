@@ -1,7 +1,12 @@
-import { Button } from "@workspace/ui/components/button";
 import { Pencil, Star, Trash2 } from "lucide-react";
+import { Button } from "@workspace/ui/components/button";
+import { deleteMyPlace } from "@/service/map";
+import { useMapStore } from "@/store/useMapStore";
+import { toast } from "sonner";
+import useConfirmModalStore from "@/store/useConfirmModalStore";
 
 interface MyPlaceCardProps {
+  placeId: number;
   name: string;
   address?: string;
   selected?: boolean;
@@ -9,24 +14,38 @@ interface MyPlaceCardProps {
 }
 
 export default function MyPlaceCard({
+  placeId,
   name,
   address,
   selected = false,
   onClick,
 }: MyPlaceCardProps) {
-  // 내 장소명 변경
-  const handleEditName = () => {
-    alert("장소명 수정");
-  };
+  const removeMyPlace = useMapStore((s) => s.removeMyPlace);
 
-  // 내 장소 주소값 변경
-  const handleEditAddress = () => {
-    alert("주소 수정");
-  };
+  // TODO: 내 장소명 변경
+  const handleEditName = () => {};
+
+  // TODO: 내 장소 주소값 변경
+  const handleEditAddress = () => {};
 
   // 내 장소 삭제
   const handleDelete = () => {
-    alert("장소 삭제");
+    const { open } = useConfirmModalStore.getState();
+
+    open({
+      message: "장소를 삭제하시겠어요?",
+      confirmText: "삭제",
+      cancelText: "취소",
+      onConfirm: async () => {
+        try {
+          await deleteMyPlace(placeId);
+          removeMyPlace(placeId); // zustand store에서 제거
+          toast.success("삭제되었습니다.");
+        } catch {
+          toast.error("장소 삭제에 실패했습니다.");
+        }
+      },
+    });
   };
 
   return (

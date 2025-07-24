@@ -27,10 +27,10 @@ export const apiHandler = async <T>(fn: () => Promise<T>) => {
     const data = await fn();
     return { data, error: null };
   } catch (error: unknown) {
-    let msg = "오류가 발생했습니다.";
-
-    msg = errorTracker(error);
-
+    if (isAxiosError(error) && error.response?.data) {
+      return { data: error.response.data as T, error: null };
+    }
+    const msg = errorTracker(error);
     return { data: null, error: msg };
   }
 };

@@ -1,5 +1,7 @@
 import { responseStatus } from "./api";
 
+export type Grade = "NONE" | "NORMAL" | "PREMIUM" | "VIP";
+
 /**
  * 브랜드 단일 항목 타입
  */
@@ -17,9 +19,9 @@ export interface BrandContent {
   /** VIP콕 혜택이 존재하는지 여부 */
   isVIPcock: boolean;
   /** 혜택을 사용할 수 있는 최소 등급 */
-  minRank: "NONE" | "NORMAL" | "PREMIUM";
+  minRank: Grade;
   /** 사용자가 북마크했는지 여부 */
-  bookmarked?: boolean;
+  isBookmarked?: boolean;
 }
 
 /**
@@ -34,11 +36,26 @@ export interface BrandListData {
   lastCursorId?: number;
 }
 
-interface BrandDetailData extends BrandContent {
+export interface BrandBenefit {
+  benefitId: number;
+  type: "NORMAL" | "VIP";
+  minRank: Grade;
+  content: string;
+  manual: string;
+  provisionCount: string;
+}
+export interface BrandDetailData {
+  brandId: number;
+  name: string;
   csrNumber: string;
   description: string;
+  imgUrl: string;
   season: string;
   categoryName: string;
+  bookmarkId?: number;
+  benefits: BrandBenefit[];
+  isBookmarked: boolean;
+  isVIPcock: boolean;
 }
 
 /**

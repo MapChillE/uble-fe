@@ -1,9 +1,12 @@
+"use client";
 import { StoreDetail, StoreSummary } from "@/types/store";
 import { Badge } from "@workspace/ui/components/badge";
 import { Button } from "@workspace/ui/components/button";
 import { MapPin, Phone, Heart } from "lucide-react";
 import MembershipGrade from "@/app/(main)/home/components/ui/MembershipGrade";
 import Image from "next/image";
+import FavoriteBtn from "@/components/FavoriteBtn";
+import BarcodeContainer from "./BarcodeContainer";
 
 // 공통 헤더 컴포넌트
 const StoreCardHeader = ({
@@ -41,9 +44,7 @@ const StoreCardHeader = ({
         </div>
       </div>
     </div>
-    <button onClick={onFavoriteToggle} className="ml-2 flex-shrink-0">
-      <Heart className="h-6 w-6 text-gray-400 hover:text-gray-600" />
-    </button>
+    <FavoriteBtn brandId={data.brandId} bookmarked={data.isBookmarked} variant="horizontal" />
   </div>
 );
 
@@ -76,7 +77,7 @@ export const DetailCard = ({
     <StoreInfoSection data={data} />
     <div className="m-4 space-y-2">
       <div>
-        {data.benefitList.map((benefit) => (
+        {data.benefitList.map((benefit, idx) => (
           <div key={benefit.benefitId} className="flex flex-col space-y-2 pb-2">
             <h3 className="font-semibold">혜택 내용</h3>
             <div className="flex flex-col space-y-2">
@@ -89,6 +90,9 @@ export const DetailCard = ({
             </div>
             <p className="text-xs text-gray-600">이용 제한: {benefit.provisionCount}</p>
             <hr className="my-4 text-gray-200" />
+            {data.benefitList.length - 1 === idx && (
+              <BarcodeContainer storeId={data.storeId} isVIPcock={benefit.type === "VIP"} />
+            )}
           </div>
         ))}
       </div>

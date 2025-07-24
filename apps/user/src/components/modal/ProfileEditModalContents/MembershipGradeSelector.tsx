@@ -16,7 +16,13 @@ const MembershipGradeSelector = ({ grade, onChange }: MembershipGradeSelectorPro
           <Button
             key={g}
             onClick={() => onChange(g)}
-            variant={grade === g ? "onb_selected" : "onb_unselected"}
+            variant={
+              grade === g ||
+              (grade === "NORMAL" && g === "일반") ||
+              (grade === "PREMIUM" && g === "우수")
+                ? "onb_selected"
+                : "onb_unselected"
+            }
           >
             {g}
           </Button>
@@ -26,4 +32,4 @@ const MembershipGradeSelector = ({ grade, onChange }: MembershipGradeSelectorPro
   );
 };
 
-export default MembershipGradeSelector; 
+export default MembershipGradeSelector;
