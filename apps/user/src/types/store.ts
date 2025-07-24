@@ -28,7 +28,7 @@ export interface StoreListResponse extends responseStatus {
 }
 
 /**
- * 매장(스토어) 간략 정보 타입 (API 미구현으로 임시)
+ * 매장(스토어) 간략 정보 타입
  */
 export interface StoreSummary {
   // TODO: 상세 API 요청시 storeId로 보낼 수 있으니까 필요 여부 확인.
@@ -64,6 +64,13 @@ export interface StoreDetail extends StoreSummary {
   normalAvailable: boolean;
   vipAvailable: boolean;
   localAvailable: boolean;
+}
+
+/**
+ * 매장 간략 정보 API
+ */
+export interface StoreSummaryResponse extends responseStatus {
+  data: StoreSummary;
 }
 
 /**
