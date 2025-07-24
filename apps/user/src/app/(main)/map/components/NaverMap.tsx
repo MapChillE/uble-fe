@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { Coordinates } from "@/types/map";
 import type { NaverMap as NaverMapInstance, NaverMapOptions, NaverMarker } from "@/types/map";
+import { CATEGORY_MARKER_STYLE, CategoryMarkerKey } from "@/constants/categoryMarkerStyle";
 
 const mapId = "naver-map";
 
@@ -22,70 +23,14 @@ interface NaverMapProps {
 }
 // 카테고리별 아이콘 반환 함수
 function getCategoryIcon(category?: string) {
-  switch (category) {
-    case "액티비티":
-      return {
-        content: `<div style="background:#FF6B6B;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;">🏃</div>`,
-        size: new window.naver.maps.Size(28, 28),
-        anchor: new window.naver.maps.Point(14, 28),
-      };
-    case "뷰티/건강":
-      return {
-        content: `<div style="background:#FFB347;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;">💄</div>`,
-        size: new window.naver.maps.Size(28, 28),
-        anchor: new window.naver.maps.Point(14, 28),
-      };
-    case "쇼핑":
-      return {
-        content: `<div style="background:#6BCB77;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;">🛍️</div>`,
-        size: new window.naver.maps.Size(28, 28),
-        anchor: new window.naver.maps.Point(14, 28),
-      };
-    case "생활/건강":
-      return {
-        content: `<div style="background:#4D96FF;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;">🏠</div>`,
-        size: new window.naver.maps.Size(28, 28),
-        anchor: new window.naver.maps.Point(14, 28),
-      };
-    case "문화/여가":
-      return {
-        content: `<div style="background:#A259FF;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;">🎭</div>`,
-        size: new window.naver.maps.Size(28, 28),
-        anchor: new window.naver.maps.Point(14, 28),
-      };
-    case "교육":
-      return {
-        content: `<div style="background:#FFD93D;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;">📚</div>`,
-        size: new window.naver.maps.Size(28, 28),
-        anchor: new window.naver.maps.Point(14, 28),
-      };
-    case "여행/교통":
-      return {
-        content: `<div style="background:#43BCCD;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;">✈️</div>`,
-        size: new window.naver.maps.Size(28, 28),
-        anchor: new window.naver.maps.Point(14, 28),
-      };
-    case "식당":
-      return {
-        content: `<div style="background:#FF7F50;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;">🍽️</div>`,
-        size: new window.naver.maps.Size(28, 28),
-        anchor: new window.naver.maps.Point(14, 28),
-      };
-    case "카페":
-      return {
-        content: `<div style="background:#A3A847;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;">☕</div>`,
-        size: new window.naver.maps.Size(28, 28),
-        anchor: new window.naver.maps.Point(14, 28),
-      };
-    case "우리동네멤버십":
-      return {
-        content: `<div style="background:#22223B;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;">🏅</div>`,
-        size: new window.naver.maps.Size(28, 28),
-        anchor: new window.naver.maps.Point(14, 28),
-      };
-    default:
-      return null;
-  }
+  const key: CategoryMarkerKey = (category as CategoryMarkerKey) ?? "default";
+  const style = CATEGORY_MARKER_STYLE[key] ?? CATEGORY_MARKER_STYLE["default"];
+  const { color, emoji } = style;
+  return {
+    content: `<div style="background:${color};width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;">${emoji}</div>`,
+    size: new window.naver.maps.Size(28, 28),
+    anchor: new window.naver.maps.Point(14, 28),
+  };
 }
 
 export default function NaverMap({ loc, zoom = 15, pins }: NaverMapProps) {
@@ -121,7 +66,6 @@ export default function NaverMap({ loc, zoom = 15, pins }: NaverMapProps) {
     }
     // 카테고리별 마커 아이콘 적용
     if (pin.type === "store" && pin.category) {
-      console.log(pin.category);
       const icon = getCategoryIcon(pin.category);
       if (icon) markerOptions.icon = icon;
     }
