@@ -23,6 +23,8 @@ interface NaverMapProps {
 }
 // 카테고리별 아이콘 반환 함수
 function getCategoryIcon(category?: string) {
+  if (!window.naver?.maps) return null;
+
   const key: CategoryMarkerKey = (category as CategoryMarkerKey) ?? "default";
   const style = CATEGORY_MARKER_STYLE[key] ?? CATEGORY_MARKER_STYLE["default"];
   const { color, emoji } = style;
