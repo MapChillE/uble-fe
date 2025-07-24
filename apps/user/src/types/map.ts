@@ -36,16 +36,9 @@ export interface MyPlace {
   coordinates: Coordinates;
 }
 
-export interface RawMyPlaceFromGet {
-  id: number;
-  name: string;
-  longitude: number;
-  latitude: number;
-  address: string;
-}
-
-export interface RawMyPlaceFromPost {
-  pinId: number;
+export interface RawMyPlace {
+  id?: number;
+  pinId?: number;
   name: string;
   longitude: number;
   latitude: number;
@@ -53,10 +46,10 @@ export interface RawMyPlaceFromPost {
 }
 
 export interface PostMyPlacesResponse extends responseStatus {
-  data: RawMyPlaceFromPost;
+  data: RawMyPlace;
 }
 export interface FetchMyPlacesResponse extends responseStatus {
   data: {
-    locations: RawMyPlaceFromGet[];
+    locations: RawMyPlace[];
   };
 }

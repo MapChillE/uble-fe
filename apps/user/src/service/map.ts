@@ -19,13 +19,16 @@ export const postMyPlace = async (params: PostMyPlaceParams): Promise<MyPlace> =
     throw new Error(error || "내 장소 등록 실패");
   }
 
-  const { pinId, name, address, longitude, latitude } = data.data.data;
+  const raw = data.data.data;
+  if (!raw.pinId) {
+    throw new Error("서버 응답에 pinId가 없습니다");
+  }
 
   return {
-    id: pinId,
-    name,
-    address,
-    coordinates: [longitude, latitude],
+    id: raw.pinId,
+    name: raw.name,
+    address: raw.address,
+    coordinates: [raw.longitude, raw.latitude],
   };
 };
 
@@ -33,7 +36,6 @@ export const postMyPlace = async (params: PostMyPlaceParams): Promise<MyPlace> =
 export const fetchMyPlaces = async (): Promise<MyPlace[]> => {
   const { data, error } = await apiHandler(async () => {
     const res = await api.get<FetchMyPlacesResponse>("/api/users/pin");
-    console.log(res);
     return res.data.data;
   });
 
@@ -41,12 +43,18 @@ export const fetchMyPlaces = async (): Promise<MyPlace[]> => {
     throw new Error(error || "내 장소 조회 실패");
   }
 
-  return data.locations.map((item) => ({
-    id: item.id,
-    name: item.name,
-    address: item.address,
-    coordinates: [item.longitude, item.latitude],
-  }));
+  return data.locations.map((item) => {
+    if (!item.id) {
+      throw new Error("유효하지 않은 장소 ID");
+    }
+
+    return {
+      id: item.id,
+      name: item.name,
+      address: item.address,
+      coordinates: [item.longitude, item.latitude],
+    };
+  });
 };
 
 // 장소 삭제
