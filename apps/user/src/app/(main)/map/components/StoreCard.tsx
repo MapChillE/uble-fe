@@ -109,7 +109,7 @@ export const SummaryCard = ({
   onRouteClick?: () => void;
   onFavoriteToggle?: () => void;
 }) => (
-  <div className="space-y-4 overflow-y-auto px-4">
+  <div className="space-y-4 overflow-y-auto px-4 pb-20">
     <StoreCardHeader data={data} onRouteClick={onRouteClick} onFavoriteToggle={onFavoriteToggle} />
     <StoreInfoSection data={data} />
   </div>
