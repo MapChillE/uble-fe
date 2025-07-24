@@ -1,4 +1,4 @@
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { Drawer } from "vaul";
 import { Button } from "@workspace/ui/components/button";
 import MyPlaceList from "./MyPlaceList";
@@ -7,34 +7,57 @@ import CurrentLocationCard from "@/app/(main)/map/components/CurrentLocationCard
 import { useMapStore } from "@/store/useMapStore";
 import useNaverServiceReady from "@/hooks/map/useNaverServiceReady";
 import { GeocodingResult, MyPlace } from "@/types/map";
+import { fetchMyPlaces, postMyPlace } from "@/service/map";
+import { toast } from "sonner";
 
 interface MyPlaceDrawerProps {
   trigger?: React.ReactNode;
 }
 
 const MyPlaceDrawer = ({ trigger }: MyPlaceDrawerProps) => {
+  const [open, setOpen] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const places = useMapStore((s) => s.myPlaces);
   const addPlace = useMapStore((s) => s.addMyPlace);
+  const setMyPlaces = useMapStore((s) => s.setMyPlaces);
+  const places = useMapStore((s) => s.myPlaces);
   const selectedPlaceId = useMapStore((s) => s.selectedPlaceId);
   const setSelectedPlaceId = useMapStore((s) => s.setSelectedPlaceId);
   const serviceReady = useNaverServiceReady();
 
-  const handleAdd = (name: string, geocode: GeocodingResult) => {
-    const newPlace: MyPlace = {
-      id: crypto.randomUUID(),
-      name,
-      address: geocode.address,
-      coordinates: [geocode.coordinates[0], geocode.coordinates[1]],
+  // Drawer 열릴 때 서버에서 myPlaces 다시 불러오기
+  useEffect(() => {
+    if (!open) return;
+    const fetchData = async () => {
+      try {
+        const places = await fetchMyPlaces();
+        setMyPlaces(places);
+        console.log("places", places);
+      } catch {
+        toast.error("내 장소를 불러오지 못했습니다.");
+      }
     };
-    addPlace(newPlace);
-    setShowForm(false);
-    // TODO: 내장소 등록 API 연결
+    fetchData();
+  }, [open, setMyPlaces]);
+
+  const handleAdd = async (name: string, geocode: GeocodingResult) => {
+    try {
+      const newPlace = await postMyPlace({
+        name,
+        address: geocode.address,
+        latitude: geocode.coordinates[1],
+        longitude: geocode.coordinates[0],
+      });
+      console.log(newPlace);
+      addPlace(newPlace);
+      setShowForm(false);
+    } catch {
+      toast.error("장소 등록에 실패했습니다.");
+    }
   };
 
   return (
     <div className="top-30 absolute right-4 z-10">
-      <Drawer.Root>
+      <Drawer.Root open={open} onOpenChange={setOpen}>
         <Drawer.Trigger asChild>{trigger}</Drawer.Trigger>
         <Drawer.Portal>
           <Drawer.Overlay className="fixed inset-0 z-30 bg-black/40" />
@@ -42,8 +65,8 @@ const MyPlaceDrawer = ({ trigger }: MyPlaceDrawerProps) => {
             <Drawer.Title className="mb-4 overflow-y-auto text-lg font-bold">내 장소</Drawer.Title>
             {/* 현재 위치 카드 */}
             <CurrentLocationCard
-              isSelected={selectedPlaceId === "current"}
-              onClick={() => setSelectedPlaceId("current")}
+              isSelected={selectedPlaceId === -1}
+              onClick={() => setSelectedPlaceId(-1)}
             />
             <hr className="my-4 text-gray-300" />
             {/* 장소 카드 목록 */}
