@@ -22,6 +22,12 @@ export interface BrandContent {
   minRank: Grade;
   /** 사용자가 북마크했는지 여부 */
   isBookmarked?: boolean;
+  /** 매장 ID(개인 추천 전용) */
+  storeId?: number;
+  /** 매장 위도(개인 추천 전용) */
+  latitude?: number;
+  /** 매장 경도(개인 추천 전용) */
+  longitude?: number;
 }
 
 /**
@@ -90,10 +96,14 @@ export interface AgeRecommendResponse extends responseStatus {
   data: AgeRecommendData;
 }
 
-export interface TimeRecommendData {
+export interface TimeAndPersonalRecommendData {
   recommendationsList: BrandContent[];
 }
 
 export interface TimeRecommendResponse extends responseStatus {
-  data: TimeRecommendData;
+  data: TimeAndPersonalRecommendData;
+}
+
+export interface PersonalRecommendResponse extends responseStatus {
+  data: TimeAndPersonalRecommendData;
 }
