@@ -1,20 +1,20 @@
-'use client'
+"use client";
 
-import { useRouter } from 'next/navigation';
-import { ChevronRight, Gift } from 'lucide-react';
+import { useRouter } from "next/navigation";
+import { ChevronRight, Gift } from "lucide-react";
 
 const BenefitListBtn = () => {
   const router = useRouter();
   return (
     <button
       onClick={() => router.push("/mypage/history")}
-      className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
+      className="flex w-full items-center justify-between p-4 transition-colors hover:bg-gray-50"
     >
       <div className="flex items-center space-x-3">
-        <Gift className="w-5 h-5 text-gray-600" />
-        <span className="font-medium text-gray-900">혜택 내역</span>
+        <Gift className="h-5 w-5 text-gray-600" />
+        <span className="font-medium text-gray-900">혜택 사용 내역</span>
       </div>
-      <ChevronRight className="w-5 h-5 text-gray-400" />
+      <ChevronRight className="h-5 w-5 text-gray-400" />
     </button>
   );
 };
