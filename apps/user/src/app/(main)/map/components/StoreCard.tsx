@@ -107,7 +107,7 @@ export const DetailCard = ({
             {data.benefitList.length - 1 === idx && (
               <Fragment>
                 <div className="space-y-2 pt-4">
-                  <h3 className="font-semibold">멤버십 바코드</h3>
+                  <h3 className="text-lg font-semibold">멤버십 바코드</h3>
                 </div>
                 <BarcodeContainer storeId={data.storeId} isVIPcock={benefit.type === "VIP"} />
               </Fragment>
