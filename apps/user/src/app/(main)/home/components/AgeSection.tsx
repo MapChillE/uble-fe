@@ -4,12 +4,14 @@ import DynamicCard from "@/components/ui/DynamicCard";
 import { useQuery } from "@tanstack/react-query";
 import { fetchAgeRecommend } from "@/service/brand";
 import SectionSkeleton from "./SectionSkeleton";
+import { useRef } from "react";
 
 const AgeSection = () => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["ageRecommend"],
     queryFn: fetchAgeRecommend,
   });
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   if (isLoading) {
     // Skeleton UI
@@ -40,10 +42,12 @@ const AgeSection = () => {
       <SectionHeader
         title={`${ageRange}대 ${gender === "MALE" ? "남성" : "여성"} 추천 제휴처`}
         isScroll
+        ref={scrollContainerRef}
       />
       <div
         className="scrollbar-hide flex gap-4 overflow-x-auto px-4 pb-2"
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        ref={scrollContainerRef}
       >
         {recommendationsList.map((item) => (
           <DynamicCard data={item} key={item.brandId} />
