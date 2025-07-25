@@ -89,3 +89,11 @@ export interface AgeRecommendData {
 export interface AgeRecommendResponse extends responseStatus {
   data: AgeRecommendData;
 }
+
+export interface TimeRecommentData {
+  recommendationsList: BrandContent[];
+}
+
+export interface TimeRecommentResponse extends responseStatus {
+  data: TimeRecommentData;
+}
