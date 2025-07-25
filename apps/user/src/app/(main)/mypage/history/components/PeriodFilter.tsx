@@ -49,9 +49,7 @@ const PeriodFilter = ({ year, month, setYear, setMonth }: PeriodFilterProps) => 
             <option
               key={`${opt.year}-${opt.month}`}
               value={`${opt.year}-${opt.month}`}
-              style={{
-                fontWeight: selectedValue === `${opt.year}-${opt.month}` ? "bold" : "normal",
-              }}
+              className={`${selectedValue === `${opt.year}-${opt.month}` ? "font-semibold" : "font-normal"} `}
             >
               {opt.label}
             </option>
