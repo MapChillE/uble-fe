@@ -83,7 +83,7 @@ export interface FetchBrandsParams {
 }
 export interface AgeRecommendData {
   ageRange: number;
-  gender: string;
+  gender: "MALE" | "FEMALE";
   recommendationsList: BrandContent[];
 }
 export interface AgeRecommendResponse extends responseStatus {
