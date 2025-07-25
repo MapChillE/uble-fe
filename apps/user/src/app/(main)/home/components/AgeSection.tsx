@@ -1,7 +1,8 @@
 "use client";
+import { useQuery } from "@tanstack/react-query";
+
 import SectionHeader from "@/components/ui/SectionHeader";
 import DynamicCard from "@/components/ui/DynamicCard";
-import { useQuery } from "@tanstack/react-query";
 import { fetchAgeRecommend } from "@/service/brand";
 import SectionSkeleton from "./ui/SectionSkeleton";
 import { useRef } from "react";

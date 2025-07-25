@@ -1,5 +1,4 @@
 "use client";
-import { useState, useEffect } from "react";
 import { Drawer } from "vaul";
 import BarcodeContainer from "@/components/ui/BarcodeContainer";
 
