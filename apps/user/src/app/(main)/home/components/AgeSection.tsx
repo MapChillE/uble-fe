@@ -33,7 +33,7 @@ const AgeSection = () => {
       <SectionHeader
         title={`${ageRange}대 ${gender === "MALE" ? "남성" : "여성"} 추천 제휴처`}
         isScroll
-        ref={scrollContainerRef}
+        Scrollref={scrollContainerRef}
       />
       <div
         className="scrollbar-hide flex gap-4 overflow-x-auto px-4 pb-2"
