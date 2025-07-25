@@ -1,17 +1,59 @@
 "use client";
-import SearchInput from "@/components/common/SearchInput";
-import { useState } from "react";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { useDebouncedCallback } from "use-debounce";
+import { useEffect, useState } from "react";
+import AutoCompleteInput from "@/components/common/AutoCompleteInput";
+import { fetchBrandSuggestions } from "@/service/brandSearch";
 
 const SearchSection = () => {
-  const [searchQuery, setSearchQuery] = useState("");
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  const q = searchParams.get("q") || "";
+  const [searchQuery, setSearchQuery] = useState(q);
+  const [autoComplete, setAutoComplete] = useState<string[]>([]);
 
+  useEffect(() => {
+    setSearchQuery(q);
+  }, [q]);
+
+  // 자동완성 fetch debounce callback 생성 (300ms 기준)
+  const debouncedFetchSuggestions = useDebouncedCallback(async (value: string) => {
+    if (value.trim()) {
+      const suggestions = await fetchBrandSuggestions(value);
+      setAutoComplete(suggestions.suggestionList.map((s) => s.suggestion));
+    } else {
+      setAutoComplete([]);
+    }
+  }, 300);
+
+  // input 변경 시 상태 업데이트 + 자동완성 fetch
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
+    const value = e.target.value;
+    setSearchQuery(value);
+    debouncedFetchSuggestions(value);
+  };
+
+  // 검색 실행 및 URL 쿼리 동기화
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    const params = new URLSearchParams(searchParams);
+    if (query) {
+      params.set("q", query);
+    } else {
+      params.delete("q");
+    }
+    router.push(`${pathname}?${params.toString()}`);
   };
 
   return (
     <section className="p-4">
-      <SearchInput searchQuery={searchQuery} handleChange={handleChange} />
+      <AutoCompleteInput
+        searchQuery={searchQuery}
+        onChange={handleChange}
+        autoComplete={autoComplete}
+        onAutoSelect={handleSearch}
+      />
     </section>
   );
 };
