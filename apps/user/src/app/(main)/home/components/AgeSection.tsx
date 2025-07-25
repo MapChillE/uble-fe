@@ -5,12 +5,14 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchAgeRecommend } from "@/service/brand";
 import SectionSkeleton from "./SectionSkeleton";
 import { useRef } from "react";
+import { useRouter } from "next/navigation";
 
 const AgeSection = () => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["ageRecommend"],
     queryFn: fetchAgeRecommend,
   });
+  const router = useRouter();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   if (isLoading) {
@@ -50,7 +52,11 @@ const AgeSection = () => {
         ref={scrollContainerRef}
       >
         {recommendationsList.map((item) => (
-          <DynamicCard data={item} key={item.brandId} />
+          <DynamicCard
+            data={item}
+            key={item.brandId}
+            onClick={() => router.push(`/partnerships/${item.brandId}`)}
+          />
         ))}
       </div>
     </div>
