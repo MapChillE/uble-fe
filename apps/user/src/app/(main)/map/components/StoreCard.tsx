@@ -6,7 +6,7 @@ import { MapPin, Phone, Heart } from "lucide-react";
 import MembershipGrade from "@/app/(main)/home/components/ui/MembershipGrade";
 import Image from "next/image";
 import FavoriteBtn from "@/components/FavoriteBtn";
-import BarcodeContainer from "./BarcodeContainer";
+import BarcodeContainer from "@/components/ui/BarcodeContainer";
 
 // 공통 헤더 컴포넌트
 const StoreCardHeader = ({
