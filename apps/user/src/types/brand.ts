@@ -81,3 +81,11 @@ export interface FetchBrandsParams {
   lastBrandId?: number;
   size?: number;
 }
+export interface AgeRecommendData {
+  ageRange: number;
+  gender: "MALE" | "FEMALE";
+  recommendationsList: BrandContent[];
+}
+export interface AgeRecommendResponse extends responseStatus {
+  data: AgeRecommendData;
+}
