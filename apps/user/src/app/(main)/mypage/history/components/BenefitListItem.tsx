@@ -24,11 +24,17 @@ const BenefitListItem = ({ data }: BenefitListItemProps) => {
             <Badge className={getCategoryColor(category)}>{category}</Badge>
           </div>
           <p className="mt-2 text-xs text-gray-500">
-            {new Date(usedAt).toLocaleDateString("ko-KR", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
+            {(() => {
+              try {
+                return new Date(usedAt).toLocaleDateString("ko-KR", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                });
+              } catch {
+                return "날짜 정보 없음";
+              }
+            })()}
           </p>
         </div>
       </div>
