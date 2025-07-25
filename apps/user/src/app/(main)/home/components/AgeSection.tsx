@@ -3,10 +3,11 @@ import SectionHeader from "@/components/ui/SectionHeader";
 import DynamicCard from "@/components/ui/DynamicCard";
 import { useQuery } from "@tanstack/react-query";
 import { fetchAgeRecommend } from "@/service/brand";
-import SectionSkeleton from "./SectionSkeleton";
+import SectionSkeleton from "./ui/SectionSkeleton";
 import { useRef } from "react";
 import { useRouter } from "next/navigation";
-import SectionError from "./SectionError";
+import SectionError from "./ui/SectionError";
+import EmptyRecommend from "./ui/EmptyRecommend";
 
 const AgeSection = () => {
   const { data, isLoading, isError } = useQuery({
@@ -40,13 +41,20 @@ const AgeSection = () => {
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         ref={scrollContainerRef}
       >
-        {recommendationsList.map((item) => (
-          <DynamicCard
-            data={item}
-            key={item.brandId}
-            onClick={() => router.push(`/partnerships/${item.brandId}`)}
-          />
-        ))}
+        {recommendationsList.length === 0 ? (
+          <EmptyRecommend>
+            아직 추천할 만한 제휴처가 없습니다.
+            <br />곧 더 많은 추천 제휴처가 준비될 예정입니다!
+          </EmptyRecommend>
+        ) : (
+          recommendationsList.map((item) => (
+            <DynamicCard
+              data={item}
+              key={item.brandId}
+              onClick={() => router.push(`/partnerships/${item.brandId}`)}
+            />
+          ))
+        )}
       </div>
     </div>
   );
