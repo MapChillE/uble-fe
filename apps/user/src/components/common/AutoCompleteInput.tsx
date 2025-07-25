@@ -77,10 +77,10 @@ export default function AutoCompleteInput({
           onKeyDown={handleKeyDown}
         />
         {showAuto && autoComplete.length > 0 && (
-          <ul className="absolute left-0 right-0 top-full z-10 rounded border border-gray-200 bg-white shadow">
+          <ul className="absolute left-0 right-0 top-full z-10 -mt-[4px] rounded-b-md border border-gray-300 bg-white">
             {autoComplete.map((item, idx) => (
               <li
-                key={item + idx}
+                key={idx}
                 className={`cursor-pointer px-4 py-2 hover:bg-gray-100 ${highlightIndex === idx ? "bg-gray-200" : ""}`}
                 onMouseDown={() => handleSelect(item)}
               >
