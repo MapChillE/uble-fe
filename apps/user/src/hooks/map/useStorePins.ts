@@ -7,6 +7,7 @@ import { useMapStore } from "@/store/useMapStore";
 import { Category } from "@/types/category";
 import { Pin } from "@/app/(main)/map/components/NaverMap";
 import { DEFAULT_LOCATION } from "@/types/constants";
+import { getCurrentSeason } from "@/utils/season";
 
 export function useStorePins(baseLocation: Coordinates | null, selectedCategory: Category) {
   const selectedPlaceId = useMapStore((s) => s.selectedPlaceId);
@@ -21,8 +22,16 @@ export function useStorePins(baseLocation: Coordinates | null, selectedCategory:
         latitude: baseLocation[1],
         longitude: baseLocation[0],
         distance: 500, //TODO: distance zoom 변환 설정
-        ...(typeof selectedCategory.categoryId === "number" &&
-          selectedCategory.categoryId !== 0 && { categoryId: selectedCategory.categoryId }),
+        ...(typeof selectedCategory.categoryId === "number" && selectedCategory.categoryId !== 0
+          ? { categoryId: selectedCategory.categoryId }
+          : {}),
+        season: selectedCategory.categoryId === "SEASON" ? getCurrentSeason() : undefined,
+        type:
+          selectedCategory.categoryId === "VIP"
+            ? "VIP"
+            : selectedCategory.categoryId === "LOCAL"
+              ? "LOCAL"
+              : undefined,
       });
 
       const storePins: Pin[] = stores.map((store) => ({
