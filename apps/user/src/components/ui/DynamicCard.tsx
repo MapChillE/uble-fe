@@ -5,6 +5,8 @@ import classNames from "classnames";
 import FavoriteBtn from "../FavoriteBtn";
 import { memo } from "react";
 import Image from "next/image";
+import { Badge } from "@workspace/ui/components/badge";
+import { getCategoryColor } from "@/utils/categoryColor";
 
 type Variant = "vertical" | "horizontal";
 interface DynamicCardProps {
@@ -41,9 +43,7 @@ const DynamicCard = ({ data, variant = "vertical", onClick }: DynamicCardProps) 
             </div>
             <div className="space-y-2 p-3">
               <div className="flex items-center justify-between">
-                <span className="rounded bg-gray-100 px-2 py-1 text-xs font-semibold text-gray-500">
-                  {category}
-                </span>
+                <Badge className={getCategoryColor(category)}>{category}</Badge>
                 {isBookmarked !== null && (
                   <FavoriteBtn brandId={brandId} bookmarked={isBookmarked} variant={variant} />
                 )}
