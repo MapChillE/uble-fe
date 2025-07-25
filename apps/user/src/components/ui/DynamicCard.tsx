@@ -38,10 +38,10 @@ const DynamicCard = ({ data, variant = "vertical", onClick }: DynamicCardProps) 
               <img
                 src={imgUrl || "/placeholder.png"}
                 alt={name}
-                className="h-32 w-full rounded-t-lg object-cover"
+                className="h-32 w-full rounded-t-lg object-contain"
               />
             </div>
-            <div className="space-y-2 p-3">
+            <div className="border-t-1 space-y-2 border-gray-200 p-3">
               <div className="flex items-center justify-between">
                 <Badge className={getCategoryColor(category)}>{category}</Badge>
                 {isBookmarked !== null && (
