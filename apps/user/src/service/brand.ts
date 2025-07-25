@@ -4,6 +4,7 @@ import {
   BrandListData,
   BrandListResponse,
   FetchBrandsParams,
+  TimeRecommendResponse,
 } from "@/types/brand";
 import api from "@api/http-commons";
 
@@ -19,5 +20,10 @@ export const fetchBrandDetail = async (params: string): Promise<BrandDetailRespo
 
 export const fetchAgeRecommend = async (): Promise<AgeRecommendResponse> => {
   const { data } = await api.get("/api/users/recommendation/similar");
+  return data;
+};
+
+export const fetchTimeRecommend = async (): Promise<TimeRecommendResponse> => {
+  const { data } = await api.get("/api/users/recommendation/time");
   return data;
 };
