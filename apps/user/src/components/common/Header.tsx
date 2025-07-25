@@ -16,7 +16,7 @@ export default function Header() {
               <ChevronLeft className="h-5 w-5 text-gray-600" />
             </button>
             <h1 className="text-lg font-semibold text-gray-900">
-              {pathname === "/mypage/history" ? "혜택 내역" : "제휴처 안내"}
+              {pathname === "/mypage/history" ? "혜택 사용 내역" : "제휴처 안내"}
             </h1>
           </div>
         ) : (
