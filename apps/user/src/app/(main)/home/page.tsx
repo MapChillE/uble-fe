@@ -1,20 +1,20 @@
-import AgeSection from "@/app/(main)/home/components/AgeSection";
-import PersonalSection from "@/app/(main)/home/components/PersonalSection";
-import TimeSection from "@/app/(main)/home/components/TimeSection";
 import SearchSection from "@/app/(main)/home/components/SearchSection";
-import EntireSection from "@/app/(main)/home/components/EntireSection";
+import SearchResults from "@/app/(main)/home/components/SearchResults";
+import HomeContent from "@/app/(main)/home/components/HomeContent";
+import { Suspense } from "react";
 
-
-const page = () => {
+const HomePage = () => {
   return (
-    <section className="space-y-8">
-      <SearchSection />
-      <PersonalSection />
-      <AgeSection />
-      <TimeSection />
-      <EntireSection />
-    </section>
+    <Suspense>
+      <section>
+        <div className="sticky top-12 z-10 bg-white">
+          <SearchSection />
+          <SearchResults />
+        </div>
+        <HomeContent />
+      </section>
+    </Suspense>
   );
 };
 
-export default page;
+export default HomePage;

@@ -56,7 +56,7 @@ const StoreDetailDrawer = ({
         <Drawer.Overlay className="fixed inset-0 z-30 bg-black/40" />
         <Drawer.Content className="fixed bottom-0 left-0 right-0 z-50 mx-auto w-full max-w-md rounded-t-2xl border border-gray-200 bg-white shadow-xl">
           <div className="mx-auto my-3 h-1 w-12 rounded-full bg-gray-300" />
-          <Drawer.Title className="text-center text-base font-bold">제휴처 정보</Drawer.Title>
+          <Drawer.Title className="text-center text-base font-bold"></Drawer.Title>
           {summary && (
             <div className="max-h-[75vh] overflow-y-auto p-4">
               {snapIndex === 0 ? (

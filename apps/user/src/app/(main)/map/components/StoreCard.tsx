@@ -18,42 +18,37 @@ const StoreCardHeader = ({
   onRouteClick?: () => void;
   onFavoriteToggle?: () => void;
 }) => (
-  <div className="relative px-4 pt-4">
-    {/* 즐겨찾기 버튼 (우상단 고정) */}
-    <div className="absolute right-4 top-4">
-      <FavoriteBtn brandId={data.brandId} bookmarked={data.isBookmarked} variant="horizontal" />
-    </div>
-
-    <div className="flex gap-4">
-      {/* 이미지 */}
+  <div className="space-y-2 px-2 pt-4 md:px-4">
+    {/* 이미지 + 즐겨찾기 버튼 */}
+    <div className="flex items-start justify-between">
       <Image
         src={data.imageUrl || "/placeholder.svg"}
         alt={data.storeName}
         width={96}
         height={96}
+        quality={100}
         className="flex-shrink-0 rounded object-fill"
       />
+      <FavoriteBtn brandId={data.brandId} bookmarked={data.isBookmarked} variant="horizontal" />
+    </div>
 
-      {/* 텍스트 정보 + 길찾기 버튼 */}
-      <div className="flex w-full flex-col justify-between space-y-2">
-        <div className="space-y-1">
-          <Badge className="w-fit text-xs font-semibold">{data.category}</Badge>
-          <h1 className="break-words text-2xl font-bold">{data.storeName}</h1>
-          <p className="break-words text-sm text-gray-600">{data.description}</p>
-        </div>
+    {/* 아래 텍스트 영역 */}
+    <div className="flex flex-col space-y-1">
+      <Badge className="w-fit text-xs font-semibold">{data.category}</Badge>
+      <h1 className="break-words text-2xl font-bold">{data.storeName}</h1>
 
-        {/* 길찾기 */}
-        <div className="flex justify-end">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={onRouteClick}
-            className="h-8 px-3 text-xs hover:bg-gray-50"
-          >
-            <MapPin className="mr-1 h-3 w-3" />
-            길찾기
-          </Button>
-        </div>
+      {/* 설명 + 길찾기 버튼 한 줄 정렬 */}
+      <div className="flex w-full items-center justify-between">
+        <p className="break-words text-sm text-gray-600">{data.description}</p>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={onRouteClick}
+          className="h-8 whitespace-nowrap px-3 text-xs hover:bg-gray-50"
+        >
+          <MapPin className="mr-1 h-3 w-3" />
+          길찾기
+        </Button>
       </div>
     </div>
   </div>
@@ -61,7 +56,7 @@ const StoreCardHeader = ({
 
 // 공통 매장 정보 섹션
 const StoreInfoSection = ({ data }: { data: StoreDetail | StoreSummary }) => (
-  <div className="mx-4 space-y-2 rounded-lg border border-gray-200 p-4">
+  <div className="mx-2 space-y-2 rounded-lg border border-gray-200 p-4 md:mx-4">
     <h3 className="text-lg font-semibold text-gray-900">매장 정보</h3>
     <div className="flex items-start space-x-2">
       <MapPin className="mt-0.5 h-4 w-4 flex-shrink-0 text-gray-500" />
@@ -86,7 +81,7 @@ export const DetailCard = ({
   <div className="space-y-4 overflow-y-auto pb-4">
     <StoreCardHeader data={data} onRouteClick={onRouteClick} onFavoriteToggle={onFavoriteToggle} />
     <StoreInfoSection data={data} />
-    <div className="m-4 space-y-2">
+    <div className="m-2 space-y-2 md:m-4">
       <div>
         {data.benefitList.map((benefit, idx) => (
           <div key={benefit.benefitId} className="flex flex-col space-y-2 pb-2">
