@@ -1,21 +1,31 @@
 "use client";
+import { toast } from "sonner";
+
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@workspace/ui/components/dialog";
 import { Button } from "@workspace/ui/components/button";
 import useBenefitConfirmModalStore from "@/store/useBenefitConfirmModalStore";
 import { UsageRegistRequest } from "@/types/usage";
 import { apiHandler } from "@api/apiHandler";
 import { setUsage } from "@/service/usage";
-import { toast } from "sonner";
 import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 const BenefitConfirmModal = () => {
   const { isOpen, close, storeId, isVIPcock, resetInfo, onSuccess } = useBenefitConfirmModalStore();
   const [isLoading, setIsLoading] = useState(false);
+  const queryClient = useQueryClient();
+
   const handleClose = () => {
     close();
     resetInfo();
   };
 
+  const invalidate = () => {
+    queryClient.invalidateQueries({
+      predicate: (query) =>
+        ["userStatistics", "usageHistory"].includes(query.queryKey[0] as string),
+    });
+  };
   const handleYes = async (benefitType: "NORMAL" | "VIP" = "NORMAL") => {
     if (storeId !== null) {
       setIsLoading(true);
@@ -24,6 +34,7 @@ const BenefitConfirmModal = () => {
       setIsLoading(false);
       handleClose();
       if (data?.statusCode === 0) {
+        invalidate();
         toast.info("사용 완료 되었습니다.");
         if (onSuccess) onSuccess();
       } else if (data?.statusCode === 2001) {
