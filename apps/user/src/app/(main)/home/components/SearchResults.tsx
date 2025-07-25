@@ -8,6 +8,7 @@ import DynamicCard from "@/components/ui/DynamicCard";
 import useInfiniteScroll from "@/hooks/useInfiniteScroll";
 import { BrandContent } from "@/types/brand";
 import { BrandSearchResult } from "@/types/search";
+import { useEffect } from "react";
 
 const PAGE_SIZE = 12;
 
@@ -28,9 +29,11 @@ const SearchResults = () => {
       refetchOnWindowFocus: false,
     });
 
-  if (isError) {
-    toast.error("검색 결과를 불러오는데 실패했습니다.");
-  }
+  useEffect(() => {
+    if (isError && error) {
+      toast.error("검색 결과를 불러오지 못했습니다.");
+    }
+  }, [isError, error]);
 
   const loadMoreRef = useInfiniteScroll({
     hasNextPage: !!hasNextPage,
