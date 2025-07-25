@@ -1,4 +1,5 @@
 import SectionHeader from "@/components/ui/SectionHeader";
+import { Skeleton } from "@workspace/ui/components/skeleton";
 
 const SectionSkeleton = () => {
   return (
@@ -6,7 +7,7 @@ const SectionSkeleton = () => {
       <SectionHeader title="추천 제휴처 불러오는 중..." />
       <div className="flex gap-4 px-4 pb-2">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="h-64 w-56 flex-shrink-0 animate-pulse rounded-xl bg-gray-100" />
+          <Skeleton key={i} className="h-64 w-56 flex-shrink-0 rounded-xl" />
         ))}
       </div>
     </div>
