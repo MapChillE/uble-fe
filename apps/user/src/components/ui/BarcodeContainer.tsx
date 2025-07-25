@@ -5,8 +5,16 @@ import BarcodeBlur from "./BarcodeBlur";
 import useUserStore from "@/store/useUserStore";
 import useBenefitConfirmModalStore from "@/store/useBenefitConfirmModalStore";
 
-const BarcodeContainer = ({ storeId, isVIPcock }: { storeId: number; isVIPcock: boolean }) => {
-  const [isBarcodeRevealed, setIsBarcodeRevealed] = useState(false);
+const BarcodeContainer = ({
+  storeId,
+  isVIPcock,
+  initialRevealed = false,
+}: {
+  storeId: number;
+  isVIPcock: boolean;
+  initialRevealed?: boolean;
+}) => {
+  const [isBarcodeRevealed, setIsBarcodeRevealed] = useState(initialRevealed);
   const { barcode } = useUserStore((state) => state.user);
   const { open, setInfo, setOnSuccess, close } = useBenefitConfirmModalStore();
 
@@ -24,7 +32,6 @@ const BarcodeContainer = ({ storeId, isVIPcock }: { storeId: number; isVIPcock: 
   };
   return (
     <div className="space-y-2 pt-4">
-      <h3 className="font-semibold">멤버십 바코드</h3>
       <div
         className={`relative cursor-pointer rounded-lg bg-gray-50 p-6 transition-all duration-300 ${
           !isBarcodeRevealed && barcode ? "hover:bg-gray-100" : ""
