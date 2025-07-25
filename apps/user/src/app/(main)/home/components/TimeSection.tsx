@@ -32,7 +32,11 @@ const TimeSection = () => {
   return (
     <Fragment>
       <div className="space-y-4">
-        <SectionHeader title="지금 가장 인기있는 제휴처" isScroll Scrollref={scrollContainerRef} />
+        <SectionHeader
+          title="이시간 가장 인기있는 제휴처"
+          isScroll
+          Scrollref={scrollContainerRef}
+        />
         <div
           className="scrollbar-hide flex gap-4 overflow-x-auto px-4 pb-2"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
