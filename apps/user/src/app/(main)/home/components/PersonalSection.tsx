@@ -18,7 +18,7 @@ const PersonalSection = () => {
   const { currentLocation } = useLocationStore();
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["timeRecommend", currentLocation],
+    queryKey: ["personalRecommend", currentLocation],
     queryFn: ({ queryKey }) => {
       const [, location] = queryKey;
       if (!location) return Promise.resolve(null);
