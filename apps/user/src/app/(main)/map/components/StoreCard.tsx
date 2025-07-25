@@ -6,7 +6,8 @@ import { MapPin, Phone, Heart } from "lucide-react";
 import MembershipGrade from "@/app/(main)/home/components/ui/MembershipGrade";
 import Image from "next/image";
 import FavoriteBtn from "@/components/FavoriteBtn";
-import BarcodeContainer from "./BarcodeContainer";
+import BarcodeContainer from "@/components/ui/BarcodeContainer";
+import { Fragment } from "react";
 
 // 공통 헤더 컴포넌트
 const StoreCardHeader = ({
@@ -104,7 +105,12 @@ export const DetailCard = ({
             <p className="text-xs text-gray-600">이용 제한: {benefit.provisionCount}</p>
             <hr className="my-4 text-gray-200" />
             {data.benefitList.length - 1 === idx && (
-              <BarcodeContainer storeId={data.storeId} isVIPcock={benefit.type === "VIP"} />
+              <Fragment>
+                <div className="space-y-2 pt-4">
+                  <h3 className="text-lg font-semibold">멤버십 바코드</h3>
+                </div>
+                <BarcodeContainer storeId={data.storeId} isVIPcock={benefit.type === "VIP"} />
+              </Fragment>
             )}
           </div>
         ))}
