@@ -44,7 +44,7 @@ const DynamicCard = ({ data, variant = "vertical", onClick }: DynamicCardProps) 
             <div className="border-t-1 space-y-2 border-gray-200 p-3">
               <div className="flex items-center justify-between">
                 <Badge className={getCategoryColor(category)}>{category}</Badge>
-                {isBookmarked !== null && (
+                {isBookmarked !== undefined && (
                   <FavoriteBtn brandId={brandId} bookmarked={isBookmarked} variant={variant} />
                 )}
               </div>
@@ -69,7 +69,7 @@ const DynamicCard = ({ data, variant = "vertical", onClick }: DynamicCardProps) 
                   <p className="mb-1 text-xs font-semibold text-gray-500">{category}</p>
                   <h4 className="truncate text-sm font-bold leading-tight text-gray-900">{name}</h4>
                 </div>
-                {isBookmarked !== null && (
+                {isBookmarked !== undefined && (
                   <FavoriteBtn brandId={brandId} bookmarked={isBookmarked} variant={variant} />
                 )}
               </div>
