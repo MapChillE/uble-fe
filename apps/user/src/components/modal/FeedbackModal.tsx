@@ -68,9 +68,10 @@ const FeedbackModal = () => {
             <Label htmlFor="feedback-title">제목</Label>
             <Input
               id="feedback-title"
+              maxLength={25}
               value={formData.title}
               onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
-              placeholder="피드백 제목을 입력해주세요"
+              placeholder="피드백 제목을 입력해 주세요 (최대 25자)"
               className="focus-visible:ring-action-green h-11 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
             />
           </div>
@@ -79,11 +80,15 @@ const FeedbackModal = () => {
           <div className="space-y-2">
             <Label htmlFor="feedback-content">내용</Label>
             <Textarea
+              maxLength={200}
               id="feedback-content"
               value={formData.content}
-              onChange={(e) => setFormData((prev) => ({ ...prev, content: e.target.value }))}
-              placeholder="자세한 내용을 입력해주세요"
-              className="min-h-[120px] resize-none"
+              onChange={(e) => {
+                const v = e.target.value;
+                if (v.length <= 200) setFormData((p) => ({ ...p, content: v })); // ← 길이 검증 로직
+              }}
+              placeholder="자세한 내용을 입력해주세요 (최대 200자)"
+              className="h-32 min-h-[120px] resize-none overflow-auto whitespace-pre-wrap break-all"
             />
           </div>
 
