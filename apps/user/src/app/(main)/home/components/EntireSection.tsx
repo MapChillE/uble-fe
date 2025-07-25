@@ -78,7 +78,12 @@ export default function EntireSection() {
                   {data.pages
                     .flatMap((page) => page.content)
                     .map((brand: BrandContent) => (
-                      <DynamicCard key={brand.brandId} data={brand} variant="horizontal" onClick={() => router.push(`/partnerships/${brand.brandId}`)} />
+                      <DynamicCard
+                        key={brand.brandId}
+                        data={brand}
+                        variant="horizontal"
+                        onClick={() => router.push(`/partnerships/${brand.brandId}`)}
+                      />
                     ))}
                 </div>
                 {/* 이 div가 보일 때마다 다음 페이지를 불러옵니다 */}
