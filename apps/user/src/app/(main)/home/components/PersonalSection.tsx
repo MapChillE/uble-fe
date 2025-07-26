@@ -1,11 +1,9 @@
 "use client";
 import SectionHeader from "@/components/ui/SectionHeader";
 import DynamicCard from "@/components/ui/DynamicCard";
-import { BrandContent } from "@/types/brand";
 import useUserStore from "@/store/useUserStore";
 import { useLocationStore } from "@/store/useLocationStore";
-import { useEffect, useRef } from "react";
-import { useCurrentLocation } from "@/hooks/map/useCurrentLocation";
+import { useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPersonalRecommend } from "@/service/brand";
 import { useRouter } from "next/navigation";
@@ -14,7 +12,7 @@ import SectionError from "./ui/SectionError";
 import EmptyRecommend from "./ui/EmptyRecommend";
 
 const PersonalSection = () => {
-  const nickname = useUserStore((state) => state.user.nickname);
+  const nickname = useUserStore((state) => state?.user?.nickname);
   const { currentLocation } = useLocationStore();
 
   const { data, isLoading, isError } = useQuery({
