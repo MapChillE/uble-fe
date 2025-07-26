@@ -22,6 +22,7 @@ import { StoreDetail, StoreSummary } from "@/types/store";
 import { Pin } from "@/app/(main)/map/components/NaverMap";
 
 import { toast } from "sonner";
+import useUserStore from "@/store/useUserStore";
 
 export default function MapContainer() {
   const [selectedCategory, setSelectedCategory] = useState<Category>(ALL_CATEGORY);
@@ -36,8 +37,8 @@ export default function MapContainer() {
 
   const currentLocation = useLocationStore((s) => s.currentLocation);
   const baseLocation = useBaseLocation(currentLocation ?? DEFAULT_LOCATION);
-
-  if (!currentLocation) {
+  const user = useUserStore((s) => s.user);
+  if (!currentLocation || !user) {
     // TODO: 로딩 스피너 등으로 변경
     return <div>현재 위치를 불러오는 중입니다...</div>;
   }
