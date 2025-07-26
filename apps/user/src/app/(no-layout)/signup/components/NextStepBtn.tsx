@@ -35,7 +35,7 @@ const NextStepBtn = ({ currentStep, canProceed, setCurrentStep, info }: NextStep
       const storeResult = await storeUserInfo();
       if (storeResult) {
         toast.info("가입을 환영합니다!");
-        router.push("/home");
+        router.replace("/home");
       } else toast.error("오류가 발생했습니다. 잠시 후 다시 이용해 주세요.");
     }
   };

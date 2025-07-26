@@ -15,11 +15,11 @@ function KakaoCallbackInner() {
     if (code) {
       const { data } = await apiHandler(() => kakaoLogin(code));
       if (data) {
-        data.role === "TMP_USER" ? router.push("/signup") : router.push("/map");
+        data.role === "TMP_USER" ? router.replace("/signup") : router.replace("/map");
       } else {
         toast.error("오류가 발생했습니다. 잠시 후 다시 이용해 주세요.");
 
-        router.push("/");
+        router.replace("/");
       }
     }
   };
