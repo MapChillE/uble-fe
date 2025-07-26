@@ -11,13 +11,7 @@ import useUserStore from "@/store/useUserStore";
 
 export default function FavoriteBrandSection() {
   const user = useUserStore((s) => s.user);
-  if (!user) {
-    return (
-      <div className="py-12 text-center">
-        <p className="text-gray-500">즐겨찾기는 로그인 후 이용 가능합니다.</p>
-      </div>
-    );
-  }
+
   // 즐겨찾기 데이터 받아오기
   const params = useMemo<FetchFavoritesParams>(
     () => ({
@@ -31,6 +25,7 @@ export default function FavoriteBrandSection() {
     queryFn: ({ pageParam }) => fetchFavoritesQuery({ ...params, lastBookmarkId: pageParam }),
     getNextPageParam: (lastPage: BrandListData) =>
       lastPage.hasNext ? lastPage.lastCursorId : undefined,
+    // enabled: Boolean(user),
     refetchOnMount: true,
     refetchOnWindowFocus: false,
     initialPageParam: undefined,
@@ -49,6 +44,13 @@ export default function FavoriteBrandSection() {
     return <div>에러가 발생했습니다: {error?.message}</div>;
   }
 
+  if (!user) {
+    return (
+      <div className="py-12 text-center">
+        <p className="text-gray-500">즐겨찾기는 로그인 후 이용 가능합니다.</p>
+      </div>
+    );
+  }
   const favoriteBrands = data?.pages.flatMap((page) => page.content) || [];
   if (favoriteBrands.length === 0) {
     return (
