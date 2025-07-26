@@ -24,6 +24,7 @@ const HydrateData = () => {
         const { data } = await apiHandler(() => getUserInfo());
         if (data.statusCode === 1001) {
           sendToMain();
+          return;
         }
         setUser(data.data);
       } catch (e) {
