@@ -7,8 +7,17 @@ import DynamicCard from "@/components/ui/DynamicCard";
 import useInfiniteScroll from "@/hooks/useInfiniteScroll";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { FetchFavoritesParams, fetchFavoritesQuery } from "@/service/favorites";
+import useUserStore from "@/store/useUserStore";
 
 export default function FavoriteBrandSection() {
+  const user = useUserStore((s) => s.user);
+  if (!user) {
+    return (
+      <div className="py-12 text-center">
+        <p className="text-gray-500">즐겨찾기는 로그인 후 이용 가능합니다.</p>
+      </div>
+    );
+  }
   // 즐겨찾기 데이터 받아오기
   const params = useMemo<FetchFavoritesParams>(
     () => ({
@@ -36,8 +45,8 @@ export default function FavoriteBrandSection() {
     return <div className="flex h-48 items-center justify-center">로딩중...</div>;
   }
 
-  if (isError) {
-    return <div>에러가 발생했습니다: {error.message}</div>;
+  if (isError || !data) {
+    return <div>에러가 발생했습니다: {error?.message}</div>;
   }
 
   const favoriteBrands = data?.pages.flatMap((page) => page.content) || [];
