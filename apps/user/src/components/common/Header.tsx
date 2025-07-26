@@ -2,10 +2,13 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { ChevronLeft, ScanBarcode } from "lucide-react";
+import { useState } from "react";
+import BarcodeDrawer from "@/app/(main)/home/components/BarcodeDrawer";
 
 export default function Header() {
   const router = useRouter();
   const pathname = usePathname();
+  const [barcodeDrawerOpen, setBarcodeDrawerOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 bg-white">
@@ -29,9 +32,16 @@ export default function Header() {
               Uble
             </button>
             {pathname === "/home" && (
-              <button aria-label="바코드 오픈">
-                <ScanBarcode />
-              </button>
+              <>
+                <button aria-label="바코드 오픈" onClick={() => setBarcodeDrawerOpen(true)}>
+                  <ScanBarcode />
+                </button>
+                <BarcodeDrawer
+                  open={barcodeDrawerOpen}
+                  onOpenChange={setBarcodeDrawerOpen}
+                  initialRevealed={true}
+                />
+              </>
             )}
           </>
         )}

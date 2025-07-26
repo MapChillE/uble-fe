@@ -5,9 +5,17 @@ import BarcodeBlur from "./BarcodeBlur";
 import useUserStore from "@/store/useUserStore";
 import useBenefitConfirmModalStore from "@/store/useBenefitConfirmModalStore";
 
-const BarcodeContainer = ({ storeId, isVIPcock }: { storeId: number; isVIPcock: boolean }) => {
-  const [isBarcodeRevealed, setIsBarcodeRevealed] = useState(false);
-  const barcode = useUserStore((s) => s.user?.barcode ?? "");
+const BarcodeContainer = ({
+  storeId,
+  isVIPcock,
+  initialRevealed = false,
+}: {
+  storeId: number;
+  isVIPcock: boolean;
+  initialRevealed?: boolean;
+}) => {
+  const [isBarcodeRevealed, setIsBarcodeRevealed] = useState(initialRevealed);
+  const barcode = useUserStore((state) => state.user?.barcode ?? "");
   const { open, setInfo, setOnSuccess, close } = useBenefitConfirmModalStore();
 
   useEffect(() => {
@@ -24,7 +32,6 @@ const BarcodeContainer = ({ storeId, isVIPcock }: { storeId: number; isVIPcock: 
   };
   return (
     <div className="space-y-2 pt-4">
-      <h3 className="font-semibold">멤버십 바코드</h3>
       <div
         className={`relative cursor-pointer rounded-lg bg-gray-50 p-6 transition-all duration-300 ${
           !isBarcodeRevealed && barcode ? "hover:bg-gray-100" : ""
@@ -41,10 +48,10 @@ const BarcodeContainer = ({ storeId, isVIPcock }: { storeId: number; isVIPcock: 
             </Fragment>
           ) : (
             <div className="space-y-1">
-              <p className="text-action-green text-xs">
+              <p className="text-action-green text-sm">
                 바코드를 등록하신 후 LGU+의 다양한 혜택을 이용하세요!
               </p>
-              <p className="text-action-green text-xs">
+              <p className="text-action-green text-sm">
                 혜택 사용 시 사용자 맞춤 제휴처가 추천됩니다
               </p>
             </div>
