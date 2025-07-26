@@ -12,6 +12,13 @@ const gradeColors = {
 
 const ProfileInfo = () => {
   const { user } = useUserStore();
+  if (!user) {
+    return (
+      <div className="flex h-20 w-full items-center justify-center text-sm text-gray-400">
+        유저 정보를 불러오는 중입니다.
+      </div>
+    );
+  }
   const { nickname, rank, gender, birthDate } = user;
   const displayRank = rank === "NORMAL" ? "일반" : rank === "PREMIUM" ? "우수" : rank;
   if (!nickname || nickname === "") {

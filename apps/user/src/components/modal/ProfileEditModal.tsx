@@ -15,6 +15,7 @@ import SaveButton from "./ProfileEditModalContents/SaveButton";
 const ProfileEditModal = () => {
   const { isOpen, close } = useProfileEditModalStore();
   const { user } = useUserStore();
+  if (!user) return null;
   const { rank, gender, birthDate, categoryIds, barcode } = user;
 
   // formData 객체로 state 관리

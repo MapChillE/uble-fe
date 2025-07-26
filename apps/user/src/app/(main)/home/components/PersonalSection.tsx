@@ -12,7 +12,7 @@ import SectionError from "./ui/SectionError";
 import EmptyRecommend from "./ui/EmptyRecommend";
 
 const PersonalSection = () => {
-  const nickname = useUserStore((state) => state.user.nickname);
+  const nickname = useUserStore((state) => state?.user?.nickname);
   const { currentLocation } = useLocationStore();
 
   const { data, isLoading, isError } = useQuery({

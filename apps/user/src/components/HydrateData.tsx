@@ -13,14 +13,22 @@ const HydrateData = () => {
   const { setUser, user } = useUserStore();
   const router = useRouter();
 
+  const sendToMain = () => {
+    toast.error("유저 정보를 불러오지 못했습니다.\n다시 로그인해 주세요");
+    router.replace("/");
+  };
+
   useEffect(() => {
     (async () => {
       try {
         const { data } = await apiHandler(() => getUserInfo());
+        if (data.statusCode === 1001) {
+          sendToMain();
+          return;
+        }
         setUser(data.data);
       } catch (e) {
-        toast.error("유저 정보를 불러오지 못했습니다. 다시 로그인해 주세요");
-        router.push("/");
+        sendToMain();
       }
     })();
   }, [setUser]);

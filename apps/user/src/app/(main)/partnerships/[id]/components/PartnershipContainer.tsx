@@ -6,10 +6,11 @@ import { apiHandler } from "@api/apiHandler";
 import { fetchBrandDetail } from "@/service/brand";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import useUserStore from "@/store/useUserStore";
 
 const PartnershipContainer = ({ id }: { id: string }) => {
   const router = useRouter();
-
+  const user = useUserStore((s) => s.user);
   const { data, isLoading, isError } = useQuery({
     queryKey: ["brandDetail", id],
     queryFn: async () => {
@@ -20,13 +21,19 @@ const PartnershipContainer = ({ id }: { id: string }) => {
   });
 
   useEffect(() => {
+    if (!user) {
+      router.replace("/");
+      return;
+    }
     if (!isLoading && !data) {
       router.replace("/not-found");
+      return;
     }
     if (isError) {
       router.replace("/error");
+      return;
     }
-  }, [isLoading, data, isError, router]);
+  }, [isLoading, data, isError, router, user]);
 
   if (isLoading) {
     return (
@@ -38,7 +45,7 @@ const PartnershipContainer = ({ id }: { id: string }) => {
     );
   }
 
-  if (!data) {
+  if (!data || !user) {
     return null;
   }
 

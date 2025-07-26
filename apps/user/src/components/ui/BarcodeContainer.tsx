@@ -15,7 +15,7 @@ const BarcodeContainer = ({
   initialRevealed?: boolean;
 }) => {
   const [isBarcodeRevealed, setIsBarcodeRevealed] = useState(initialRevealed);
-  const { barcode } = useUserStore((state) => state.user);
+  const barcode = useUserStore((state) => state.user?.barcode ?? "");
   const { open, setInfo, setOnSuccess, close } = useBenefitConfirmModalStore();
 
   useEffect(() => {

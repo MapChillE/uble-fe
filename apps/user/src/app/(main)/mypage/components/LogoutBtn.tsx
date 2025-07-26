@@ -1,5 +1,6 @@
 "use client";
 import { logout } from "@/service/user";
+import useUserStore from "@/store/useUserStore";
 import { apiHandler } from "@api/apiHandler";
 import { Button } from "@workspace/ui/components/button";
 import { LogOut } from "lucide-react";
@@ -10,6 +11,7 @@ import { toast } from "sonner";
 const LogoutBtn = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
+  const { clearUser } = useUserStore();
 
   const handleLogout = useCallback(async () => {
     setIsLoading(true);
@@ -17,6 +19,7 @@ const LogoutBtn = () => {
     const result = data?.statusCode;
     if (result === 0) {
       window.localStorage.removeItem("accessToken");
+      clearUser();
       router.push("/");
     } else {
       toast.error("오류가 발생했습니다. 잠시 후 다시 사용해 주세요.");
