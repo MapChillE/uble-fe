@@ -9,9 +9,10 @@ import {
 } from "@/types/store";
 
 interface GetNearbyStoresParams {
-  latitude: number;
-  longitude: number;
-  distance: number;
+  swLat: number;
+  swLng: number;
+  neLat: number;
+  neLng: number;
   categoryId?: number;
   brandId?: number;
   season?: string;
