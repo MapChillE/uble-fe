@@ -48,10 +48,6 @@ export default function MapContainer() {
   const currentLocation = useLocationStore((s) => s.currentLocation);
   const baseLocation = useBaseLocation(currentLocation ?? DEFAULT_LOCATION);
   const user = useUserStore((s) => s.user);
-  if (!currentLocation || !user) {
-    // TODO: 로딩 스피너 등으로 변경
-    return <div>현재 위치를 불러오는 중입니다...</div>;
-  }
 
   // URL 쿼리 파라미터 감지 및 처리
   useEffect(() => {
