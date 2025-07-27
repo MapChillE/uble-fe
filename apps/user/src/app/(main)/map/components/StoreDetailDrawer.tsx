@@ -53,8 +53,8 @@ const StoreDetailDrawer = ({
       }}
     >
       <Drawer.Portal>
-        <Drawer.Overlay className="z-100 fixed inset-0 bg-black/40" />
-        <Drawer.Content className="z-150 fixed bottom-0 left-0 right-0 mx-auto w-full max-w-md rounded-t-2xl border border-gray-200 bg-white shadow-xl">
+        <Drawer.Overlay className="z-80 fixed inset-0 bg-black/40" />
+        <Drawer.Content className="z-100 fixed bottom-0 left-0 right-0 mx-auto w-full max-w-md rounded-t-2xl border border-gray-200 bg-white shadow-xl">
           <div className="mx-auto my-3 h-1 w-12 rounded-full bg-gray-300" />
           <Drawer.Title className="text-center text-base font-bold"></Drawer.Title>
           {summary && (
