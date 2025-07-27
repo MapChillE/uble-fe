@@ -18,46 +18,54 @@ export async function fetchStorePins(
   category: Category,
   baseLocation?: Coordinates
 ): Promise<Pin[]> {
-  const ne = bounds.getNE();
-  const sw = bounds.getSW();
+  try {
+    const ne = bounds.getNE();
+    const sw = bounds.getSW();
 
-  const stores = await getNearbyStores({
-    swLat: sw.lat(),
-    swLng: sw.lng(),
-    neLat: ne.lat(),
-    neLng: ne.lng(),
-    ...(typeof category.categoryId === "number" && category.categoryId !== 0
-      ? { categoryId: category.categoryId }
-      : {}),
-    season: category.categoryId === "SEASON" ? getCurrentSeason() : undefined,
-    type:
-      category.categoryId === "VIP" ? "VIP" : category.categoryId === "LOCAL" ? "LOCAL" : undefined,
-  });
+    const stores = await getNearbyStores({
+      swLat: sw.lat(),
+      swLng: sw.lng(),
+      neLat: ne.lat(),
+      neLng: ne.lng(),
+      ...(typeof category.categoryId === "number" && category.categoryId !== 0
+        ? { categoryId: category.categoryId }
+        : {}),
+      season: category.categoryId === "SEASON" ? getCurrentSeason() : undefined,
+      type:
+        category.categoryId === "VIP"
+          ? "VIP"
+          : category.categoryId === "LOCAL"
+            ? "LOCAL"
+            : undefined,
+    });
 
-  const storePins: Pin[] = stores.map((store) => ({
-    id: store.storeId,
-    coords: [store.longitude, store.latitude],
-    name: store.storeName,
-    category: store.category,
-    type: "store",
-  }));
+    const storePins: Pin[] = stores.map((store) => ({
+      id: store.storeId,
+      coords: [store.longitude, store.latitude],
+      name: store.storeName,
+      category: store.category,
+      type: "store",
+    }));
 
-  const shouldShowCurrentLocation =
-    baseLocation &&
-    Math.abs(center[0] - baseLocation[0]) < 0.0001 &&
-    Math.abs(center[1] - baseLocation[1]) < 0.0001;
+    const shouldShowCurrentLocation =
+      baseLocation &&
+      Math.abs(center[0] - baseLocation[0]) < 0.0001 &&
+      Math.abs(center[1] - baseLocation[1]) < 0.0001;
 
-  if (shouldShowCurrentLocation) {
-    return [
-      {
-        id: -1,
-        coords: center,
-        name: "현위치",
-        type: "current",
-      },
-      ...storePins,
-    ];
+    if (shouldShowCurrentLocation) {
+      return [
+        {
+          id: -1,
+          coords: center,
+          name: "현위치",
+          type: "current",
+        },
+        ...storePins,
+      ];
+    }
+
+    return storePins;
+  } catch (error) {
+    return [];
   }
-
-  return storePins;
 }
