@@ -46,8 +46,8 @@ export default function EntireSection() {
     getNextPageParam: (lastPage: BrandListData) =>
       lastPage.hasNext ? lastPage.lastCursorId : undefined,
     staleTime: 1000 * 60 * 5,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
     initialPageParam: undefined,
   });
 

@@ -27,7 +27,7 @@ export default function FavoriteBrandSection() {
       lastPage.hasNext ? lastPage.lastCursorId : undefined,
     // enabled: Boolean(user),
     refetchOnMount: true,
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,
     initialPageParam: undefined,
   });
 
