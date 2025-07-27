@@ -23,6 +23,10 @@ import { Pin } from "@/app/(main)/map/components/NaverMap";
 
 import { toast } from "sonner";
 
+/**
+ * 지도 컨테이너 컴포넌트
+ * @returns 지도 컨테이너 컴포넌트
+ */
 export default function MapContainer() {
   const [selectedCategory, setSelectedCategory] = useState<Category>(ALL_CATEGORY);
   const [isOpen, setIsOpen] = useState(false);
@@ -81,7 +85,7 @@ export default function MapContainer() {
   };
 
   return (
-    <div className="relative h-screen w-full">
+    <div className="relative h-full w-full">
       <MapWithBaseLocation
         zoom={15}
         selectedCategory={selectedCategory}
