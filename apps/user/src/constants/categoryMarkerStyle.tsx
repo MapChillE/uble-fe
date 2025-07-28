@@ -9,6 +9,7 @@ import {
   Utensils,
   Coffee,
   Users,
+  Heart,
   HelpCircle, // default
 } from "lucide-react";
 import { ReactNode } from "react";
@@ -80,7 +81,7 @@ export const CATEGORY_MARKER_STYLE: Record<CategoryMarkerKey, CategoryMarkerStyl
     icon: () => <Users size={18} color="white" />,
   },
   default: {
-    color: "#94A3B8", // slate-400
-    icon: () => <HelpCircle size={18} color="white" />,
+    color: "#FB7185", // slate-400
+    icon: () => <Heart size={18} color="white" />,
   },
 };

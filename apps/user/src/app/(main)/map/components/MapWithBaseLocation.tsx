@@ -12,10 +12,14 @@ import { Button } from "@workspace/ui/components/button";
 import { fetchStorePins } from "@/utils/fetchStorePins";
 import { createBoundsFromCenterAndZoom } from "@/utils/mapBounds";
 
+const DEFAULT_ZOOM = 15;
+
 interface MapWithBaseLocationProps {
   selectedCategory: Category;
   onPinClick: (pin: Pin) => void;
-  zoom?: number;
+  searchLocation?: Coordinates | null;
+  searchStoreId?: number | null;
+  onExitSearchMode?: () => void;
 }
 
 /**
@@ -23,12 +27,17 @@ interface MapWithBaseLocationProps {
  * @param zoom 지도 줌 레벨
  * @param selectedCategory 선택된 카테고리
  * @param onPinClick 마커 클릭 시 호출되는 함수
+ * @param searchLocation 검색으로 이동할 위치
+ * @param searchStoreId 검색된 매장 ID
+ * @param onExitSearchMode 검색 모드 해제 콜백
  * @returns 지도 컴포넌트
  */
 export default function MapWithBaseLocation({
   selectedCategory,
   onPinClick,
-  zoom = 15,
+  searchLocation,
+  searchStoreId,
+  onExitSearchMode,
 }: MapWithBaseLocationProps) {
   const { location: currentLocation, getCurrentLocation } = useCurrentLocation();
   const [isInitialized, setIsInitialized] = useState(false);
@@ -44,11 +53,27 @@ export default function MapWithBaseLocation({
   const [mapCenter, setMapCenter] = useState<Coordinates>(baseLocation);
   const [showSearchBtn, setShowSearchBtn] = useState(false);
   const [pins, setPins] = useState<Pin[]>([]);
+  const [isExitingSearchMode, setIsExitingSearchMode] = useState(false);
   const lastBaseLocationRef = useRef<Coordinates>(baseLocation);
 
+  // 주변 매장 가져오기
   const fetchPins = useCallback(
     async (center: Coordinates, bounds: naver.maps.LatLngBounds, category?: Category) => {
       try {
+        // 검색 모드일 때는 해당 매장만 표시
+        if (searchStoreId && searchLocation) {
+          const searchPin: Pin = {
+            id: searchStoreId,
+            coords: searchLocation,
+            name: "검색된 매장",
+            category: "store",
+            type: "store",
+          };
+          setPins([searchPin]);
+          return;
+        }
+
+        // 일반 모드일 때는 주변 매장들 표시
         const pins = await fetchStorePins(
           center,
           bounds,
@@ -61,13 +86,13 @@ export default function MapWithBaseLocation({
       }
       setShowSearchBtn(false);
     },
-    [baseLocation, selectedCategory]
+    [baseLocation, selectedCategory, searchStoreId, searchLocation]
   );
 
   // 초기화: currentLocation이 로드되면 첫 번째 fetchPins 실행
   useEffect(() => {
     if (currentLocation && !isInitialized) {
-      const initialBounds = createBoundsFromCenterAndZoom(currentLocation, zoom);
+      const initialBounds = createBoundsFromCenterAndZoom(currentLocation, DEFAULT_ZOOM);
       if (initialBounds) {
         setMapBounds(initialBounds);
         fetchPins(currentLocation, initialBounds);
@@ -89,7 +114,7 @@ export default function MapWithBaseLocation({
       lastBaseLocationRef.current = baseLocation;
 
       // 새로운 baseLocation에 맞는 bounds 생성
-      const newBounds = createBoundsFromCenterAndZoom(baseLocation, zoom);
+      const newBounds = createBoundsFromCenterAndZoom(baseLocation, DEFAULT_ZOOM);
       if (newBounds) {
         setMapBounds(newBounds);
         fetchPins(baseLocation, newBounds); // 새로운 bounds 기준으로 fetch
@@ -105,11 +130,39 @@ export default function MapWithBaseLocation({
     }
   }, [selectedCategory.categoryId]);
 
+  // 검색 위치로 이동
+  useEffect(() => {
+    if (searchLocation && isInitialized) {
+      setMapCenter(searchLocation);
+      const newBounds = createBoundsFromCenterAndZoom(searchLocation, DEFAULT_ZOOM);
+      if (newBounds) {
+        setMapBounds(newBounds);
+        fetchPins(searchLocation, newBounds);
+        setShowSearchBtn(false);
+      }
+    }
+  }, [searchLocation, isInitialized]);
+
+  // 검색 모드 해제 시 주변 매장 표시
+  useEffect(() => {
+    if (isExitingSearchMode && isInitialized && mapBounds && mapCenter) {
+      // 검색 모드 해제 시에만 주변 매장 표시
+      fetchPins(mapCenter, mapBounds, selectedCategory);
+      setIsExitingSearchMode(false); // 플래그 리셋
+    }
+  }, [isExitingSearchMode, isInitialized, mapBounds, mapCenter, fetchPins]);
+
   // 지도 bounds/center 변경 시 (드래그/줌)
   const handleBoundsChange = useDebouncedCallback(
     (bounds: naver.maps.LatLngBounds, center: Coordinates) => {
       setMapBounds(bounds);
       setMapCenter(center);
+
+      // 검색 모드일 때는 버튼 표시하지 않음
+      if (searchStoreId && searchLocation) {
+        setShowSearchBtn(false);
+        return;
+      }
 
       // baseLocation과 center가 다르고, 사용자가 실제로 지도를 이동했을 때만 버튼 노출
       const distance = Math.sqrt(
@@ -156,7 +209,7 @@ export default function MapWithBaseLocation({
     <div className="relative flex h-full w-full">
       <NaverMap
         loc={mapCenter}
-        zoom={zoom}
+        zoom={DEFAULT_ZOOM}
         pins={pinsWithClick}
         onBoundsChange={handleBoundsChange}
       />
@@ -166,6 +219,18 @@ export default function MapWithBaseLocation({
             현재 위치에서 검색
           </Button>
         </div>
+      )}
+      {searchStoreId && searchLocation && (
+        <Button
+          className="absolute bottom-5 left-1/2 z-20 -translate-x-1/2 rounded-full"
+          variant="filter_select"
+          onClick={() => {
+            onExitSearchMode?.();
+            setIsExitingSearchMode(true); // 검색 모드 해제 플래그 설정
+          }}
+        >
+          주변 매장 보기
+        </Button>
       )}
     </div>
   );
