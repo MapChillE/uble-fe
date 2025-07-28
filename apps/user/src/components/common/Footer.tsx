@@ -20,7 +20,7 @@ export default function Footer() {
         {navItems.map(({ path, icon: Icon, label }) => (
           <button
             key={path}
-            onClick={() => router.push(path)}
+            onClick={() => router.replace(path)}
             className={`flex flex-1 flex-col items-center py-2 transition-colors ${
               pathname === path ? "text-gray-900" : "text-gray-400"
             }`}
