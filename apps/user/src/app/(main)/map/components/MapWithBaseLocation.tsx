@@ -214,13 +214,11 @@ export default function MapWithBaseLocation({
         onBoundsChange={handleBoundsChange}
       />
       {showSearchBtn && (
-        <Button
-          className="absolute bottom-5 left-1/2 z-20 -translate-x-1/2 rounded-full"
-          variant="filter_select"
-          onClick={handleSearchHere}
-        >
-          현재 위치에서 검색
-        </Button>
+        <div className="absolute bottom-5 left-1/2 z-20 -translate-x-1/2 pb-10">
+          <Button className="rounded-full" variant="filter_select" onClick={handleSearchHere}>
+            현재 위치에서 검색
+          </Button>
+        </div>
       )}
       {searchStoreId && searchLocation && (
         <Button

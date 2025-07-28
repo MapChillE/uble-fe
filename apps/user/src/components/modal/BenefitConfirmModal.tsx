@@ -51,7 +51,7 @@ const BenefitConfirmModal = () => {
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="w-full max-w-xs">
+      <DialogContent className="z-120 w-full max-w-xs">
         <DialogHeader>
           <DialogTitle className="text-center text-lg font-semibold">
             혜택을 사용하시겠어요?
