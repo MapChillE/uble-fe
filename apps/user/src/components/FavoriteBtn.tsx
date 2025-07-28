@@ -27,7 +27,6 @@ const FavoriteBtn = ({ brandId, bookmarked = false, variant }: FavoriteBtnProps)
       queryClient.invalidateQueries({ queryKey: [k] })
     );
     queryClient.invalidateQueries({ queryKey: ["brandDetail", brandId.toString()] });
-    queryClient.invalidateQueries({ queryKey: ["storeDetail", brandId.toString()] });
   };
 
   const { mutate, isPending } = useMutation({
@@ -35,7 +34,7 @@ const FavoriteBtn = ({ brandId, bookmarked = false, variant }: FavoriteBtnProps)
       newIsLiked ? postFavoritesMutation({ brandId }) : deleteFavoriteMutation({ brandId }),
     onMutate: async (newState: boolean) => {
       // InfiniteQuery에 먼저 낙관적 업데이트
-      const infiniteKeys = ([["brands"], ["storeDetail", brandId]] as const).map((k) => ({
+      const infiniteKeys = ([["brands"]] as const).map((k) => ({
         queryKey: k,
       }));
 
@@ -68,6 +67,7 @@ const FavoriteBtn = ({ brandId, bookmarked = false, variant }: FavoriteBtnProps)
       return { prev };
     },
     onSuccess: async (newState) => {
+      setIsLiked((prev) => !prev);
       // 1) "brands" 로 시작하는 모든 infiniteQuery 키만 골라서
       const brandQueries = queryClient.getQueriesData<{
         pages: BrandListData[];
