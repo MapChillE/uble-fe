@@ -8,8 +8,10 @@ import useInfiniteScroll from "@/hooks/useInfiniteScroll";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { FetchFavoritesParams, fetchFavoritesQuery } from "@/service/favorites";
 import useUserStore from "@/store/useUserStore";
+import { useRouter } from "next/navigation";
 
 export default function FavoriteBrandSection() {
+  const router = useRouter();
   const user = useUserStore((s) => s.user);
 
   // 즐겨찾기 데이터 받아오기
@@ -64,7 +66,12 @@ export default function FavoriteBrandSection() {
     <div>
       <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {favoriteBrands.map((brand: BrandContent) => (
-          <DynamicCard key={brand.brandId} data={brand} variant="horizontal" />
+          <DynamicCard
+            key={brand.brandId}
+            data={brand}
+            variant="horizontal"
+            onClick={() => router.push(`/partnerships/${brand.brandId}`)}
+          />
         ))}
       </div>
       <div ref={loadMoreRef} className="h-1" />
