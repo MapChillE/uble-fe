@@ -8,7 +8,7 @@ import {
   StoreSummaryResponse,
 } from "@/types/store";
 
-interface GetNearbyStoresParams {
+export interface GetNearbyStoresParams {
   swLat: number;
   swLng: number;
   neLat: number;
