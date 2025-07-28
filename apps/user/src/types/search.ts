@@ -29,9 +29,8 @@ export interface MapSuggestion {
   category: string;
   id: number;
   type: "CATEGORY" | "STORE" | "BRAND";
-  // 매장일 경우에만 있음
-  longitude?: number;
-  latitude?: number;
+  longitude: number;
+  latitude: number;
   address?: string;
 }
 
