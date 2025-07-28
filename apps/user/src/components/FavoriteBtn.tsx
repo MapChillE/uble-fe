@@ -121,7 +121,6 @@ const FavoriteBtn = ({ brandId, bookmarked = false, variant }: FavoriteBtnProps)
       invalidate();
     },
     onError: (error: Error) => {
-      console.log(error);
       setIsLiked((prev) => !prev); // 실패했으면 상태 복구
       toast.error("오류가 발생했습니다. 잠시 후 다시 이용해 주세요.");
     },
