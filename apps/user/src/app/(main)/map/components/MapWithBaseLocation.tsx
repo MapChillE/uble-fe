@@ -12,7 +12,7 @@ import { Button } from "@workspace/ui/components/button";
 import { fetchStorePins } from "@/utils/fetchStorePins";
 import { createBoundsFromCenterAndZoom } from "@/utils/mapBounds";
 
-export const DEFAULT_ZOOM_LEVEL_LEVEL = 15;
+export const DEFAULT_ZOOM_LEVEL = 15;
 
 interface MapWithBaseLocationProps {
   selectedCategory: Category;
@@ -51,7 +51,7 @@ export default function MapWithBaseLocation({
   // 지도 bounds/center 추적
   const [mapBounds, setMapBounds] = useState<naver.maps.LatLngBounds | null>(null);
   const [mapCenter, setMapCenter] = useState<Coordinates>(baseLocation);
-  const [mapZoomLevel, setMapZoomLevel] = useState<number>(DEFAULT_ZOOM_LEVEL_LEVEL);
+  const [mapZoomLevel, setMapZoomLevel] = useState<number>(DEFAULT_ZOOM_LEVEL);
   const [showSearchBtn, setShowSearchBtn] = useState(false);
   const [pins, setPins] = useState<Pin[]>([]);
   const [isExitingSearchMode, setIsExitingSearchMode] = useState(false);
@@ -99,13 +99,10 @@ export default function MapWithBaseLocation({
   // 초기화: currentLocation이 로드되면 첫 번째 fetchPins 실행
   useEffect(() => {
     if (currentLocation && !isInitialized) {
-      const initialBounds = createBoundsFromCenterAndZoom(
-        currentLocation,
-        DEFAULT_ZOOM_LEVEL_LEVEL
-      );
+      const initialBounds = createBoundsFromCenterAndZoom(currentLocation, DEFAULT_ZOOM_LEVEL);
       if (initialBounds) {
         setMapBounds(initialBounds);
-        fetchPins(currentLocation, initialBounds, DEFAULT_ZOOM_LEVEL_LEVEL);
+        fetchPins(currentLocation, initialBounds, DEFAULT_ZOOM_LEVEL);
         lastBaseLocationRef.current = currentLocation;
         setMapCenter(currentLocation);
         setIsInitialized(true);
@@ -124,7 +121,7 @@ export default function MapWithBaseLocation({
       lastBaseLocationRef.current = baseLocation;
 
       // 새로운 baseLocation에 맞는 bounds 생성
-      const newBounds = createBoundsFromCenterAndZoom(baseLocation, DEFAULT_ZOOM_LEVEL_LEVEL);
+      const newBounds = createBoundsFromCenterAndZoom(baseLocation, DEFAULT_ZOOM_LEVEL);
       if (newBounds) {
         setMapBounds(newBounds);
         fetchPins(baseLocation, newBounds, mapZoomLevel); // 새로운 bounds 기준으로 fetch
@@ -144,7 +141,7 @@ export default function MapWithBaseLocation({
   useEffect(() => {
     if (searchLocation && isInitialized) {
       setMapCenter(searchLocation);
-      const newBounds = createBoundsFromCenterAndZoom(searchLocation, DEFAULT_ZOOM_LEVEL_LEVEL);
+      const newBounds = createBoundsFromCenterAndZoom(searchLocation, DEFAULT_ZOOM_LEVEL);
       if (newBounds) {
         setMapBounds(newBounds);
         fetchPins(searchLocation, newBounds, mapZoomLevel);
