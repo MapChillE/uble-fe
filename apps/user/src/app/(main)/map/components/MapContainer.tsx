@@ -93,11 +93,21 @@ export default function MapContainer() {
     const storeId = searchParams.get("storeId");
 
     if (lat && lng) {
-      const location: Coordinates = [parseFloat(lng), parseFloat(lat)];
+      const parsedLat = parseFloat(lat);
+      const parsedLng = parseFloat(lng);
+      if (isNaN(parsedLat) || isNaN(parsedLng)) {
+        toast.error("유효하지 않은 위치 정보입니다.");
+        return;
+      }
+      const location: Coordinates = [parsedLng, parsedLat];
       setSearchLocation(location);
 
       if (storeId) {
-        const storeIdNum = parseInt(storeId);
+        const storeIdNum = parseInt(storeId, 10);
+        if (isNaN(storeIdNum)) {
+          toast.error("유효하지 않은 가맹점 ID입니다.");
+          return;
+        }
         setSearchStoreId(storeIdNum);
         handleStoreClick(storeIdNum, location);
       } else {
