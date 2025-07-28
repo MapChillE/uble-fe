@@ -21,13 +21,11 @@ const PartnershipContainer = ({ id }: { id: string }) => {
   });
 
   useEffect(() => {
-    if (!user) {
-      router.replace("/");
-      return;
-    }
     if (!isLoading && !data) {
-      router.replace("/not-found");
-      return;
+      if (!user) {
+        router.replace("/");
+        return;
+      } else router.replace("/not-found");
     }
     if (isError) {
       router.replace("/error");
