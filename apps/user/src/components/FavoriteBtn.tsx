@@ -95,22 +95,24 @@ const FavoriteBtn = ({ brandId, bookmarked = false, variant }: FavoriteBtnProps)
         // cursor param 꺼내기
         const cursor = pageParams[pageIndex];
         const params = fullKey[1] as FetchBrandsParams; // ["brands", params]
+        try {
+          // 해당 페이지 하나만 재요청
+          const updatedPage = await fetchBrands({
+            ...params,
+            lastBrandId: cursor,
+          });
 
-        // 해당 페이지 하나만 재요청
-        const updatedPage = await fetchBrands({
-          ...params,
-          lastBrandId: cursor,
-        });
-
-        // 캐시에 그 페이지만 대체
-        queryClient.setQueryData(fullKey, (old: any) => {
-          if (!old || !Array.isArray(old.pages)) return old;
-          return {
-            ...old,
-            pages: old.pages.map((pg: any, i: number) => (i === pageIndex ? updatedPage : pg)),
-          };
-        });
-
+          // 캐시에 그 페이지만 대체
+          queryClient.setQueryData(fullKey, (old: any) => {
+            if (!old || !Array.isArray(old.pages)) return old;
+            return {
+              ...old,
+              pages: old.pages.map((pg: any, i: number) => (i === pageIndex ? updatedPage : pg)),
+            };
+          });
+        } catch (err) {
+          toast.error("오류가 발생했습니다. 잠시 후 다시 이용해 주세요.");
+        }
         // 하나만 바꾸고 루프 종료
         break;
       }
