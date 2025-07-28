@@ -54,6 +54,11 @@ const SearchContainer = () => {
 
   const handleResultClick = async (result: MapSuggestion) => {
     // STORE 타입일 때는 지도로 이동
+    if (!result.latitude || !result.longitude) {
+      toast.error("위치 정보를 찾을 수 없습니다.");
+      return;
+    }
+
     if (result.type === "STORE") {
       const params = new URLSearchParams({
         lat: result.latitude.toString(),
@@ -66,55 +71,13 @@ const SearchContainer = () => {
       const params = new URLSearchParams({
         lat: result.latitude.toString(),
         lng: result.longitude.toString(),
-        // storeId: result.id.toString(),
+        zoom: DEFAULT_ZOOM_LEVEL.toString(),
+        type: result.type,
+        id: result.id.toString(),
         searchQuery: searchQuery,
       });
+
       router.push(`/map?${params.toString()}`);
-      // // CATEGORY나 BRAND 타입일 때는 해당 필터로 주변 검색 실행
-      // if (!currentLocation) {
-      //   toast.error("현재 위치를 불러올 수 없습니다.");
-      //   return;
-      // }
-
-      // setIsSearching(true);
-
-      // try {
-      //   const searchParams: GetNearbyStoresParams = {
-      //     swLat: currentLocation[1] - 0.01,
-      //     swLng: currentLocation[0] - 0.01,
-      //     neLat: currentLocation[1] + 0.01,
-      //     neLng: currentLocation[0] + 0.01,
-      //     zoomLevel: DEFAULT_ZOOM_LEVEL,
-      //   };
-
-      //   // 타입에 따라 필터 추가
-      //   if (result.type === "CATEGORY") {
-      //     searchParams.categoryId = result.id;
-      //   } else if (result.type === "BRAND") {
-      //     searchParams.brandId = result.id;
-      //   }
-
-      //   const results = await getNearbyStores(searchParams);
-
-      // StoreContent를 MapSuggestion 형태로 변환
-      // const formattedResults: MapSuggestion[] = results.map((store) => ({
-      //   suggestion: store.storeName,
-      //   category: store.category || "기타",
-      //   id: store.storeId,
-      //   type: "STORE",
-      //   longitude: store.longitude,
-      //   latitude: store.latitude,
-      //   address: "주소 정보 없음",
-      // }));
-
-      // setSearchResults(formattedResults);
-      toast.success(`${result.suggestion} 관련 매장을 찾았습니다.`);
-      // } catch (error) {
-      //   console.error("카테고리/브랜드 검색 중 오류:", error);
-      //   toast.error("해당 카테고리/브랜드의 매장을 찾을 수 없습니다.");
-      // } finally {
-      //   setIsSearching(false);
-      // }
     }
   };
 
