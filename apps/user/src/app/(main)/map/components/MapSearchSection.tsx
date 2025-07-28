@@ -8,7 +8,7 @@ const MapSearchSection = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleInputClick = () => {
-    // router.push("/search");
+    router.push("/search");
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

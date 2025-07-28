@@ -16,6 +16,7 @@ export async function fetchStorePins(
   center: Coordinates,
   bounds: naver.maps.LatLngBounds,
   category: Category,
+  zoomLevel: number,
   baseLocation?: Coordinates
 ): Promise<Pin[]> {
   try {
@@ -27,6 +28,7 @@ export async function fetchStorePins(
       swLng: sw.lng(),
       neLat: ne.lat(),
       neLng: ne.lng(),
+      zoomLevel,
       ...(typeof category.categoryId === "number" && category.categoryId !== 0
         ? { categoryId: category.categoryId }
         : {}),

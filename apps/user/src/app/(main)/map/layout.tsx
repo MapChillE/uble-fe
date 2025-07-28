@@ -16,14 +16,14 @@ export default function MapLayout({ children }: { children: React.ReactNode }) {
         }}
       />
 
-      <main
+      <div
         style={{
           height: "calc(100vh - 60px - 72px)",
           overflow: "hidden",
         }}
       >
         {children}
-      </main>
+      </div>
     </>
   );
 }

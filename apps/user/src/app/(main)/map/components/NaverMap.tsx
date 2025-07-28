@@ -26,6 +26,7 @@ interface NaverMapProps {
   zoom: number;
   pins?: Pin[];
   onBoundsChange?: (bounds: naver.maps.LatLngBounds, center: Coordinates) => void;
+  onZoomChange?: (zoom: number) => void;
 }
 // 카테고리별 아이콘 반환 함수
 function getCategoryIcon(category?: string) {
@@ -51,7 +52,13 @@ function getCategoryIcon(category?: string) {
  * @param onBoundsChange 지도 바운드 변경 시 호출되는 함수
  * @returns 지도 컴포넌트
  */
-export default function NaverMap({ loc, zoom = 15, pins, onBoundsChange }: NaverMapProps) {
+export default function NaverMap({
+  loc,
+  zoom = 15,
+  pins,
+  onBoundsChange,
+  onZoomChange,
+}: NaverMapProps) {
   const mapRef = useRef<NaverMapInstance | null>(null);
   const markerRefs = useRef<NaverMarker[]>([]);
   const clustererRef = useRef<MarkerClustering | null>(null);
@@ -124,8 +131,16 @@ export default function NaverMap({ loc, zoom = 15, pins, onBoundsChange }: Naver
           ]);
         });
       }
+
+      if (onZoomChange) {
+        window.naver.maps.Event.addListener(map, "zoomend", () => {
+          const zoom = map.getZoom();
+          console.log("zoom", zoom);
+          onZoomChange(zoom);
+        });
+      }
     }
-  }, [loc, onBoundsChange]);
+  }, [loc, onBoundsChange, onZoomChange]);
 
   // 마커/클러스터러 관리
   useEffect(() => {
@@ -177,7 +192,8 @@ export default function NaverMap({ loc, zoom = 15, pins, onBoundsChange }: Naver
       anchor: new window.naver.maps.Point(22, 44),
     };
     clustererRef.current = new window.MarkerClustering({
-      minClusterSize: 2,
+      // TODO: 클러스터 사이즈 변경 필요
+      minClusterSize: 1000,
       maxZoom: 14,
       map: mapRef.current,
       markers: newMarkers,

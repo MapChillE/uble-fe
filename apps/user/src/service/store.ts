@@ -13,6 +13,7 @@ export interface GetNearbyStoresParams {
   swLng: number;
   neLat: number;
   neLng: number;
+  zoomLevel: number;
   categoryId?: number;
   brandId?: number;
   season?: string;
