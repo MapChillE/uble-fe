@@ -9,6 +9,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <meta name="color-scheme" content="light" />
+      </head>
       <body>
         <Providers>
           <Toaster richColors position="top-center" />

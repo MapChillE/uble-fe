@@ -118,6 +118,7 @@
 
   html {
     @apply scroll-auto antialiased;
+    color-scheme: light;
   }
 
   body {
