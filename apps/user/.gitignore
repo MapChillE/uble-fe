@@ -37,3 +37,7 @@ yarn-error.log*
 storybook-static
 
 certificates
+
+# pwa
+public/sw.js
+public/workbox-*.js
