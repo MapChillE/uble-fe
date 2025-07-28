@@ -58,7 +58,6 @@ const SearchContainer = () => {
       toast.error("위치 정보를 찾을 수 없습니다.");
       return;
     }
-
     if (result.type === "STORE") {
       const params = new URLSearchParams({
         lat: result.latitude.toString(),

@@ -36,33 +36,34 @@ const PartnershipBenefitList = (data: BrandDetailData) => {
           >
             <CardHeader>
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <MembershipGrade rank={benefit.minRank} isVIPcock={benefit.type === "VIP"} />
-                </div>
                 <Badge
                   variant="outline"
-                  className="border-emerald-200 bg-emerald-50 text-emerald-700"
+                  className="border-emerald-200 bg-emerald-50 text-sm text-emerald-700"
                 >
                   혜택 {idx + 1}
                 </Badge>
+                <div className="flex items-center gap-4">
+                  <MembershipGrade rank={benefit.minRank} isVIPcock={benefit.type === "VIP"} />
+                </div>
               </div>
             </CardHeader>
 
             <CardContent className="space-y-6">
               {/* 혜택 내용 */}
-              <div className="space-y-4">
+              <div className="space-y-2">
                 {benefit.content.split("\n").map((item, contentIdx) => {
                   const isTitle =
                     contentIdx === 0 ||
                     item.includes(":") ||
                     item.includes("②") ||
+                    item.includes("③") ||
                     item.includes("우수");
                   return (
                     <div
                       key={contentIdx}
                       className={
                         isTitle
-                          ? "text-xl font-bold leading-relaxed text-gray-900"
+                          ? "pl-4 text-lg font-bold leading-relaxed text-gray-900"
                           : "border-l-2 border-emerald-200 pl-4 text-base leading-relaxed text-gray-700"
                       }
                     >
@@ -71,7 +72,12 @@ const PartnershipBenefitList = (data: BrandDetailData) => {
                   );
                 })}
               </div>
-
+              {/* 이용 제한 */}
+              <div className="flex items-center gap-3 pl-4">
+                <AlertCircle className="h-5 w-5 flex-shrink-0 text-amber-600" />
+                <p className="font-medium leading-5 text-amber-800">이용 제한</p>
+                <p className="text-sm leading-5 text-amber-700">{benefit.provisionCount}</p>
+              </div>
               {/* 이용방법 토글 */}
               <Collapsible open={openItems.includes(idx)} onOpenChange={() => toggleItem(idx)}>
                 <CollapsibleTrigger className="w-full">
@@ -100,15 +106,6 @@ const PartnershipBenefitList = (data: BrandDetailData) => {
                   </div>
                 </CollapsibleContent>
               </Collapsible>
-
-              {/* 이용 제한 */}
-              <div className="flex items-center gap-3 p-4">
-                <AlertCircle className="h-5 w-5 flex-shrink-0 text-amber-600" />
-                <div>
-                  <p className="font-medium text-amber-800">이용 제한</p>
-                  <p className="text-sm text-amber-700">{benefit.provisionCount}</p>
-                </div>
-              </div>
             </CardContent>
           </Card>
         ))}
