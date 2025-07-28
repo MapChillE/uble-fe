@@ -12,7 +12,7 @@ import { Button } from "@workspace/ui/components/button";
 import { fetchStorePins } from "@/utils/fetchStorePins";
 import { createBoundsFromCenterAndZoom } from "@/utils/mapBounds";
 
-const DEFAULT_ZOOM = 15;
+export const DEFAULT_ZOOM_LEVEL_LEVEL = 15;
 
 interface MapWithBaseLocationProps {
   selectedCategory: Category;
@@ -51,6 +51,7 @@ export default function MapWithBaseLocation({
   // 지도 bounds/center 추적
   const [mapBounds, setMapBounds] = useState<naver.maps.LatLngBounds | null>(null);
   const [mapCenter, setMapCenter] = useState<Coordinates>(baseLocation);
+  const [mapZoomLevel, setMapZoomLevel] = useState<number>(DEFAULT_ZOOM_LEVEL_LEVEL);
   const [showSearchBtn, setShowSearchBtn] = useState(false);
   const [pins, setPins] = useState<Pin[]>([]);
   const [isExitingSearchMode, setIsExitingSearchMode] = useState(false);
@@ -58,7 +59,12 @@ export default function MapWithBaseLocation({
 
   // 주변 매장 가져오기
   const fetchPins = useCallback(
-    async (center: Coordinates, bounds: naver.maps.LatLngBounds, category?: Category) => {
+    async (
+      center: Coordinates,
+      bounds: naver.maps.LatLngBounds,
+      zoomLevel: number,
+      category?: Category
+    ) => {
       try {
         // 검색 모드일 때는 해당 매장만 표시
         if (searchStoreId && searchLocation) {
@@ -78,6 +84,7 @@ export default function MapWithBaseLocation({
           center,
           bounds,
           category ?? selectedCategory,
+          zoomLevel,
           baseLocation
         );
         setPins(pins);
@@ -92,10 +99,13 @@ export default function MapWithBaseLocation({
   // 초기화: currentLocation이 로드되면 첫 번째 fetchPins 실행
   useEffect(() => {
     if (currentLocation && !isInitialized) {
-      const initialBounds = createBoundsFromCenterAndZoom(currentLocation, DEFAULT_ZOOM);
+      const initialBounds = createBoundsFromCenterAndZoom(
+        currentLocation,
+        DEFAULT_ZOOM_LEVEL_LEVEL
+      );
       if (initialBounds) {
         setMapBounds(initialBounds);
-        fetchPins(currentLocation, initialBounds);
+        fetchPins(currentLocation, initialBounds, DEFAULT_ZOOM_LEVEL_LEVEL);
         lastBaseLocationRef.current = currentLocation;
         setMapCenter(currentLocation);
         setIsInitialized(true);
@@ -114,10 +124,10 @@ export default function MapWithBaseLocation({
       lastBaseLocationRef.current = baseLocation;
 
       // 새로운 baseLocation에 맞는 bounds 생성
-      const newBounds = createBoundsFromCenterAndZoom(baseLocation, DEFAULT_ZOOM);
+      const newBounds = createBoundsFromCenterAndZoom(baseLocation, DEFAULT_ZOOM_LEVEL_LEVEL);
       if (newBounds) {
         setMapBounds(newBounds);
-        fetchPins(baseLocation, newBounds); // 새로운 bounds 기준으로 fetch
+        fetchPins(baseLocation, newBounds, mapZoomLevel); // 새로운 bounds 기준으로 fetch
         setShowSearchBtn(false);
       }
     }
@@ -126,7 +136,7 @@ export default function MapWithBaseLocation({
   // 카테고리 변경시 현재 위치에서 fetchPins
   useEffect(() => {
     if (isInitialized && mapBounds && mapCenter) {
-      fetchPins(mapCenter, mapBounds, selectedCategory);
+      fetchPins(mapCenter, mapBounds, mapZoomLevel, selectedCategory);
     }
   }, [selectedCategory.categoryId]);
 
@@ -134,10 +144,10 @@ export default function MapWithBaseLocation({
   useEffect(() => {
     if (searchLocation && isInitialized) {
       setMapCenter(searchLocation);
-      const newBounds = createBoundsFromCenterAndZoom(searchLocation, DEFAULT_ZOOM);
+      const newBounds = createBoundsFromCenterAndZoom(searchLocation, DEFAULT_ZOOM_LEVEL_LEVEL);
       if (newBounds) {
         setMapBounds(newBounds);
-        fetchPins(searchLocation, newBounds);
+        fetchPins(searchLocation, newBounds, mapZoomLevel);
         setShowSearchBtn(false);
       }
     }
@@ -147,7 +157,7 @@ export default function MapWithBaseLocation({
   useEffect(() => {
     if (isExitingSearchMode && isInitialized && mapBounds && mapCenter) {
       // 검색 모드 해제 시에만 주변 매장 표시
-      fetchPins(mapCenter, mapBounds, selectedCategory);
+      fetchPins(mapCenter, mapBounds, mapZoomLevel, selectedCategory);
       setIsExitingSearchMode(false); // 플래그 리셋
     }
   }, [isExitingSearchMode, isInitialized, mapBounds, mapCenter, fetchPins]);
@@ -178,10 +188,23 @@ export default function MapWithBaseLocation({
     150 // 150ms 디바운싱
   );
 
+  const handleZoomChange = useDebouncedCallback(
+    (zoom: number) => {
+      setMapZoomLevel(zoom);
+
+      // 검색 모드일 때는 버튼 표시하지 않음
+      if (searchStoreId && searchLocation) {
+        setShowSearchBtn(false);
+        return;
+      }
+    },
+    150 // 150ms 디바운싱
+  );
+
   // 버튼 클릭 시 현재 bounds/center로 fetchPins
   const handleSearchHere = () => {
     if (mapBounds && mapCenter) {
-      fetchPins(mapCenter, mapBounds, selectedCategory);
+      fetchPins(mapCenter, mapBounds, mapZoomLevel, selectedCategory);
     }
   };
 
@@ -209,9 +232,10 @@ export default function MapWithBaseLocation({
     <div className="relative flex h-full w-full">
       <NaverMap
         loc={mapCenter}
-        zoom={DEFAULT_ZOOM}
+        zoom={mapZoomLevel}
         pins={pinsWithClick}
         onBoundsChange={handleBoundsChange}
+        onZoomChange={handleZoomChange}
       />
       {showSearchBtn && (
         <div className="absolute bottom-5 left-1/2 z-20 -translate-x-1/2 pb-10">
