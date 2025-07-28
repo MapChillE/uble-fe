@@ -1,7 +1,7 @@
 import { Pencil, Star, Trash2 } from "lucide-react";
 import { Button } from "@workspace/ui/components/button";
 import { deleteMyPlace } from "@/service/map";
-import { useMapStore } from "@/store/useMapStore";
+import { useLocationStore } from "@/store/useLocationStore";
 import { toast } from "sonner";
 import useConfirmModalStore from "@/store/useConfirmModalStore";
 
@@ -20,7 +20,7 @@ export default function MyPlaceCard({
   selected = false,
   onClick,
 }: MyPlaceCardProps) {
-  const removeMyPlace = useMapStore((s) => s.removeMyPlace);
+  const removeMyPlace = useLocationStore((s) => s.removeMyPlace);
 
   // TODO: 내 장소명 변경
   const handleEditName = () => {};

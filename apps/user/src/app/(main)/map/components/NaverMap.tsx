@@ -25,6 +25,7 @@ interface NaverMapProps {
   loc: Coordinates;
   zoom: number;
   pins?: Pin[];
+  onBoundsChange?: (bounds: naver.maps.LatLngBounds, center: Coordinates) => void;
 }
 // 카테고리별 아이콘 반환 함수
 function getCategoryIcon(category?: string) {
@@ -42,7 +43,15 @@ function getCategoryIcon(category?: string) {
   };
 }
 
-export default function NaverMap({ loc, zoom = 15, pins }: NaverMapProps) {
+/**
+ * 지도에 마커, 클러스터러 등을 표시하는 컴포넌트
+ * @param loc 지도 중심 좌표
+ * @param zoom 지도 줌 레벨 (기본값: 15)
+ * @param pins 마커 데이터
+ * @param onBoundsChange 지도 바운드 변경 시 호출되는 함수
+ * @returns 지도 컴포넌트
+ */
+export default function NaverMap({ loc, zoom = 15, pins, onBoundsChange }: NaverMapProps) {
   const mapRef = useRef<NaverMapInstance | null>(null);
   const markerRefs = useRef<NaverMarker[]>([]);
   const clustererRef = useRef<MarkerClustering | null>(null);
@@ -103,12 +112,24 @@ export default function NaverMap({ loc, zoom = 15, pins }: NaverMapProps) {
       };
       const map = new window.naver.maps.Map(mapId, mapOptions);
       mapRef.current = map;
+      // bounds_changed 이벤트 리스너 등록
+      if (onBoundsChange) {
+        window.naver.maps.Event.addListener(map, "bounds_changed", () => {
+          const bounds = map.getBounds();
+          const center = map.getCenter();
+          const latLngCenter = center as naver.maps.LatLng;
+          onBoundsChange(bounds as naver.maps.LatLngBounds, [
+            latLngCenter.lng(),
+            latLngCenter.lat(),
+          ]);
+        });
+      }
     }
-  }, [loc]);
+  }, [loc, onBoundsChange]);
 
   // 마커/클러스터러 관리
   useEffect(() => {
-    if (!mapRef.current || !pins?.length || !window.naver || !window.MarkerClustering) return;
+    if (!mapRef.current || !window.naver || !window.MarkerClustering) return;
 
     // center 이동
     mapRef.current.setCenter(new window.naver.maps.LatLng(lat, lng));
@@ -127,6 +148,11 @@ export default function NaverMap({ loc, zoom = 15, pins }: NaverMapProps) {
     if (currentMarkerRef.current) {
       currentMarkerRef.current.setMap(null);
       currentMarkerRef.current = null;
+    }
+
+    // pins가 없거나 빈 배열이면 마커 제거
+    if (!pins || pins.length === 0) {
+      return;
     }
 
     // 현위치 마커 분리

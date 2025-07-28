@@ -4,7 +4,7 @@ import { Button } from "@workspace/ui/components/button";
 import MyPlaceList from "./MyPlaceList";
 import MyPlaceForm from "./MyPlaceForm";
 import CurrentLocationCard from "@/app/(main)/map/components/CurrentLocationCard";
-import { useMapStore } from "@/store/useMapStore";
+import { useLocationStore } from "@/store/useLocationStore";
 import useNaverServiceReady from "@/hooks/map/useNaverServiceReady";
 import { GeocodingResult, MyPlace } from "@/types/map";
 import { fetchMyPlaces, postMyPlace } from "@/service/map";
@@ -17,11 +17,11 @@ interface MyPlaceDrawerProps {
 const MyPlaceDrawer = ({ trigger }: MyPlaceDrawerProps) => {
   const [open, setOpen] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const addPlace = useMapStore((s) => s.addMyPlace);
-  const setMyPlaces = useMapStore((s) => s.setMyPlaces);
-  const places = useMapStore((s) => s.myPlaces);
-  const selectedPlaceId = useMapStore((s) => s.selectedPlaceId);
-  const setSelectedPlaceId = useMapStore((s) => s.setSelectedPlaceId);
+  const addPlace = useLocationStore((s) => s.addMyPlace);
+  const setMyPlaces = useLocationStore((s) => s.setMyPlaces);
+  const places = useLocationStore((s) => s.myPlaces);
+  const selectedPlaceId = useLocationStore((s) => s.selectedPlaceId);
+  const setSelectedPlaceId = useLocationStore((s) => s.setSelectedPlaceId);
   const serviceReady = useNaverServiceReady();
 
   // Drawer 열릴 때 서버에서 myPlaces 다시 불러오기
@@ -54,12 +54,12 @@ const MyPlaceDrawer = ({ trigger }: MyPlaceDrawerProps) => {
   };
 
   return (
-    <div className="top-30 absolute right-4 z-10">
+    <div className="top-30 absolute right-4 z-50">
       <Drawer.Root open={open} onOpenChange={setOpen}>
         <Drawer.Trigger asChild>{trigger}</Drawer.Trigger>
         <Drawer.Portal>
-          <Drawer.Overlay className="fixed inset-0 z-30 bg-black/40" />
-          <Drawer.Content className="fixed bottom-0 left-0 right-0 z-50 mx-auto max-w-md rounded-t-2xl bg-white p-6 shadow-lg">
+          <Drawer.Overlay className="z-80 fixed inset-0 bg-black/40" />
+          <Drawer.Content className="z-100 fixed bottom-0 left-0 right-0 mx-auto max-w-md rounded-t-2xl bg-white p-6 shadow-lg">
             <Drawer.Title className="mb-4 overflow-y-auto text-lg font-bold">내 장소</Drawer.Title>
             {/* 현재 위치 카드 */}
             <CurrentLocationCard
