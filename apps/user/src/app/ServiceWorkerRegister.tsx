@@ -1,4 +1,3 @@
-// app/components/ServiceWorkerRegister.tsx
 "use client";
 import { useEffect } from "react";
 

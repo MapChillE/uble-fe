@@ -34,7 +34,6 @@ const nextConfig = {
       },
     ],
   },
-  // ...그 외 Next.js 옵션
 };
 
 // 3) PWA 래퍼에 Next.js 설정을 넘겨줍니다.
