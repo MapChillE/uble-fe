@@ -4,7 +4,7 @@ import { Button } from "@workspace/ui/components/button";
 import MyPlaceList from "./MyPlaceList";
 import MyPlaceForm from "./MyPlaceForm";
 import CurrentLocationCard from "@/app/(main)/map/components/CurrentLocationCard";
-import { useMapStore } from "@/store/useMapStore";
+import { useLocationStore } from "@/store/useLocationStore";
 import useNaverServiceReady from "@/hooks/map/useNaverServiceReady";
 import { GeocodingResult, MyPlace } from "@/types/map";
 import { fetchMyPlaces, postMyPlace } from "@/service/map";
@@ -17,11 +17,11 @@ interface MyPlaceDrawerProps {
 const MyPlaceDrawer = ({ trigger }: MyPlaceDrawerProps) => {
   const [open, setOpen] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const addPlace = useMapStore((s) => s.addMyPlace);
-  const setMyPlaces = useMapStore((s) => s.setMyPlaces);
-  const places = useMapStore((s) => s.myPlaces);
-  const selectedPlaceId = useMapStore((s) => s.selectedPlaceId);
-  const setSelectedPlaceId = useMapStore((s) => s.setSelectedPlaceId);
+  const addPlace = useLocationStore((s) => s.addMyPlace);
+  const setMyPlaces = useLocationStore((s) => s.setMyPlaces);
+  const places = useLocationStore((s) => s.myPlaces);
+  const selectedPlaceId = useLocationStore((s) => s.selectedPlaceId);
+  const setSelectedPlaceId = useLocationStore((s) => s.setSelectedPlaceId);
   const serviceReady = useNaverServiceReady();
 
   // Drawer 열릴 때 서버에서 myPlaces 다시 불러오기
