@@ -103,6 +103,13 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: light;
+    background-color: white !important;
+    color: black !important;
+  }
+}
 @layer base {
   *,
   ::before,
