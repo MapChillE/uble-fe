@@ -15,7 +15,12 @@ const BarcodeDrawer = ({ open, onOpenChange, initialRevealed = true }: BarcodeDr
         <Drawer.Overlay className="fixed inset-0 z-30 bg-black/40" />
         <Drawer.Content className="fixed bottom-0 left-0 right-0 z-50 mx-auto max-w-md rounded-t-2xl bg-white p-6 shadow-lg">
           <Drawer.Title className="mb-4 text-lg font-bold">멤버십 바코드</Drawer.Title>
-          <BarcodeContainer storeId={0} isVIPcock={false} initialRevealed={initialRevealed} />
+          <BarcodeContainer
+            storeId={0}
+            isVIPcock={false}
+            initialRevealed={initialRevealed}
+            vipOnly={false}
+          />
         </Drawer.Content>
       </Drawer.Portal>
     </Drawer.Root>
