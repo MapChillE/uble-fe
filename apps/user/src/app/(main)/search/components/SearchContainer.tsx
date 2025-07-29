@@ -9,9 +9,8 @@ import { toast } from "sonner";
 import { getNearbyStores, GetNearbyStoresParams } from "@/service/store";
 import { useLocationStore } from "@/store/useLocationStore";
 import { fetchMapSearch } from "@/service/mapSearch";
-import { DEFAULT_LOCATION } from "@/types/constants";
+import { DEFAULT_LOCATION, DEFAULT_ZOOM_LEVEL } from "@/types/constants";
 import { MapSuggestion } from "@/types/search";
-import { DEFAULT_ZOOM_LEVEL } from "@/app/(main)/map/components/MapWithBaseLocation";
 
 const SearchContainer = () => {
   const router = useRouter();
