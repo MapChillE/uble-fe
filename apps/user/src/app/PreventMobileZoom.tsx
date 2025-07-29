@@ -15,9 +15,9 @@ export default function PreventMobileZoom() {
     };
 
     document.addEventListener("touchstart", preventGesture, { passive: false });
-    document.addEventListener("gesturestart", preventGestureStart);
-    document.addEventListener("gesturechange", preventGestureStart);
-    document.addEventListener("gestureend", preventGestureStart);
+    document.addEventListener("gesturestart", preventGestureStart, { passive: false });
+    document.addEventListener("gesturechange", preventGestureStart, { passive: false });
+    document.addEventListener("gestureend", preventGestureStart, { passive: false });
 
     return () => {
       document.removeEventListener("touchstart", preventGesture);
