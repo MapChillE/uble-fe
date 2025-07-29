@@ -126,7 +126,7 @@ const SearchContainer = () => {
             searchQuery={searchQuery}
             onChange={handleSearchInputChange}
             onKeyDown={handleSearchKeyDown}
-            placeholder="검색어를 입력해보세요"
+            placeholder="검색어를 입력하세요"
           />
         </div>
       </div>

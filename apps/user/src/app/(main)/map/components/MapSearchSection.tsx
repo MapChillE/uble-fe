@@ -21,7 +21,7 @@ const MapSearchSection = () => {
         <SearchInput
           searchQuery={searchQuery}
           onChange={handleInputChange}
-          placeholder="검색어를 입력해보세요"
+          placeholder="검색어를 입력하세요"
         />
       </div>
     </section>
