@@ -12,8 +12,8 @@ export function createBoundsFromCenterAndZoom(
   if (typeof window === "undefined" || !window.naver?.maps) return null;
 
   const zoomFactor = Math.pow(2, 15 - zoom);
-  const latDelta = 0.01 / zoomFactor;
-  const lngDelta = 0.01 / zoomFactor;
+  const latDelta = 0.005 / zoomFactor;
+  const lngDelta = 0.005 / zoomFactor;
 
   const bounds = new window.naver.maps.LatLngBounds(
     new window.naver.maps.LatLng(center[1] - latDelta, center[0] - lngDelta),
