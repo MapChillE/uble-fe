@@ -17,7 +17,7 @@ const SearchSection = () => {
     setSearchQuery(q);
   }, [q]);
 
-  // 자동완성 fetch debounce callback 생성 (300ms 기준)
+  // 자동완성 fetch debounce callback 생성 (100ms 기준)
   const debouncedFetchSuggestions = useDebouncedCallback(async (value: string) => {
     if (value.trim()) {
       const suggestions = await fetchBrandSuggestions(value);
@@ -25,7 +25,7 @@ const SearchSection = () => {
     } else {
       setAutoComplete([]);
     }
-  }, 300);
+  }, 100);
 
   // input 변경 시 상태 업데이트 + 자동완성 fetch
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

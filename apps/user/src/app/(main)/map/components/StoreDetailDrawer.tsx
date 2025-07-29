@@ -1,57 +1,54 @@
 "use client";
 
 import { Drawer } from "vaul";
-import { StoreSummary, StoreDetail } from "@/types/store";
 import { DetailCard } from "@/app/(main)/map/components/StoreCard";
 import { SummaryCard } from "@/app/(main)/map/components/StoreCard";
-import { memo, useEffect, useState } from "react";
-import { Skeleton } from "@workspace/ui/components/skeleton";
+import { memo } from "react";
 import StoreDetailSkeleton from "./StoreDetailSkeleton";
+import useStoreDetailDrawerStore from "@/store/useStoreDetailDrawerStore";
+import { useLocationStore } from "@/store/useLocationStore";
+import { DEFAULT_LOCATION } from "@/types/constants";
 
-type Props = {
-  isOpen: boolean;
-  onClose: () => void;
-  summary: StoreSummary | null;
-  detail: StoreDetail | null;
-  snapIndex: number;
-  setSnapIndex: (snap: number) => void;
-  onSnapChange: (snap: number | string) => void;
-  isDetailLoading: boolean;
-};
+interface StoreDetailDrawerProps {
+  trigger?: React.ReactNode;
+}
 
 const snapPoints = [0.9, 1];
 
-const StoreDetailDrawer = ({
-  isOpen,
-  onClose,
-  summary,
-  detail,
-  snapIndex,
-  setSnapIndex,
-  onSnapChange,
-  isDetailLoading,
-}: Props) => {
+const StoreDetailDrawer = ({ trigger }: StoreDetailDrawerProps) => {
+  const isOpen = useStoreDetailDrawerStore((s) => s.isOpen);
+  const summary = useStoreDetailDrawerStore((s) => s.summary);
+  const detail = useStoreDetailDrawerStore((s) => s.detail);
+  const snapIndex = useStoreDetailDrawerStore((s) => s.snapIndex);
+  const isDetailLoading = useStoreDetailDrawerStore((s) => s.isDetailLoading);
+  const close = useStoreDetailDrawerStore((s) => s.close);
+  const setSnapIndex = useStoreDetailDrawerStore((s) => s.setSnapIndex);
+  const loadDetail = useStoreDetailDrawerStore((s) => s.loadDetail);
+
+  const baseLocation = useLocationStore((s) => s.baseLocation);
+
   return (
     <Drawer.Root
       open={isOpen}
       onOpenChange={(open) => {
         if (!open) {
-          onClose();
+          close();
         }
       }}
       modal
       snapPoints={snapPoints}
-      activeSnapPoint={snapPoints[snapIndex as number]} // index → 실제 snapPoint 값
+      activeSnapPoint={snapPoints[snapIndex] as number}
       setActiveSnapPoint={(snap) => {
         if (typeof snap !== "number") return;
 
         const newIndex = snapPoints.indexOf(snap);
         if (newIndex !== -1) {
           setSnapIndex(newIndex);
-          onSnapChange(newIndex);
+          loadDetail(baseLocation ?? DEFAULT_LOCATION);
         }
       }}
     >
+      {trigger && <Drawer.Trigger asChild>{trigger}</Drawer.Trigger>}
       <Drawer.Portal>
         <Drawer.Overlay className="z-80 fixed inset-0 bg-black/40" />
         <Drawer.Content className="z-100 fixed bottom-0 left-0 right-0 mx-auto w-full max-w-md rounded-t-2xl border border-gray-200 bg-white shadow-xl">

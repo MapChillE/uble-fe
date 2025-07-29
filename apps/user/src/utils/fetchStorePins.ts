@@ -1,6 +1,5 @@
 import { Coordinates } from "@/types/map";
 import { getNearbyStores } from "@/service/store";
-import { Category } from "@/types/category";
 import { getCurrentSeason } from "@/utils/season";
 import { Pin } from "@/app/(main)/map/components/NaverMap";
 
@@ -9,15 +8,18 @@ import { Pin } from "@/app/(main)/map/components/NaverMap";
  * @param center 지도 중심 좌표
  * @param bounds 지도 사각형 영역
  * @param category 선택된 카테고리
+ * @param zoomLevel 지도 줌 레벨
  * @param baseLocation 기반 위치
+ * @param brandId 브랜드 ID
  * @returns 매장 marker 데이터 배열
  */
 export async function fetchStorePins(
   center: Coordinates,
   bounds: naver.maps.LatLngBounds,
-  category: Category,
+  category: number | "SEASON" | "VIP" | "LOCAL",
   zoomLevel: number,
-  baseLocation?: Coordinates
+  baseLocation?: Coordinates,
+  brandId?: number
 ): Promise<Pin[]> {
   try {
     const ne = bounds.getNE();
@@ -29,16 +31,10 @@ export async function fetchStorePins(
       neLat: ne.lat(),
       neLng: ne.lng(),
       zoomLevel,
-      ...(typeof category.categoryId === "number" && category.categoryId !== 0
-        ? { categoryId: category.categoryId }
-        : {}),
-      season: category.categoryId === "SEASON" ? getCurrentSeason() : undefined,
-      type:
-        category.categoryId === "VIP"
-          ? "VIP"
-          : category.categoryId === "LOCAL"
-            ? "LOCAL"
-            : undefined,
+      ...(typeof category === "number" && category !== 0 ? { categoryId: category } : {}),
+      season: category === "SEASON" ? getCurrentSeason() : undefined,
+      type: category === "VIP" ? "VIP" : category === "LOCAL" ? "LOCAL" : undefined,
+      brandId: brandId ?? undefined,
     });
 
     const storePins: Pin[] = stores.map((store) => ({
