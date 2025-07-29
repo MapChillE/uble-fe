@@ -55,7 +55,7 @@ const useStoreDetailDrawerStore = create<StoreDetailDrawerState>((set, get) => (
     set({ snapIndex: index });
   },
 
-  loadDetail: async () => {
+  loadDetail: async (baseLocation: Coordinates) => {
     const { summary } = get();
     if (!summary) return;
 
@@ -63,8 +63,8 @@ const useStoreDetailDrawerStore = create<StoreDetailDrawerState>((set, get) => (
 
     try {
       const detail = await getStoreDetail({
-        latitude: DEFAULT_LOCATION[1],
-        longitude: DEFAULT_LOCATION[0],
+        latitude: baseLocation[1],
+        longitude: baseLocation[0],
         storeId: summary.storeId,
       });
       set({ detail, isDetailLoading: false });
