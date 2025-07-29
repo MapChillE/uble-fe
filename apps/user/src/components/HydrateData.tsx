@@ -15,7 +15,7 @@ const HydrateData = () => {
 
   const sendToMain = () => {
     toast.error("유저 정보를 불러오지 못했습니다.\n다시 로그인해 주세요");
-    router.replace("/");
+    // router.replace("/");
   };
 
   useEffect(() => {
