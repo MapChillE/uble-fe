@@ -29,7 +29,7 @@ interface NaverMapProps {
   onZoomChange?: (zoom: number) => void;
 }
 // 카테고리별 아이콘 반환 함수
-function getCategoryIcon(category?: string) {
+function getCategoryIcon(category?: string, name?: string) {
   if (!window.naver?.maps) return null;
 
   const key: CategoryMarkerKey = (category as CategoryMarkerKey) ?? "default";
@@ -38,7 +38,17 @@ function getCategoryIcon(category?: string) {
   const svgString = getCategoryIconHTML(icon);
 
   return {
-    content: `<div style="background:${color};width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;">${svgString}</div>`,
+    content: `
+        <div style="display:flex;flex-direction:column;align-items:center;">
+          <div style="background:${color};width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+            ${svgString}
+          </div>
+          <div style="margin-top:4px;font-size:11px;font-weight:bold;color:#333;white-space:nowrap;
+          text-shadow:-1px -1px 0 white,1px -1px 0 white,-1px 1px 0 white,1px 1px 0 white,0px 0px 2px white;">
+          ${name ?? ""}
+          </div>
+        </div>
+      `,
     size: new window.naver.maps.Size(28, 28),
     anchor: new window.naver.maps.Point(14, 28),
   };
@@ -84,7 +94,7 @@ export default function NaverMap({
             height: 15px;
             border-radius: 50%;
             border: 2px solid white;
-            box-shadow: 0 0 4px rgba(0,0,0,0.3);
+            box-shadow: 0 0 4px rgba(0,0,0,0.3);  
           "></div>`,
         size: new window.naver.maps.Size(20, 20),
         anchor: new window.naver.maps.Point(10, 10),
@@ -92,8 +102,10 @@ export default function NaverMap({
     }
     // 카테고리별 마커 아이콘 적용
     if (pin.type === "store" && pin.category) {
-      const icon = getCategoryIcon(pin.category);
-      if (icon) markerOptions.icon = icon;
+      const icon = getCategoryIcon(pin.category, pin.name);
+      if (icon) {
+        markerOptions.icon = icon;
+      }
     }
 
     const marker = new window.naver.maps.Marker(markerOptions);
