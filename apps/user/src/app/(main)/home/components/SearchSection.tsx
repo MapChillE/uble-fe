@@ -11,7 +11,9 @@ const SearchSection = () => {
   const pathname = usePathname();
   const q = searchParams.get("q") || "";
   const [searchQuery, setSearchQuery] = useState(q);
-  const [autoComplete, setAutoComplete] = useState<string[]>([]);
+  const [autoComplete, setAutoComplete] = useState<{ type: "CATEGORY" | "BRAND"; value: string }[]>(
+    []
+  );
 
   useEffect(() => {
     setSearchQuery(q);
@@ -21,7 +23,12 @@ const SearchSection = () => {
   const debouncedFetchSuggestions = useDebouncedCallback(async (value: string) => {
     if (value.trim()) {
       const suggestions = await fetchBrandSuggestions(value);
-      setAutoComplete(suggestions.suggestionList.map((s) => s.suggestion));
+      setAutoComplete(
+        suggestions.suggestionList.map((s) => ({
+          type: s.type.toUpperCase() === "CATEGORY" ? "CATEGORY" : "BRAND",
+          value: s.suggestion,
+        }))
+      );
     } else {
       setAutoComplete([]);
     }
