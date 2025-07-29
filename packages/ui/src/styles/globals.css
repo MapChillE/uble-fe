@@ -8,6 +8,43 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ========================
+  공통 스타일 (스크롤바 제거)
+   ======================== */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* ========================
+  모바일 뷰포트 대응
+   ======================== */
+
+/* iOS Safari */
+@supports (-webkit-touch-callout: none) {
+  .h-screen {
+    height: -webkit-fill-available;
+  }
+}
+
+/* Android Chrome, Firefox */
+@media screen and (max-width: 768px) {
+  .h-screen {
+    height: 100vh;
+    height: 100dvh; /* dynamic viewport height for modern browsers */
+  }
+}
+
+/* Safari 및 삼성 브라우저 */
+.h-screen {
+  height: 100dvh; /* Safari 15.0+, Samsung Internet */
+  min-height: 100vh; /* fallback */
+}
+
 :root {
   --font-pretendard: "Pretendard";
 
