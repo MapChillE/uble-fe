@@ -99,7 +99,7 @@ const MapContainer = () => {
     const parsedLat = parseFloat(lat || "");
     const parsedLng = parseFloat(lng || "");
     if (isNaN(parsedLat) || isNaN(parsedLng)) {
-      console.error("유효하지 않은 위치 정보입니다.");
+      toast.error("유효하지 않은 위치 정보입니다.");
       return;
     }
 
