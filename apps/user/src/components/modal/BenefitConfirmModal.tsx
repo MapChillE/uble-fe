@@ -7,18 +7,25 @@ import useBenefitConfirmModalStore from "@/store/useBenefitConfirmModalStore";
 import { UsageRegistRequest } from "@/types/usage";
 import { apiHandler } from "@api/apiHandler";
 import { setUsage } from "@/service/usage";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 
 const BenefitConfirmModal = () => {
-  const { isOpen, close, storeId, isVIPcock, resetInfo, onSuccess } = useBenefitConfirmModalStore();
+  const { isOpen, close, storeId, isVIPcock, vipOnly, resetInfo, onSuccess } =
+    useBenefitConfirmModalStore();
   const [isLoading, setIsLoading] = useState(false);
   const queryClient = useQueryClient();
 
   const handleClose = () => {
     close();
-    resetInfo();
   };
+
+  useEffect(() => {
+    if (!isOpen) {
+      const timer = setTimeout(() => resetInfo(), 300);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
 
   const invalidate = () => {
     queryClient.invalidateQueries({
@@ -57,19 +64,11 @@ const BenefitConfirmModal = () => {
             혜택을 사용하시겠어요?
           </DialogTitle>
         </DialogHeader>
-        <div className="flex justify-center space-x-3 pt-2">
+        <div className="flex flex-wrap justify-center space-x-3 pt-2">
           <Button type="button" variant="modal_cancel" onClick={handleClose}>
             아니요
           </Button>
-          <Button
-            type="button"
-            onClick={() => handleYes("NORMAL")}
-            variant="modal_submit"
-            disabled={isLoading}
-          >
-            일반 혜택
-          </Button>
-          {isVIPcock && (
+          {isVIPcock && vipOnly && (
             <Button
               type="button"
               onClick={() => handleYes("VIP")}
@@ -77,6 +76,38 @@ const BenefitConfirmModal = () => {
               disabled={isLoading}
             >
               VIP콕 혜택
+            </Button>
+          )}
+
+          {isVIPcock && !vipOnly && (
+            <>
+              <Button
+                type="button"
+                onClick={() => handleYes("NORMAL")}
+                variant="modal_submit"
+                disabled={isLoading}
+              >
+                일반 혜택
+              </Button>
+              <Button
+                type="button"
+                onClick={() => handleYes("VIP")}
+                variant="modal_submit"
+                disabled={isLoading}
+              >
+                VIP콕 혜택
+              </Button>
+            </>
+          )}
+
+          {!isVIPcock && (
+            <Button
+              type="button"
+              onClick={() => handleYes("NORMAL")}
+              variant="modal_submit"
+              disabled={isLoading}
+            >
+              일반 혜택
             </Button>
           )}
         </div>
