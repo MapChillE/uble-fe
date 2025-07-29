@@ -12,7 +12,7 @@ const HomeContent = () => {
   if (q) return null;
 
   return (
-    <section className="space-y-8">
+    <section className="scrollbar-hide space-y-8">
       <PersonalSection />
       <AgeSection />
       <TimeSection />
