@@ -6,8 +6,8 @@ interface CategorySelectorProps {
   categoryIds: number[];
   onChange: (ids: number[]) => void;
 }
-
 const CategorySelector = ({ categoryIds, onChange }: CategorySelectorProps) => {
+  const CATEGORY_KEYS = Object.keys(CATEGORIES).map(Number);
   const toggleCategory = (categoryId: number) => {
     const exists = categoryIds.includes(categoryId);
     if (exists) {
@@ -19,30 +19,35 @@ const CategorySelector = ({ categoryIds, onChange }: CategorySelectorProps) => {
 
   return (
     <div className="space-y-3">
-      <Label className="text-sm font-medium">관심 분야</Label>
-      <div className="grid grid-cols-2 gap-2">
-        {CATEGORIES.map((cat) => {
-          const isSelected = categoryIds.includes(cat.categoryId);
+      <Label className="text-sm font-medium">관심 카테고리</Label>
+      <div className="grid grid-cols-3 gap-2">
+        {CATEGORY_KEYS.map((key) => {
+          const isSelected = categoryIds.includes(key);
           const isDisabled = !isSelected && categoryIds.length >= 3;
+
           return (
             <Button
-              key={cat.categoryId}
-              onClick={() => toggleCategory(cat.categoryId)}
+              key={key}
+              onClick={() => toggleCategory(key)}
               disabled={isDisabled}
               variant={isSelected ? "onb_selected" : "onb_unselected"}
             >
-              {cat.categoryName}
+              <span className="text-sm font-semibold">
+                {CATEGORIES[key as keyof typeof CATEGORIES]}
+              </span>
             </Button>
           );
         })}
       </div>
       {categoryIds.length > 0 && (
         <div className="text-center">
-          <span className="text-xs text-action-green font-medium">{categoryIds.length}/3개 선택됨</span>
+          <span className="text-action-green text-xs font-medium">
+            {categoryIds.length}/3개 선택됨
+          </span>
         </div>
       )}
     </div>
   );
 };
 
-export default CategorySelector; 
+export default CategorySelector;
