@@ -12,7 +12,8 @@ import {
   Heart,
   Star,
   Calendar,
-  HelpCircle, // default
+  HelpCircle,
+  Car, // default
 } from "lucide-react";
 import { ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
@@ -55,7 +56,7 @@ const CATEGORY_META: Record<
   "생활/건강": { icon: Home, markerColor: "#60A5FA", textColor: "text-blue-500" },
   "문화/여가": { icon: Theater, markerColor: "#C084FC", textColor: "text-purple-500" },
   교육: { icon: GraduationCap, markerColor: "#FACC15", textColor: "text-yellow-500" },
-  "여행/교통": { icon: Plane, markerColor: "#5EEAD4", textColor: "text-teal-500" },
+  "여행/교통": { icon: Car, markerColor: "#5EEAD4", textColor: "text-teal-500" },
   식당: { icon: Utensils, markerColor: "#FB7185", textColor: "text-rose-500" },
   카페: { icon: Coffee, markerColor: "#FB923C", textColor: "text-orange-400" },
   우리동네멤버십: { icon: Users, markerColor: "#1E293B", textColor: "text-slate-700" },
