@@ -23,7 +23,7 @@ const FavoriteBtn = ({ brandId, bookmarked = false, variant }: FavoriteBtnProps)
 
   /** 캐시 무효화, useQuery를 사용하는 쿼리들 업데이트 */
   const invalidate = () => {
-    ["timeRecommend", "ageRecommend", "favoriteBrands"].forEach((k) =>
+    ["timeRecommend", "ageRecommend", "favoriteBrands", "brandSearch"].forEach((k) =>
       queryClient.invalidateQueries({ queryKey: [k] })
     );
     queryClient.invalidateQueries({ queryKey: ["brandDetail", brandId.toString()] });
