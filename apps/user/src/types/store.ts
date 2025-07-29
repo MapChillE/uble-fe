@@ -50,7 +50,7 @@ export interface StoreSummary {
 export interface StoreBenefit {
   benefitId: number;
   type: string;
-  minRank: "NONE" | "NORMAL" | "PREMIUM";
+  minRank: "NONE" | "NORMAL" | "PREMIUM" | "VIP";
   content: string;
   manual: string;
   provisionCount: string;
