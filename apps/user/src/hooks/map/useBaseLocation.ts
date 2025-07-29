@@ -11,7 +11,10 @@ import { DEFAULT_LOCATION } from "@/types/constants";
  * @returns 선택된 장소 기반 위치
  */
 export function useBaseLocation(currentLocation: Coordinates) {
-  const { selectedPlaceId, myPlaces, baseLocation, setBaseLocation } = useLocationStore();
+  const selectedPlaceId = useLocationStore((s) => s.selectedPlaceId);
+  const myPlaces = useLocationStore((s) => s.myPlaces);
+  const baseLocation = useLocationStore((s) => s.baseLocation);
+  const setBaseLocation = useLocationStore((s) => s.setBaseLocation);
 
   // baseLocation 계산을 메모이제이션하여 불필요한 재계산 방지
   const calculatedBaseLocation = useMemo(() => {
