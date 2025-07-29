@@ -27,15 +27,15 @@
 /* iOS Safari */
 @supports (-webkit-touch-callout: none) {
   .h-screen {
-    height: -webkit-fill-available;
+    height: 100dvh;
   }
 }
 
 /* Android Chrome, Firefox */
 @media screen and (max-width: 768px) {
   .h-screen {
-    height: 100vh;
     height: 100dvh; /* dynamic viewport height for modern browsers */
+    height: 100vh;
   }
 }
 
@@ -148,7 +148,7 @@
   }
 }
 @layer base {
-  *,
+  /* *,
   ::before,
   ::after {
     @apply box-border;
@@ -158,7 +158,7 @@
 
   *::-webkit-scrollbar {
     display: none;
-  }
+  } */
 
   html {
     @apply scroll-auto antialiased;
@@ -250,19 +250,5 @@
 
   .animate-accordion-up {
     animation: accordion-up 0.2s ease-out;
-  }
-
-  .react-modal-sheet-container {
-    width: 100%;
-    left: 0;
-    right: 0;
-  }
-
-  @media (min-width: 768px) {
-    .react-modal-sheet-container {
-      width: 448px;
-      left: 0;
-      right: 0;
-    }
   }
 }
