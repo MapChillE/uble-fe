@@ -3,6 +3,15 @@ import { Providers } from "@/components/providers";
 import { Toaster } from "sonner";
 import ServiceWorkerRegister from "./ServiceWorkerRegister";
 import Script from "next/script";
+import type { Viewport } from "next";
+import PreventMobileZoom from "./PreventMobileZoom";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
 
 export default function RootLayout({
   children,
@@ -13,7 +22,7 @@ export default function RootLayout({
     <html lang="ko" suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
         <link rel="manifest" href="manifest.json" />
         <meta name="color-scheme" content="light" />
         <title>Uble</title>
@@ -31,9 +40,10 @@ export default function RootLayout({
             `}
         </Script>
       </head>
-      <body>
+      <body className="h-screen">
         <Providers>
           <ServiceWorkerRegister />
+          <PreventMobileZoom />
           <Toaster richColors position="top-center" />
           <main>{children}</main>
         </Providers>

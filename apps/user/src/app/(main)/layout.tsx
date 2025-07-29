@@ -17,7 +17,7 @@ export default function RootLayout({
       <ConfirmModal />
       <Header />
       <ReactQueryProvider>
-        <main style={{ paddingBottom: "72px" }}>{children}</main>
+        <main>{children}</main>
       </ReactQueryProvider>
       <Footer />
     </Fragment>

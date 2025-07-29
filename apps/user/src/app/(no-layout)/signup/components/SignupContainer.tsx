@@ -46,10 +46,12 @@ const SignupContainer = () => {
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-white">
-      <ProgressHeader currentStep={currentStep} setCurrentStep={setCurrentStep} />
-      <div className="flex-1 px-5 py-4">
-        {StepComponent ? <StepComponent info={info} setInfo={setInfo} /> : null}
+    <div className="scroll-none flex h-[100dvh] flex-col justify-between bg-white">
+      <div>
+        <ProgressHeader currentStep={currentStep} setCurrentStep={setCurrentStep} />
+        <div className="flex-1 px-5 py-4">
+          {StepComponent ? <StepComponent info={info} setInfo={setInfo} /> : null}
+        </div>
       </div>
       <NextStepBtn
         currentStep={currentStep}

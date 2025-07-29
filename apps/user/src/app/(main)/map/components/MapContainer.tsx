@@ -153,7 +153,7 @@ export default function MapContainer() {
   };
 
   return (
-    <div className="relative h-full w-full">
+    <div className="relative h-[100dvh] w-full">
       <MapWithBaseLocation
         selectedCategory={selectedCategory}
         onPinClick={handlePinClick}
