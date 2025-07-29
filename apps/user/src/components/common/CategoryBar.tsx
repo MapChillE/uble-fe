@@ -4,6 +4,7 @@ import { Button } from "@workspace/ui/components/button";
 import { Category } from "@/types/category";
 import { memo } from "react";
 import { useCategoryStore } from "@/store/useCategoryStore";
+import { getCategoryIconStyle } from "@/constants/categoryMarkerStyle";
 
 interface CategoryBarProps {
   selectedCategory: Category;
@@ -19,19 +20,24 @@ const CategoryBar = ({ selectedCategory, onSelectCategory }: CategoryBarProps) =
   }
 
   return (
-    <nav className=" flex gap-2 overflow-x-auto whitespace-nowrap py-3">
-      {categories.map((cat) => (
-        <Button
-          key={cat.categoryId}
-          variant={
-            selectedCategory.categoryId === cat.categoryId ? "filter_select" : "filter_unselect"
-          }
-          size="sm"
-          onClick={() => onSelectCategory(cat)}
-        >
-          {cat.categoryName}
-        </Button>
-      ))}
+    <nav className="scrollbar-hide flex gap-2 overflow-x-auto overflow-y-hidden whitespace-nowrap py-3">
+      {categories.map((cat) => {
+        const iconStyle = getCategoryIconStyle(cat.categoryName);
+        const isSelected = selectedCategory.categoryId === cat.categoryId;
+
+        return (
+          <Button
+            key={cat.categoryId}
+            variant={isSelected ? "filter_select" : "filter_unselect"}
+            size="sm"
+            onClick={() => onSelectCategory(cat)}
+            className="flex items-center gap-2"
+          >
+            {cat.categoryId !== 0 && <div className={iconStyle.color}>{iconStyle.icon()}</div>}
+            <span>{cat.categoryName}</span>
+          </Button>
+        );
+      })}
     </nav>
   );
 };

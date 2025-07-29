@@ -10,17 +10,14 @@ import {
   Coffee,
   Users,
   Heart,
+  Star,
+  Calendar,
   HelpCircle, // default
 } from "lucide-react";
 import { ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 
-// iconComponent: () => ReactNode
-export const getCategoryIconHTML = (iconComponent: () => ReactNode) => {
-  const icon = iconComponent();
-  return renderToStaticMarkup(icon as React.ReactElement);
-};
-
+// Types
 export type CategoryMarkerKey =
   | "액티비티"
   | "뷰티/건강"
@@ -32,6 +29,8 @@ export type CategoryMarkerKey =
   | "식당"
   | "카페"
   | "우리동네멤버십"
+  | "VIP콕"
+  | "계절"
   | "default";
 
 export interface CategoryMarkerStyle {
@@ -39,49 +38,62 @@ export interface CategoryMarkerStyle {
   icon: () => ReactNode;
 }
 
-export const CATEGORY_MARKER_STYLE: Record<CategoryMarkerKey, CategoryMarkerStyle> = {
-  액티비티: {
-    color: "#F87171", // red-400
-    icon: () => <Activity size={18} color="white" />,
-  },
-  "뷰티/건강": {
-    color: "#A16207", // orange-400
-    icon: () => <HeartPulse size={18} color="white" />,
-  },
-  쇼핑: {
-    color: "#34D399", // emerald-400
-    icon: () => <ShoppingCart size={18} color="white" />,
-  },
-  "생활/건강": {
-    color: "#60A5FA", // blue-400
-    icon: () => <Home size={18} color="white" />,
-  },
-  "문화/여가": {
-    color: "#C084FC", // purple-400
-    icon: () => <Theater size={18} color="white" />,
-  },
-  교육: {
-    color: "#FACC15", // yellow-400
-    icon: () => <GraduationCap size={18} color="white" />,
-  },
-  "여행/교통": {
-    color: "#5EEAD4", // teal-300
-    icon: () => <Plane size={18} color="white" />,
-  },
-  식당: {
-    color: "#FB7185", // rose-400
-    icon: () => <Utensils size={18} color="white" />,
-  },
-  카페: {
-    color: "#FB923C", // warm brown tone
-    icon: () => <Coffee size={18} color="white" />,
-  },
-  우리동네멤버십: {
-    color: "#1E293B", // slate-800
-    icon: () => <Users size={18} color="white" />,
-  },
-  default: {
-    color: "#FB7185", // slate-400
-    icon: () => <Heart size={18} color="white" />,
-  },
+export interface CategoryIconStyle {
+  icon: () => ReactNode;
+  color: string;
+  markerColor: string;
+}
+
+// 공통 데이터 정의
+const CATEGORY_META: Record<
+  CategoryMarkerKey,
+  { icon: any; markerColor: string; textColor: string }
+> = {
+  액티비티: { icon: Activity, markerColor: "#F87171", textColor: "text-red-500" },
+  "뷰티/건강": { icon: HeartPulse, markerColor: "#A16207", textColor: "text-orange-500" },
+  쇼핑: { icon: ShoppingCart, markerColor: "#34D399", textColor: "text-emerald-500" },
+  "생활/건강": { icon: Home, markerColor: "#60A5FA", textColor: "text-blue-500" },
+  "문화/여가": { icon: Theater, markerColor: "#C084FC", textColor: "text-purple-500" },
+  교육: { icon: GraduationCap, markerColor: "#FACC15", textColor: "text-yellow-500" },
+  "여행/교통": { icon: Plane, markerColor: "#5EEAD4", textColor: "text-teal-500" },
+  식당: { icon: Utensils, markerColor: "#FB7185", textColor: "text-rose-500" },
+  카페: { icon: Coffee, markerColor: "#FB923C", textColor: "text-orange-400" },
+  우리동네멤버십: { icon: Users, markerColor: "#1E293B", textColor: "text-slate-700" },
+  VIP콕: { icon: Star, markerColor: "#9869f1", textColor: "text-purple-600" },
+  계절: { icon: Calendar, markerColor: "#22c55e", textColor: "text-green-500" },
+  default: { icon: Heart, markerColor: "#FB7185", textColor: "text-gray-500" },
+};
+
+// 카테고리별 아이콘 스타일 정보 반환 (카테고리바용)
+export const getCategoryIconStyle = (categoryName: string): CategoryIconStyle => {
+  const meta = CATEGORY_META[categoryName as CategoryMarkerKey] || CATEGORY_META["default"];
+  return {
+    icon: () => <meta.icon size={16} />,
+    color: meta.textColor,
+    markerColor: meta.markerColor,
+  };
+};
+
+// 카테고리별 아이콘 반환 (카테고리바용)
+export const getCategoryIcon = (categoryName: string): ReactNode => {
+  const iconStyle = getCategoryIconStyle(categoryName);
+  return iconStyle.icon();
+};
+
+// 마커용 스타일 객체
+export const CATEGORY_MARKER_STYLE: Record<CategoryMarkerKey, CategoryMarkerStyle> =
+  Object.fromEntries(
+    Object.entries(CATEGORY_META).map(([key, meta]) => [
+      key,
+      {
+        color: meta.markerColor,
+        icon: () => <meta.icon size={18} color="white" />,
+      },
+    ])
+  ) as Record<CategoryMarkerKey, CategoryMarkerStyle>;
+
+// HTML 문자열로 변환 (마커용)
+export const getCategoryIconHTML = (iconComponent: () => ReactNode) => {
+  const icon = iconComponent();
+  return renderToStaticMarkup(icon as React.ReactElement);
 };
