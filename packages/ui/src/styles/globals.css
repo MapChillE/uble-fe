@@ -34,8 +34,8 @@
 /* Android Chrome, Firefox */
 @media screen and (max-width: 768px) {
   .h-screen {
-    height: 100dvh; /* dynamic viewport height for modern browsers */
     height: 100vh;
+    height: 100dvh; /* dynamic viewport height for modern browsers */
   }
 }
 
