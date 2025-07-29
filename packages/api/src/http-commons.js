@@ -30,7 +30,10 @@ function processQueue(error, token = null) {
 function handleAuthError() {
   localStorage.removeItem("accessToken");
   document.cookie = "refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-  window.location.replace("/");
+  toast.error("로그인 세션이 만료되었습니다. 다시 로그인해주세요.");
+  setTimeout(() => {
+    window.location.replace("/");
+  }, 1500);
 }
 
 /** 토큰 재발급 함수 */
@@ -53,7 +56,6 @@ async function reissueAndRetry(originalRequest) {
   } catch (err) {
     processQueue(err, null); // 큐의 요청들 reject
     handleAuthError(); // 토큰 제거
-    toast.error("로그인 세션이 만료되었습니다. 다시 로그인해주세요.");
     return Promise.reject(err);
   } finally {
     isRefreshing = false;
