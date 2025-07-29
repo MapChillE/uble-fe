@@ -11,21 +11,13 @@ import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 
 const BenefitConfirmModal = () => {
-  const { isOpen, close, storeId, isVIPcock, vipOnly, resetInfo, onSuccess } =
-    useBenefitConfirmModalStore();
+  const { isOpen, close, storeId, isVIPcock, vipOnly, onSuccess } = useBenefitConfirmModalStore();
   const [isLoading, setIsLoading] = useState(false);
   const queryClient = useQueryClient();
 
   const handleClose = () => {
     close();
   };
-
-  useEffect(() => {
-    if (!isOpen) {
-      const timer = setTimeout(() => resetInfo(), 300);
-      return () => clearTimeout(timer);
-    }
-  }, [isOpen]);
 
   const invalidate = () => {
     queryClient.invalidateQueries({

@@ -9,7 +9,6 @@ interface BenefitConfirmModalState {
   open: () => void;
   close: () => void;
   setInfo: (storeId: number, isVIPcock: boolean, vipOnly: boolean) => void;
-  resetInfo: () => void;
   setOnSuccess: (cb: (() => void) | null) => void;
 }
 
@@ -22,7 +21,6 @@ const useBenefitConfirmModalStore = create<BenefitConfirmModalState>((set) => ({
   open: () => set({ isOpen: true }),
   close: () => set({ isOpen: false }),
   setInfo: (storeId, isVIPcock, vipOnly) => set({ storeId, isVIPcock, vipOnly }),
-  resetInfo: () => set({ storeId: null, isVIPcock: false, onSuccess: null }),
   setOnSuccess: (cb) => set({ onSuccess: cb }),
 }));
 
