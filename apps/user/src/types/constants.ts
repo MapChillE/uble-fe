@@ -13,16 +13,17 @@ export const GRADE_COLORS = {
 export const TOTAL_STEPS = 5;
 
 /** 개발 단계에서 사용할 기본 카테고리 목록 */
-export const CATEGORIES = [
-  { categoryId: 1, categoryName: "액티비티" },
-  { categoryId: 2, categoryName: "뷰티/건강" },
-  { categoryId: 3, categoryName: "쇼핑" },
-  { categoryId: 4, categoryName: "생활/편의" },
-  { categoryId: 5, categoryName: "푸드" },
-  { categoryId: 6, categoryName: "문화여가" },
-  { categoryId: 7, categoryName: "교육" },
-  { categoryId: 8, categoryName: "여행/교통" },
-];
+export const CATEGORIES = {
+  1: "액티비티",
+  2: "뷰티/건강",
+  3: "쇼핑",
+  4: "생활/편의",
+  5: "식당",
+  6: "문화/여가",
+  7: "교육",
+  8: "여행/교통",
+  9: "카페",
+} as const;
 
 // export type Category = (typeof CATEGORIES)[number];
 
