@@ -62,7 +62,7 @@ const CATEGORY_META: Record<
   우리동네멤버십: { icon: Users, markerColor: "#1E293B", textColor: "text-slate-700" },
   VIP콕: { icon: Star, markerColor: "#9869f1", textColor: "text-purple-600" },
   계절: { icon: Calendar, markerColor: "#22c55e", textColor: "text-green-500" },
-  default: { icon: Heart, markerColor: "#FB7185", textColor: "text-gray-500" },
+  default: { icon: Star, markerColor: "#FACC15", textColor: "text-yellow-500" },
 };
 
 // 카테고리별 아이콘 스타일 정보 반환 (카테고리바용)
@@ -97,4 +97,55 @@ export const CATEGORY_MARKER_STYLE: Record<CategoryMarkerKey, CategoryMarkerStyl
 export const getCategoryIconHTML = (iconComponent: () => ReactNode) => {
   const icon = iconComponent();
   return renderToStaticMarkup(icon as React.ReactElement);
+};
+
+// 줌 레벨에 따른 마커 스타일 반환
+export const getCategoryIconByZoom = (category?: string, name?: string, zoom: number = 15) => {
+  if (!window.naver?.maps) return null;
+
+  const key: CategoryMarkerKey = (category as CategoryMarkerKey) ?? "default";
+  const style = CATEGORY_MARKER_STYLE[key] ?? CATEGORY_MARKER_STYLE["default"];
+  const { color, icon } = style;
+  const svgString = getCategoryIconHTML(icon);
+
+  // 줌 레벨에 따른 마커 크기와 텍스트 표시 여부 결정
+  const markerSize = 28;
+  const fontSize = 11;
+  let showText = true;
+
+  // if (zoom <= 12) {
+  //   // 줌 레벨이 작을 때: 작은 마커, 텍스트 숨김
+  //   markerSize = 20;
+  // } else
+  if (zoom <= 14) {
+    // 중간 줌 레벨: 중간 크기 마커, 작은 텍스트
+
+    showText = false;
+  } else {
+    // 큰 줌 레벨: 기본 크기 마커, 기본 텍스트
+  }
+
+  const iconSize = Math.max(16, markerSize - 8); // 아이콘 크기는 마커 크기에 비례
+
+  return {
+    content: `
+        <div style="display:flex;flex-direction:column;align-items:center;">
+          <div style="background:${color};width:${markerSize}px;height:${markerSize}px;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+            ${svgString.replace(/size=\{18\}/g, `size={${iconSize}}`)}
+          </div>
+          ${
+            showText
+              ? `
+          <div style="margin-top:4px;font-size:${fontSize}px;font-weight:bold;color:#333;white-space:nowrap;
+          text-shadow:-1px -1px 0 white,1px -1px 0 white,-1px 1px 0 white,1px 1px 0 white,0px 0px 2px white;">
+          ${name ?? ""}
+          </div>
+          `
+              : ""
+          }
+        </div>
+      `,
+    size: new window.naver.maps.Size(markerSize, markerSize + 20), // (showText ? 20 : 0)),
+    anchor: new window.naver.maps.Point(markerSize / 2, markerSize + 20),
+  };
 };

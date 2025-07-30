@@ -56,7 +56,7 @@ export async function fetchStorePins(
           id: -1,
           coords: center,
           name: "현위치",
-          type: "current",
+          type: "selected",
         },
         ...storePins,
       ];
