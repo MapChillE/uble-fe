@@ -178,7 +178,7 @@ const MapContainer = () => {
       </div>
 
       <MyPlaceDrawer trigger={<MyPlaceTriggerBtn />} />
-      <CurrentPlaceBtn />
+      {/* <CurrentPlaceBtn /> */}
       <StoreDetailDrawer />
       <BenefitConfirmModal />
     </div>
