@@ -89,13 +89,13 @@ export default function MapWithBaseLocation({
       }
     },
     [
-      baseLocation,
-      selectedCategory,
+      selectedCategory.categoryId,
       searchStoreId,
       searchLocation,
       searchType,
       searchId,
       state.zoom,
+      baseLocation,
     ]
   );
 
@@ -131,8 +131,8 @@ export default function MapWithBaseLocation({
       const newBounds = createBoundsFromCenterAndZoom(baseLocation, DEFAULT_ZOOM_LEVEL);
       if (newBounds) {
         dispatch({ type: "SET_BOUNDS", payload: newBounds });
-        // fetchPins(baseLocation, newBounds, selectedCategory.categoryId);
-        // setShowSearchBtn(false);
+        fetchPins(baseLocation, newBounds, selectedCategory.categoryId);
+        setShowSearchBtn(false);
       }
     }
   }, [baseLocation]);
