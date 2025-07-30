@@ -1,7 +1,7 @@
 "use client";
 
 import { BarChart3, MessageSquare, Home, X } from "lucide-react";
-import { cn } from "@/utils/cn";
+import { cn } from "@workspace/ui/lib/utils";
 import { Button } from "@workspace/ui/components/button";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
