@@ -38,7 +38,8 @@ function getCategoryIcon(category?: string, name?: string) {
   const key: CategoryMarkerKey = (category as CategoryMarkerKey) ?? "default";
   const style = CATEGORY_MARKER_STYLE[key] ?? CATEGORY_MARKER_STYLE["default"];
   const { color, icon } = style;
-  const svgString = getCategoryIconHTML(icon);
+  const iconSize = 16;
+  const svgString = getCategoryIconHTML(icon, iconSize);
 
   return {
     content: `
