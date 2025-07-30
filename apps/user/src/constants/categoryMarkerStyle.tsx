@@ -36,7 +36,7 @@ export type CategoryMarkerKey =
 
 export interface CategoryMarkerStyle {
   color: string;
-  icon: () => ReactNode;
+  icon: (size?: number) => ReactNode;
 }
 
 export interface CategoryIconStyle {
@@ -88,14 +88,14 @@ export const CATEGORY_MARKER_STYLE: Record<CategoryMarkerKey, CategoryMarkerStyl
       key,
       {
         color: meta.markerColor,
-        icon: () => <meta.icon size={18} color="white" />,
+        icon: (size: number = 18) => <meta.icon size={size} color="white" />,
       },
     ])
   ) as Record<CategoryMarkerKey, CategoryMarkerStyle>;
 
 // HTML 문자열로 변환 (마커용)
-export const getCategoryIconHTML = (iconComponent: () => ReactNode) => {
-  const icon = iconComponent();
+export const getCategoryIconHTML = (iconComponent: (size?: number) => ReactNode, size?: number) => {
+  const icon = iconComponent(size);
   return renderToStaticMarkup(icon as React.ReactElement);
 };
 
@@ -106,8 +106,9 @@ export const getCategoryIconByZoom = (category?: string, name?: string, zoom: nu
   const key: CategoryMarkerKey = (category as CategoryMarkerKey) ?? "default";
   const style = CATEGORY_MARKER_STYLE[key] ?? CATEGORY_MARKER_STYLE["default"];
   const { color, icon } = style;
-  const svgString = getCategoryIconHTML(icon);
-
+  const iconSize = 16; // 마커 크기에 맞는 아이콘 크기
+  const svgString = getCategoryIconHTML(icon, iconSize);
+  
   // 줌 레벨에 따른 마커 크기와 텍스트 표시 여부 결정
   const markerSize = 28;
   const fontSize = 11;
@@ -117,7 +118,7 @@ export const getCategoryIconByZoom = (category?: string, name?: string, zoom: nu
   //   // 줌 레벨이 작을 때: 작은 마커, 텍스트 숨김
   //   markerSize = 20;
   // } else
-  if (zoom <= 14) {
+  if (zoom <= 15) {
     // 중간 줌 레벨: 중간 크기 마커, 작은 텍스트
 
     showText = false;
@@ -125,27 +126,57 @@ export const getCategoryIconByZoom = (category?: string, name?: string, zoom: nu
     // 큰 줌 레벨: 기본 크기 마커, 기본 텍스트
   }
 
-  const iconSize = Math.max(16, markerSize - 8); // 아이콘 크기는 마커 크기에 비례
-
   return {
     content: `
-        <div style="display:flex;flex-direction:column;align-items:center;">
-          <div style="background:${color};width:${markerSize}px;height:${markerSize}px;border-radius:50%;display:flex;align-items:center;justify-content:center;">
-            ${svgString.replace(/size=\{18\}/g, `size={${iconSize}}`)}
-          </div>
-          ${
-            showText
-              ? `
-          <div style="margin-top:4px;font-size:${fontSize}px;font-weight:bold;color:#333;white-space:nowrap;
-          text-shadow:-1px -1px 0 white,1px -1px 0 white,-1px 1px 0 white,1px 1px 0 white,0px 0px 2px white;">
-          ${name ?? ""}
-          </div>
-          `
-              : ""
-          }
+    <div style="
+      position: relative;
+      width: ${markerSize}px;
+      height: ${markerSize}px;
+    ">
+      <!-- 마커 원 -->
+      <div style="
+        width: ${markerSize}px;
+        height: ${markerSize}px;
+        border-radius: 50%;
+        background: ${color};
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 0;
+        left: 0;
+      ">
+        ${svgString}
+      </div>
+
+      ${
+        showText && name
+          ? `
+        <!-- 텍스트는 마커 아래로 -->
+        <div style="
+          position: absolute;
+          top: ${markerSize + 4}px;
+          left: 50%;
+          transform: translateX(-50%);
+          font-size: ${fontSize}px;
+          font-weight: bold;
+          color: #333;
+          white-space: nowrap;
+          text-shadow:
+            -1px -1px 0 white,
+             1px -1px 0 white,
+            -1px  1px 0 white,
+             1px  1px 0 white,
+             0px  0px 2px white;
+        ">
+          ${name}
         </div>
-      `,
-    size: new window.naver.maps.Size(markerSize, markerSize + 20), // (showText ? 20 : 0)),
-    anchor: new window.naver.maps.Point(markerSize / 2, markerSize + 20),
+        `
+          : ""
+      }
+    </div>
+  `,
+    size: new window.naver.maps.Size(markerSize, markerSize + (showText ? 20 : 0)),
+    anchor: new window.naver.maps.Point(markerSize / 2, markerSize / 2),
   };
 };

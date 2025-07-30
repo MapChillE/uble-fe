@@ -18,7 +18,7 @@ export default function MapLayout({ children }: { children: React.ReactNode }) {
 
       <div
         style={{
-          height: "calc(100vh - 60px - 72px)",
+          height: "calc(100dvh - 55px - 72px)",
           overflow: "hidden",
         }}
       >

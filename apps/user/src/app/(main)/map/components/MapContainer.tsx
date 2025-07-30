@@ -157,7 +157,7 @@ const MapContainer = () => {
   }
 
   return (
-    <div className="relative h-[100dvh] w-full">
+    <div className="relative h-[100dvh] w-full overflow-hidden">
       <MapWithBaseLocation
         selectedCategory={selectedCategory}
         onPinClick={handlePinClick}
@@ -178,7 +178,7 @@ const MapContainer = () => {
       </div>
 
       <MyPlaceDrawer trigger={<MyPlaceTriggerBtn />} />
-      <CurrentPlaceBtn />
+      {/* <CurrentPlaceBtn /> */}
       <StoreDetailDrawer />
       <BenefitConfirmModal />
     </div>

@@ -208,9 +208,12 @@ export default function MapWithBaseLocation({
     () =>
       state.pins.map((pin) => ({
         ...pin,
-        onClick: () => {
-          onPinClick(pin);
-        },
+        onClick:
+          pin.type === "current" || pin.type === "selected"
+            ? () => undefined
+            : () => {
+                onPinClick(pin);
+              },
       })),
     [state.pins, onPinClick]
   );
