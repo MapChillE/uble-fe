@@ -41,7 +41,7 @@ const StoreCardHeader = ({
       {/* 설명 + 길찾기 버튼 한 줄 정렬 */}
       <div className="flex w-full items-center justify-between">
         <p className="break-words text-sm text-gray-600">{data.description}</p>
-        <Button
+        {/* <Button
           variant="outline"
           size="sm"
           onClick={onRouteClick}
@@ -49,7 +49,7 @@ const StoreCardHeader = ({
         >
           <MapPin className="mr-1 h-3 w-3" />
           길찾기
-        </Button>
+        </Button> */}
       </div>
     </div>
   </div>
