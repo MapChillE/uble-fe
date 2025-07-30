@@ -4,6 +4,7 @@ import { useDebouncedCallback } from "use-debounce";
 import { useEffect, useState } from "react";
 import AutoCompleteInput from "@/components/common/AutoCompleteInput";
 import { fetchBrandSuggestions } from "@/service/brandSearch";
+import { fetchSearchLog } from "@/service/mapSearch";
 
 const SearchSection = () => {
   const searchParams = useSearchParams();
@@ -11,6 +12,7 @@ const SearchSection = () => {
   const pathname = usePathname();
   const q = searchParams.get("q") || "";
   const [searchQuery, setSearchQuery] = useState(q);
+
   const [autoComplete, setAutoComplete] = useState<{ type: "CATEGORY" | "BRAND"; value: string }[]>(
     []
   );
@@ -41,14 +43,38 @@ const SearchSection = () => {
     debouncedFetchSuggestions(value);
   };
 
-  // 검색 실행 및 URL 쿼리 동기화
-  const handleSearch = (query: string) => {
+  // 자동완성 결과 클릭 시 검색
+  const handleAutoSelect = async (query: string) => {
+    // 자동완성 클릭 로그 전송 (사용자가 입력한 검색어 사용)
+    await fetchSearchLog({
+      keyword: searchQuery,
+      searchType: "CLICK",
+      isResultExists: true,
+    });
+
+    setSearchQuery(query);
+
+    const params = new URLSearchParams(searchParams);
+    if (query) {
+      params.set("q", query);
+      params.set("s", "auto");
+    } else {
+      params.delete("q");
+      params.delete("s");
+    }
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
+  // 엔터 키로 검색
+  const handleEnterSearch = (query: string) => {
     setSearchQuery(query);
     const params = new URLSearchParams(searchParams);
     if (query) {
       params.set("q", query);
+      params.set("s", "manual");
     } else {
       params.delete("q");
+      params.delete("s");
     }
     router.push(`${pathname}?${params.toString()}`);
   };
@@ -59,7 +85,8 @@ const SearchSection = () => {
         searchQuery={searchQuery}
         onChange={handleChange}
         autoComplete={autoComplete}
-        onAutoSelect={handleSearch}
+        onAutoSelect={handleAutoSelect}
+        onEnterSearch={handleEnterSearch}
       />
     </section>
   );

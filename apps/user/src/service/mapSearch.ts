@@ -11,3 +11,12 @@ export async function fetchMapSearch(params: MapSearchParams): Promise<MapSugges
   const { data } = await api.get<MapSuggestionResponse>("/api/stores/suggestions", { params });
   return data.data;
 }
+
+interface SearchLogParams {
+  searchType: "CLICK" | "ENTER";
+  keyword: string;
+  isResultExists: boolean;
+}
+export async function fetchSearchLog(params: SearchLogParams) {
+  await api.post("/search/log", params);
+}
