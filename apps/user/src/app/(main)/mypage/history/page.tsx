@@ -2,7 +2,7 @@ import BenefitList from "./components/BenefitList";
 
 const page = () => {
   return (
-    <div className="scrollbar-hide bg-gray-50">
+    <div className="scrollbar-hide min-h-screen bg-gray-50">
       <BenefitList />
     </div>
   );

@@ -106,8 +106,7 @@ export const getCategoryIconByZoom = (category?: string, name?: string, zoom: nu
   const key: CategoryMarkerKey = (category as CategoryMarkerKey) ?? "default";
   const style = CATEGORY_MARKER_STYLE[key] ?? CATEGORY_MARKER_STYLE["default"];
   const { color, icon } = style;
-  const iconSize = 16; // 마커 크기에 맞는 아이콘 크기
-  const svgString = getCategoryIconHTML(icon, iconSize);
+  const svgString = getCategoryIconHTML(icon);
 
   // 줌 레벨에 따른 마커 크기와 텍스트 표시 여부 결정
   const markerSize = 28;
