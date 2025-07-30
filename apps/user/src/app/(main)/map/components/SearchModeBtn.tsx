@@ -8,7 +8,7 @@ interface SearchModeBtnProps {
 
 const SearchModeBtn = ({ isSearchMode, onExit, onSearchHere }: SearchModeBtnProps) => {
   return (
-    <div className="absolute bottom-5 left-1/2 z-20 -translate-x-1/2 pb-10">
+    <div className="bottom-25 absolute left-1/2 z-20 -translate-x-1/2 pb-10">
       <Button
         className="rounded-full"
         variant="filter_select"
