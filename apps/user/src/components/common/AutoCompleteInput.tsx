@@ -6,6 +6,7 @@ interface AutoCompleteInputProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   autoComplete: { type: "CATEGORY" | "BRAND"; value: string }[];
   onAutoSelect: (item: string) => void;
+  onEnterSearch: (query: string) => void;
 }
 
 export default function AutoCompleteInput({
@@ -13,6 +14,7 @@ export default function AutoCompleteInput({
   onChange,
   autoComplete,
   onAutoSelect,
+  onEnterSearch,
 }: AutoCompleteInputProps) {
   const [showAuto, setShowAuto] = useState(false);
   const [highlightIndex, setHighlightIndex] = useState<number | null>(null);
@@ -40,7 +42,7 @@ export default function AutoCompleteInput({
           setShowAuto(false);
         }
       } else {
-        onAutoSelect(searchQuery);
+        onEnterSearch(searchQuery);
         setShowAuto(false);
       }
       setHighlightIndex(null);
