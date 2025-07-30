@@ -4,6 +4,7 @@ import { useDebouncedCallback } from "use-debounce";
 import { useEffect, useState } from "react";
 import AutoCompleteInput from "@/components/common/AutoCompleteInput";
 import { fetchBrandSuggestions } from "@/service/brandSearch";
+import { fetchSearchLog } from "@/service/mapSearch";
 
 const SearchSection = () => {
   const searchParams = useSearchParams();
@@ -43,12 +44,20 @@ const SearchSection = () => {
   };
 
   // 자동완성 결과 클릭 시 검색
-  const handleAutoSelect = (query: string) => {
+  const handleAutoSelect = async (query: string) => {
+    // 자동완성 클릭 로그 전송 (사용자가 입력한 검색어 사용)
+    await fetchSearchLog({
+      keyword: searchQuery,
+      searchType: "CLICK",
+      isResultExists: true,
+    });
+
     setSearchQuery(query);
+
     const params = new URLSearchParams(searchParams);
     if (query) {
       params.set("q", query);
-      params.set("s", "auto"); // 짧은 파라미터명 사용
+      params.set("s", "auto");
     } else {
       params.delete("q");
       params.delete("s");

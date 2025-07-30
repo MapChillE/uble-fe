@@ -4,12 +4,11 @@ import { toast } from "sonner";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
 import { fetchBrandSearch } from "@/service/brandSearch";
-import { fetchSearchLog } from "@/service/mapSearch";
 import DynamicCard from "@/components/ui/DynamicCard";
 import useInfiniteScroll from "@/hooks/useInfiniteScroll";
 import { BrandContent } from "@/types/brand";
 import { BrandSearchResult } from "@/types/search";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 const PAGE_SIZE = 12;
 
@@ -18,7 +17,6 @@ const SearchResults = () => {
   const q = searchParams.get("q") || "";
   const s = searchParams.get("s") || "";
   const router = useRouter();
-  const [hasLogged, setHasLogged] = useState(false);
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError, error } =
     useInfiniteQuery<BrandSearchResult, Error>({
@@ -37,32 +35,6 @@ const SearchResults = () => {
       toast.error("검색 결과를 불러오지 못했습니다.");
     }
   }, [isError, error]);
-
-  // 검색 쿼리 변경 시 로그 상태 리셋
-  useEffect(() => {
-    setHasLogged(false);
-  }, [q]);
-
-  // 자동완성 클릭 결과만 로그 전송 (엔터 검색은 로그 전송하지 않음)
-  useEffect(() => {
-    if (data && s === "auto" && !hasLogged && !isLoading) {
-      const hasResults = data.pages.some((page) => page.brandList.length > 0);
-      const searchKeyword = searchParams.get("q");
-
-      if (searchKeyword) {
-        try {
-          fetchSearchLog({
-            keyword: searchKeyword,
-            searchType: "CLICK",
-            isResultExists: hasResults,
-          });
-          setHasLogged(true);
-        } catch (error) {
-          console.warn("검색 결과 로그 전송 실패:", error);
-        }
-      }
-    }
-  }, [data, s, searchParams, hasLogged, isLoading]);
 
   const loadMoreRef = useInfiniteScroll({
     hasNextPage: !!hasNextPage,
