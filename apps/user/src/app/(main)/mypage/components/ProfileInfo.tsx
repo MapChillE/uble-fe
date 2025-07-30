@@ -31,7 +31,7 @@ const ProfileInfo = () => {
   return (
     <div className="flex items-center justify-between">
       <div className="flex items-center space-x-4">
-        <img src="profileImg.png" className="h-16 w-16 rounded-full" alt="profile" />
+        <img src="profile.png" className="h-16 w-16 rounded-full" alt="profile" />
         <div>
           <div className="mb-1 flex items-center space-x-2">
             <h2 className="text-lg font-semibold text-gray-900">{nickname}</h2>
