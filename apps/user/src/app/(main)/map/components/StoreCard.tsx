@@ -109,7 +109,11 @@ export const DetailCard = ({
                 <div className="space-y-2 pt-4">
                   <h3 className="text-lg font-semibold">멤버십 바코드</h3>
                 </div>
-                <BarcodeContainer storeId={data.storeId} isVIPcock={benefit.type === "VIP"} />
+                <BarcodeContainer
+                  storeId={data.storeId}
+                  isVIPcock={benefit.type === "VIP"}
+                  vipOnly={data.benefitList[0]?.minRank === "VIP"}
+                />
               </Fragment>
             )}
           </div>
