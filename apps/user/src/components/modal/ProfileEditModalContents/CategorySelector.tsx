@@ -27,10 +27,11 @@ const CategorySelector = ({ categoryIds, onChange }: CategorySelectorProps) => {
 
           return (
             <Button
-              key={key}
+              key={`${key}-${isSelected}`}
               onClick={() => toggleCategory(key)}
               disabled={isDisabled}
               variant={isSelected ? "onb_selected" : "onb_unselected"}
+              className={isSelected ? "" : "hover:bg-gray-100 hover:text-gray-600"}
             >
               <span className="text-sm font-semibold">
                 {CATEGORIES[key as keyof typeof CATEGORIES]}

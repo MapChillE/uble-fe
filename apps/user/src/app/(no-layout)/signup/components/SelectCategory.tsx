@@ -38,10 +38,11 @@ const SelectCategory = ({ info, setInfo }: StepProps) => {
 
             return (
               <Button
-                key={key}
+                key={`${key}-${isSelected}`}
                 onClick={() => toggleInterest(key)}
                 disabled={isDisabled}
                 variant={isSelected ? "onb_selected" : "onb_unselected"}
+                className={isSelected ? "" : "hover:bg-gray-100 hover:text-gray-600"}
               >
                 <span className="text-sm font-semibold">
                   {CATEGORIES[key as keyof typeof CATEGORIES]}
