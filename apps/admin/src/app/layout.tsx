@@ -1,5 +1,4 @@
-import { Providers } from "@/components/providers";
-import "../../../../packages/ui/src/styles/globals.css";
+import "@workspace/ui/styles/globals.css";
 
 export default function RootLayout({
   children,
@@ -7,10 +6,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body>
-        <Providers>{children}</Providers>
-      </body>
+    <html lang="ko" suppressHydrationWarning>
+      <head></head>
+      <body>{children}</body>
     </html>
   );
 }

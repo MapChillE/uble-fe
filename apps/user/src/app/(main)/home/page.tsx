@@ -9,8 +9,8 @@ const HomePage = () => {
       <section>
         <div className="sticky top-12 z-10 bg-white">
           <SearchSection />
-          <SearchResults />
         </div>
+        <SearchResults />
         <HomeContent />
       </section>
     </Suspense>

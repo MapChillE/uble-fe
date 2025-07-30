@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
@@ -10,106 +10,113 @@ import { Button } from "@workspace/ui/components/button";
 import SearchInput from "@/components/common/SearchInput";
 import MapSearchResult from "@/app/(main)/map/components/MapSearchResult";
 import { useLocationStore } from "@/store/useLocationStore";
-import { fetchMapSearch } from "@/service/mapSearch";
+import { fetchMapSearch, fetchSearchLog } from "@/service/mapSearch";
 import { DEFAULT_LOCATION, DEFAULT_ZOOM_LEVEL } from "@/types/constants";
 import { MapSuggestion } from "@/types/search";
 
-const SearchContainer = () => {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState<MapSuggestion[]>([]);
-  const [isSearching, setIsSearching] = useState(false);
+export default function SearchContainer() {
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState<MapSuggestion[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
-  const currentLocation = useLocationStore((s) => s.currentLocation);
+  const enterFiredRef = useRef(false);
 
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, []);
+  const router = useRouter();
+  const pathname = usePathname();
+  const urlParams = useSearchParams();
+  const currentLoc = useLocationStore((s) => s.currentLocation);
 
-  const debouncedSearch = useDebouncedCallback((query: string) => {
-    if (query.trim()) {
-      handleSearch(query);
-    } else {
-      setSearchResults([]);
-    }
-  }, 200);
-
-  useEffect(() => {
-    debouncedSearch(searchQuery);
-  }, [searchQuery]);
-
-  const handleBack = () => {
-    router.back();
-  };
-
-  const handleSearch = async (query: string) => {
-    if (!query.trim()) return;
-
-    setIsSearching(true);
-    setSearchQuery(query);
-
+  /** 검색 & (필요 시) 로그 */
+  const runSearch = async (keyword: string, via: "ENTER" | "AUTO") => {
+    setLoading(true);
     try {
-      const results = await fetchMapSearch({
-        keyword: query,
-        latitude: currentLocation?.[1] ?? DEFAULT_LOCATION[1],
-        longitude: currentLocation?.[0] ?? DEFAULT_LOCATION[0],
+      const res = await fetchMapSearch({
+        keyword,
+        latitude: currentLoc?.[1] ?? DEFAULT_LOCATION[1],
+        longitude: currentLoc?.[0] ?? DEFAULT_LOCATION[0],
       });
+      setResults(res.suggestionList);
 
-      setSearchResults(results.suggestionList);
-    } catch (error) {
-      console.error("검색 중 오류:", error);
+      if (via === "ENTER") {
+        await fetchSearchLog({
+          keyword,
+          searchType: "ENTER",
+          isResultExists: res.suggestionList.length > 0,
+        });
+      }
+    } catch (err) {
+      console.error(err);
       toast.error("검색 중 오류가 발생했습니다.");
     } finally {
-      setIsSearching(false);
+      setLoading(false);
     }
   };
 
-  const handleResultClick = async (result: MapSuggestion) => {
-    if (!result.latitude || !result.longitude) {
+  /** 입력 자동완성 (디바운스) */
+  const debouncedAutoSearch = useDebouncedCallback((v: string) => {
+    if (enterFiredRef.current) {
+      // ENTER 직후 첫 AUTO 무시
+      enterFiredRef.current = false;
+      return;
+    }
+    v.trim() ? runSearch(v, "AUTO") : setResults([]);
+  }, 200);
+
+  const handleBack = () => router.back();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const v = e.target.value;
+    setQuery(v);
+    debouncedAutoSearch(v);
+
+    /* 주소창 파라미터 갱신 */
+    const p = new URLSearchParams(urlParams);
+    v ? p.set("q", v) : p.delete("q");
+    router.replace(`${pathname}?${p.toString()}`);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if ((e.nativeEvent as any).isComposing) return; // IME 조합 중 무시
+    if (e.key !== "Enter") return;
+    if (enterFiredRef.current) return; // 중복 차단
+
+    e.preventDefault();
+    const v = e.currentTarget.value.trim();
+    if (!v) return;
+
+    enterFiredRef.current = true;
+    debouncedAutoSearch.cancel();
+    runSearch(v, "ENTER");
+    setTimeout(() => {
+      enterFiredRef.current = false;
+    }, 200); // 200 ms 후 풀기
+  };
+
+  const handleResultClick = async (item: MapSuggestion) => {
+    if (!item.latitude || !item.longitude) {
       toast.error("위치 정보를 찾을 수 없습니다.");
       return;
     }
 
-    const params = new URLSearchParams({
-      lat: result.latitude.toString(),
-      lng: result.longitude.toString(),
-      searchQuery: searchQuery,
+    /* 클릭 로그 */
+    await fetchSearchLog({ keyword: query, searchType: "CLICK", isResultExists: true });
+
+    /* 파라미터 조립 후 라우팅 */
+    const p = new URLSearchParams({
+      lat: item.latitude.toString(),
+      lng: item.longitude.toString(),
+      searchQuery: query,
     });
 
-    if (result.type === "STORE") {
-      params.set("storeId", result.id.toString());
-      router.push(`/map?${params.toString()}`);
-    } else if (result.type === "CATEGORY" || result.type === "BRAND") {
-      params.set("zoom", DEFAULT_ZOOM_LEVEL.toString());
-      params.set("type", result.type);
-      params.set("id", result.id.toString());
-      router.push(`/map?${params.toString()}`);
-    }
-  };
-
-  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setSearchQuery(value);
-
-    const params = new URLSearchParams(searchParams);
-    if (value) {
-      params.set("q", value);
+    if (item.type === "STORE") {
+      p.set("storeId", item.id.toString());
     } else {
-      params.delete("q");
+      p.set("zoom", DEFAULT_ZOOM_LEVEL.toString());
+      p.set("type", item.type);
+      p.set("id", item.id.toString());
     }
-    router.push(`${pathname}?${params.toString()}`);
-  };
-
-  const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      handleSearch(searchQuery);
-    }
+    router.push(`/map?${p.toString()}`);
   };
 
   return (
@@ -123,9 +130,9 @@ const SearchContainer = () => {
         <div className="flex-1">
           <SearchInput
             ref={inputRef}
-            searchQuery={searchQuery}
-            onChange={handleSearchInputChange}
-            onKeyDown={handleSearchKeyDown}
+            searchQuery={query}
+            onChange={handleChange}
+            onKeyDown={handleKeyDown}
             placeholder="검색어를 입력하세요"
           />
         </div>
@@ -133,21 +140,16 @@ const SearchContainer = () => {
 
       {/* 검색 결과 */}
       <div className="flex-1 overflow-y-auto">
-        {isSearching ? (
-          <div className="flex h-full items-center justify-center"></div>
-        ) : searchResults.length > 0 ? (
-          <MapSearchResult
-            searchResults={searchResults}
-            onResultClick={(result) => handleResultClick(result as MapSuggestion)}
-          />
+        {loading ? (
+          <div className="flex h-full items-center justify-center" />
+        ) : results.length ? (
+          <MapSearchResult searchResults={results} onResultClick={handleResultClick} />
         ) : (
-          <div className="flex h-full items-center justify-center">
-            <div className="text-gray-500">검색 결과가 없습니다.</div>
+          <div className="flex h-full items-center justify-center text-gray-500">
+            검색 결과가 없습니다.
           </div>
         )}
       </div>
     </div>
   );
-};
-
-export default SearchContainer;
+}
