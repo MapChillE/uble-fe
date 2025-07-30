@@ -57,7 +57,7 @@ const LoginPage = () => {
         </Card>
 
         <div className="mt-6 text-center">
-          <p className="text-sm text-gray-500">© 2024 Uble Admin. All rights reserved.</p>
+          <p className="text-sm text-gray-500">© 2025 Uble Admin. All rights reserved.</p>
         </div>
       </div>
     </div>
