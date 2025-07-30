@@ -4,7 +4,7 @@ import SearchInput from "./SearchInput";
 interface AutoCompleteInputProps {
   searchQuery: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  autoComplete: string[];
+  autoComplete: { type: "CATEGORY" | "BRAND"; value: string }[];
   onAutoSelect: (item: string) => void;
 }
 
@@ -36,7 +36,7 @@ export default function AutoCompleteInput({
       if (highlightIndex !== null) {
         const selected = autoComplete[highlightIndex];
         if (selected) {
-          onAutoSelect(selected);
+          onAutoSelect(selected.value);
           setShowAuto(false);
         }
       } else {
@@ -82,9 +82,14 @@ export default function AutoCompleteInput({
               <li
                 key={idx}
                 className={`cursor-pointer px-4 py-2 hover:bg-gray-100 ${highlightIndex === idx ? "bg-gray-200" : ""}`}
-                onMouseDown={() => handleSelect(item)}
+                onMouseDown={() => handleSelect(item.value)}
               >
-                {item}
+                <span
+                  className={`mr-2 inline-block rounded px-2 py-0.5 text-xs ${item.type === "CATEGORY" ? "bg-green-100 text-green-700" : "bg-purple-100 text-purple-700"}`}
+                >
+                  {item.type === "CATEGORY" ? "카테고리" : "브랜드"}
+                </span>
+                {item.value}
               </li>
             ))}
           </ul>

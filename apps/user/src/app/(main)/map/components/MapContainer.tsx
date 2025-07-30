@@ -22,6 +22,7 @@ import { Pin } from "@/app/(main)/map/components/NaverMap";
 import { toast } from "sonner";
 import useUserStore from "@/store/useUserStore";
 import { Coordinates } from "@/types/map";
+import CurrentPlaceBtn from "./CurrentPlaceBtn";
 
 /**
  * 지도 컨테이너 컴포넌트 (내부 로직)
@@ -177,6 +178,7 @@ const MapContainer = () => {
       </div>
 
       <MyPlaceDrawer trigger={<MyPlaceTriggerBtn />} />
+      <CurrentPlaceBtn />
       <StoreDetailDrawer />
       <BenefitConfirmModal />
     </div>

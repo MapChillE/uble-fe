@@ -34,7 +34,7 @@ export function DatePickerPopover({
         </button>
       </PopoverTrigger>
       <PopoverContent
-        className="w-auto overflow-hidden p-0"
+        className="z-150 w-auto overflow-hidden p-0"
         align="end"
         alignOffset={-8}
         sideOffset={10}

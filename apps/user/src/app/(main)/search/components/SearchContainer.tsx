@@ -134,9 +134,7 @@ const SearchContainer = () => {
       {/* 검색 결과 */}
       <div className="flex-1 overflow-y-auto">
         {isSearching ? (
-          <div className="flex h-full items-center justify-center">
-            <div className="text-gray-500">검색 중...</div>
-          </div>
+          <div className="flex h-full items-center justify-center"></div>
         ) : searchResults.length > 0 ? (
           <MapSearchResult
             searchResults={searchResults}
