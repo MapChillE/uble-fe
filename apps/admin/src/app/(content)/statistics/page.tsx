@@ -1,5 +1,11 @@
+import StatisticsContainer from "./components/StatisticsContainer";
+
 const page = () => {
-  return <div></div>;
+  return (
+    <div>
+      <StatisticsContainer />
+    </div>
+  );
 };
 
 export default page;
