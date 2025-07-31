@@ -9,6 +9,9 @@ interface PaginationProps {
 export default function Pagination({ currentPage, totalPages, onPageChange }: PaginationProps) {
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
+  if (totalPages <= 0 || currentPage <= 0 || currentPage > totalPages) {
+    return null;
+  }
   return (
     <div className="mt-4 flex flex-wrap justify-center gap-2">
       <Button
