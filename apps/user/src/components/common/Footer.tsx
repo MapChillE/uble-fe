@@ -15,8 +15,8 @@ export default function Footer() {
   ];
 
   return (
-    <div className="border-border fixed bottom-0 left-0 right-0 border-t bg-white">
-      <div className="flex w-full justify-around py-2">
+    <nav className="border-border fixed bottom-0 left-0 right-0 h-[56px] border-t bg-white">
+      <div className="flex h-full w-full justify-around">
         {navItems.map(({ path, icon: Icon, label }) => (
           <button
             key={path}
@@ -25,11 +25,11 @@ export default function Footer() {
               pathname === path ? "text-gray-900" : "text-gray-400"
             }`}
           >
-            <Icon className="mb-1 h-5 w-5" />
+            <Icon className="mb-0.5 h-5 w-5" />
             <span className="text-xs">{label}</span>
           </button>
         ))}
       </div>
-    </div>
+    </nav>
   );
 }
