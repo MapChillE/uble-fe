@@ -44,7 +44,7 @@ const StatisticsFilter = ({ filters, setFilters }: StatisticsFilterProps) => {
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-gray-700">카테고리</label>
+            <label className="mb-2 block text-sm font-medium text-gray-700">성별</label>
             <Select
               value={filters.gender}
               onValueChange={(value: "MALE" | "FEMALE") =>
