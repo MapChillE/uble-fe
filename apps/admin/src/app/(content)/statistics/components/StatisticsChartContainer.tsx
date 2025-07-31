@@ -15,7 +15,7 @@ const StatisticsChartContainer = ({ params }: StatisticsChartContainerProps) => 
   return (
     <Fragment>
       <ChartSelector activeStatType={activeStatType} setActiveStatType={setActiveStatType} />
-      <Card>
+      <Card className="border-none">
         <CardHeader>
           <CardTitle className="mt-5 text-xl font-bold">
             {statTypes.find((type) => type.id === activeStatType)?.label}
