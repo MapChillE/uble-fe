@@ -12,6 +12,7 @@ import {
   Legend,
   type ChartOptions,
 } from "chart.js";
+import { useEffect, useState } from "react";
 
 // Chart.js 등록
 ChartJS.register(
@@ -30,7 +31,18 @@ interface RenderChartProps {
 }
 
 const RenderChart = ({ activeStatType }: RenderChartProps) => {
-  const chartHeight = typeof window !== "undefined" && window.innerWidth < 768 ? 300 : 400;
+  const [chartHeight, setChartHeight] = useState(400);
+
+  useEffect(() => {
+    const updateHeight = () => {
+      setChartHeight(window.innerWidth < 768 ? 300 : 400);
+    };
+
+    updateHeight();
+    window.addEventListener("resize", updateHeight);
+    return () => window.removeEventListener("resize", updateHeight);
+  }, []);
+
   const partnerViewData = {
     labels: ["스타벅스", "맥도날드", "베스킨라빈스", "도미노피자", "쉐이크쉑"],
     datasets: [
