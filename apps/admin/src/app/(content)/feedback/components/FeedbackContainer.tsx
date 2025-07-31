@@ -39,7 +39,7 @@ const FeedbackContainer = () => {
   };
   return (
     <Fragment>
-      <FeedbackStatistics feedbackData={feedbackData} currentPage={currentPage} />
+      <FeedbackStatistics feedbackData={feedbackData} />
       <FeedbackList feedbacks={feedbackData.content} />
       <Pagination
         currentPage={currentPage}
