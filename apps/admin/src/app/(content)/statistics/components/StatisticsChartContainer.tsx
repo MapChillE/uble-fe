@@ -7,10 +7,10 @@ import RenderChart from "./RenderChart";
 import { statTypes } from "@/types/constants";
 import { StatisticsFilter } from "@/types/statistics";
 
-interface StatisticsCharContainerProps {
+interface StatisticsChartContainerProps {
   params: StatisticsFilter;
 }
-const StatisticsChartContainer = ({ params }: StatisticsCharContainerProps) => {
+const StatisticsChartContainer = ({ params }: StatisticsChartContainerProps) => {
   const [activeStatType, setActiveStatType] = useState("click");
   return (
     <Fragment>
