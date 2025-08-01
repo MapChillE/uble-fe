@@ -6,14 +6,25 @@ import { Card, CardContent, CardHeader, CardTitle } from "@workspace/ui/componen
 import { Input } from "@workspace/ui/components/input";
 import { Label } from "@workspace/ui/components/label";
 import { useState } from "react";
+import { apiHandler } from "@api/apiHandler";
+import { adminLogin } from "@/service/login";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const LoginPage = () => {
   const [code, setCode] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
+  const router = useRouter();
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    const response = await apiHandler(() => adminLogin(code));
+    if (response.data?.statusCode === 0) {
+      toast.info("로그인 되었습니다.");
+      router.push("/statistics");
+    } else {
+      toast.error("코드가 일치하지 않습니다.");
+    }
     setIsLoading(false);
   };
   return (
