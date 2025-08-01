@@ -1,5 +1,6 @@
 "use client";
 
+import React, { memo } from "react";
 import { TrendingUp, TrendingDown } from "lucide-react";
 import { useTrendingSearches } from "@/hooks/useTrendingSearches";
 
@@ -7,7 +8,7 @@ interface TrendingSearchesSectionProps {
   onSearchClick: (keyword: string) => void;
 }
 
-export default function TrendingSearchesSection({ onSearchClick }: TrendingSearchesSectionProps) {
+const TrendingSearchesSection = ({ onSearchClick }: TrendingSearchesSectionProps) => {
   const { data, isLoading, error } = useTrendingSearches();
   const trendingSearches = data?.trendingSearches || [];
 
@@ -112,4 +113,6 @@ export default function TrendingSearchesSection({ onSearchClick }: TrendingSearc
       </div>
     </div>
   );
-}
+};
+
+export default memo(TrendingSearchesSection);
