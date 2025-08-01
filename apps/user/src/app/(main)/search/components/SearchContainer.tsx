@@ -1,15 +1,15 @@
 "use client";
 
-import { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
 
-import { Button } from "@workspace/ui/components/button";
 import SearchInput from "@/components/common/SearchInput";
 import MapSearchResult from "@/app/(main)/map/components/MapSearchResult";
+import SearchSuggestionsSection from "./SearchSuggestionsSection";
 import { useLocationStore } from "@/store/useLocationStore";
+import { useSearchStore } from "@/store/useSearchStore";
 import { fetchMapSearch, fetchSearchLog } from "@/service/mapSearch";
 import { DEFAULT_LOCATION, DEFAULT_ZOOM_LEVEL } from "@/types/constants";
 import { MapSuggestion } from "@/types/search";
@@ -25,20 +25,35 @@ export default function SearchContainer() {
   const router = useRouter();
   const pathname = usePathname();
   const urlParams = useSearchParams();
-  const currentLoc = useLocationStore((s) => s.currentLocation);
+  const currentLocation = useLocationStore((s) => s.currentLocation);
+  const { addRecentSearch } = useSearchStore();
+
+  // URL 파라미터에서 초기 상태 감지
+  useEffect(() => {
+    const urlQuery = urlParams.get("q");
+
+    if (!urlQuery) {
+      setQuery("");
+      setResults([]);
+    } else {
+      setQuery(urlQuery);
+    }
+  }, [urlParams]);
 
   /** 검색 & (필요 시) 로그 */
   const runSearch = async (keyword: string, via: "ENTER" | "AUTO") => {
     setLoading(true);
+
     try {
       const res = await fetchMapSearch({
         keyword,
-        latitude: currentLoc?.[1] ?? DEFAULT_LOCATION[1],
-        longitude: currentLoc?.[0] ?? DEFAULT_LOCATION[0],
+        latitude: currentLocation?.[1] ?? DEFAULT_LOCATION[1],
+        longitude: currentLocation?.[0] ?? DEFAULT_LOCATION[0],
       });
       setResults(res.suggestionList);
 
       if (via === "ENTER") {
+        addRecentSearch(keyword);
         await fetchSearchLog({
           keyword,
           searchType: "ENTER",
@@ -63,7 +78,27 @@ export default function SearchContainer() {
     v.trim() ? runSearch(v, "AUTO") : setResults([]);
   }, 200);
 
-  const handleBack = () => router.back();
+  const handleBack = () => {
+    // 1. 검색 결과가 있거나 검색어가 입력된 상태라면 초기 상태로 돌아가기
+    if (query.trim() || results.length > 0) {
+      setQuery("");
+      setResults([]);
+
+      // URL 파라미터도 초기화
+      const p = new URLSearchParams(urlParams);
+      p.delete("q");
+      router.replace(`${pathname}?${p.toString()}`);
+
+      // 입력창 포커스
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+      return;
+    }
+
+    // 2. 초기 상태라면 map 페이지로 이동
+    router.push("/map");
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const v = e.target.value;
@@ -119,20 +154,26 @@ export default function SearchContainer() {
     router.push(`/map?${p.toString()}`);
   };
 
+  const handleSuggestionClick = (keyword: string) => {
+    setQuery(keyword);
+    if (inputRef.current) {
+      inputRef.current.value = keyword;
+    }
+    runSearch(keyword, "ENTER");
+  };
+
   return (
     <div className="flex h-full flex-col bg-white">
       {/* 헤더 */}
       <div className="flex items-center gap-3 border-b border-gray-200 px-4 py-3">
-        <Button variant="ghost" size="sm" onClick={handleBack} className="p-2">
-          <ArrowLeft className="h-5 w-5" />
-        </Button>
-
         <div className="flex-1">
           <SearchInput
             ref={inputRef}
             searchQuery={query}
             onChange={handleChange}
             onKeyDown={handleKeyDown}
+            onBackClick={handleBack}
+            showBackButton={true}
             placeholder="검색어를 입력하세요"
           />
         </div>
@@ -144,10 +185,12 @@ export default function SearchContainer() {
           <div className="flex h-full items-center justify-center" />
         ) : results.length ? (
           <MapSearchResult searchResults={results} onResultClick={handleResultClick} />
-        ) : (
+        ) : query ? (
           <div className="flex h-full items-center justify-center text-gray-500">
             검색 결과가 없습니다.
           </div>
+        ) : (
+          <SearchSuggestionsSection onSearchClick={handleSuggestionClick} />
         )}
       </div>
     </div>
