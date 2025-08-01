@@ -93,33 +93,6 @@ const TrendingSearchesSection = ({ onSearchClick }: TrendingSearchesSectionProps
   const { data, isLoading, error } = useTrendingSearches();
   const trendingSearches = data?.trendingSearches || [];
 
-  if (isLoading) {
-    return (
-      <div className="px-4 py-4">
-        <div className="mb-3 flex items-center justify-between">
-          <h3 className="text-sm font-semibold text-gray-900">실시간 인기 검색어</h3>
-        </div>
-        <div className="grid grid-cols-2 gap-4">
-          <TrendingSearchSkeletonList />
-          <TrendingSearchSkeletonList />
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="px-4 py-4">
-        <div className="mb-3 flex items-center justify-between">
-          <h3 className="text-sm font-semibold text-gray-900">실시간 인기 검색어</h3>
-        </div>
-        <div className="py-4 text-center text-sm text-gray-500">
-          인기 검색어를 불러오는데 실패했습니다.
-        </div>
-      </div>
-    );
-  }
-
   const firstColumnItems = trendingSearches.slice(0, 5);
   const secondColumnItems = trendingSearches.slice(5, 10);
 
