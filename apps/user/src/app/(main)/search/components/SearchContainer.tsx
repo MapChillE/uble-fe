@@ -30,15 +30,15 @@ export default function SearchContainer() {
 
   // URL 파라미터에서 초기 상태 감지
   useEffect(() => {
-    const urlQuery = urlParams.get("q");
+    const searchQuery = urlParams.get("q") ?? "";
 
-    if (!urlQuery) {
+    if (!searchQuery) {
       setQuery("");
       setResults([]);
     } else {
-      setQuery(urlQuery);
+      setQuery(searchQuery);
     }
-  }, [urlParams]);
+  }, [urlParams.get("q")]);
 
   /** 검색 & (필요 시) 로그 */
   const runSearch = async (keyword: string, via: "ENTER" | "AUTO") => {
