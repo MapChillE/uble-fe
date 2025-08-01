@@ -7,6 +7,8 @@ interface AutoCompleteInputProps {
   autoComplete: { type: "CATEGORY" | "BRAND"; value: string }[];
   onAutoSelect: (item: string) => void;
   onEnterSearch: (query: string) => void;
+  onBackClick?: () => void;
+  showBackButton?: boolean;
 }
 
 export default function AutoCompleteInput({
@@ -15,6 +17,8 @@ export default function AutoCompleteInput({
   autoComplete,
   onAutoSelect,
   onEnterSearch,
+  onBackClick,
+  showBackButton = false,
 }: AutoCompleteInputProps) {
   const [showAuto, setShowAuto] = useState(false);
   const [highlightIndex, setHighlightIndex] = useState<number | null>(null);
@@ -77,6 +81,8 @@ export default function AutoCompleteInput({
           onChange={onChange}
           onFocus={() => setShowAuto(true)}
           onKeyDown={handleKeyDown}
+          onBackClick={onBackClick}
+          showBackButton={showBackButton}
         />
         {showAuto && autoComplete.length > 0 && (
           <ul className="absolute left-0 right-0 top-full z-10 -mt-[4px] rounded-b-md border border-gray-300 bg-white">

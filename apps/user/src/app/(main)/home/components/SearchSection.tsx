@@ -79,6 +79,10 @@ const SearchSection = () => {
     router.push(`${pathname}?${params.toString()}`);
   };
 
+  const handleBackClick = () => {
+    router.back();
+  };
+
   return (
     <section className="p-4">
       <AutoCompleteInput
@@ -87,6 +91,8 @@ const SearchSection = () => {
         autoComplete={autoComplete}
         onAutoSelect={handleAutoSelect}
         onEnterSearch={handleEnterSearch}
+        onBackClick={handleBackClick}
+        showBackButton={!!searchParams.get("q")}
       />
     </section>
   );
