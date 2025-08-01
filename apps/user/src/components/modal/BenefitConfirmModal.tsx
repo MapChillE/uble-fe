@@ -20,10 +20,8 @@ const BenefitConfirmModal = () => {
   };
 
   const invalidate = () => {
-    queryClient.invalidateQueries({
-      predicate: (query) =>
-        ["userStatistics", "usageHistory"].includes(query.queryKey[0] as string),
-    });
+    queryClient.invalidateQueries({ queryKey: ["userStatistics"] });
+    queryClient.invalidateQueries({ queryKey: ["usageHistory"] });
   };
   const handleYes = async (benefitType: "NORMAL" | "VIP" = "NORMAL") => {
     if (storeId !== null) {
