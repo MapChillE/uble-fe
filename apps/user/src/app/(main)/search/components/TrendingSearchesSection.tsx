@@ -3,11 +3,11 @@
 import { TrendingUp, TrendingDown } from "lucide-react";
 import { useTrendingSearches } from "@/hooks/useTrendingSearches";
 
-interface TrendingSearchesProps {
+interface TrendingSearchesSectionProps {
   onSearchClick: (keyword: string) => void;
 }
 
-export default function TrendingSearches({ onSearchClick }: TrendingSearchesProps) {
+export default function TrendingSearchesSection({ onSearchClick }: TrendingSearchesSectionProps) {
   const { data, isLoading, error } = useTrendingSearches();
   const trendingSearches = data?.trendingSearches || [];
 
