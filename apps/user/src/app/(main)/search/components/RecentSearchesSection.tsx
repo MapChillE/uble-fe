@@ -1,5 +1,6 @@
 "use client";
 
+import React, { memo } from "react";
 import { X } from "lucide-react";
 import { useSearchStore } from "@/store/useSearchStore";
 
@@ -7,7 +8,7 @@ interface RecentSearchesSectionProps {
   onSearchClick: (keyword: string) => void;
 }
 
-export default function RecentSearchesSection({ onSearchClick }: RecentSearchesSectionProps) {
+const RecentSearchesSection = ({ onSearchClick }: RecentSearchesSectionProps) => {
   const { recentSearches, removeRecentSearch, clearRecentSearches } = useSearchStore();
 
   return (
@@ -43,4 +44,6 @@ export default function RecentSearchesSection({ onSearchClick }: RecentSearchesS
       )}
     </div>
   );
-}
+};
+
+export default memo(RecentSearchesSection);
