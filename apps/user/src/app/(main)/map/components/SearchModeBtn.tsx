@@ -14,7 +14,7 @@ const SearchModeBtn = ({ isSearchMode, onExit, onSearchHere }: SearchModeBtnProp
         variant="filter_select"
         onClick={isSearchMode ? onExit : onSearchHere}
       >
-        {isSearchMode ? "주변 매장 보기" : "현재 위치에서 검색"}
+        {isSearchMode ? "주변 매장 보기" : "현 지도에서 검색"}
       </Button>
     </div>
   );
