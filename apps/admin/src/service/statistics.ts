@@ -40,19 +40,14 @@ export const fetchStatistics = async ({
   // click과 usage만 rankTarget이 필수, 나머지는 제외
   const isRankTargetRequired = reqUrl === "click" || reqUrl === "usage";
 
-  let requestParams: any = {};
+  let requestParams: Partial<RankParams> = {};
 
   if (isRankTargetRequired) {
     // rankTarget이 필수인 경우
     requestParams = filterNonNullParams(params);
   } else {
-    // rankTarget이 제외되는 경우
-    const { rankTarget, ...otherParams } = params;
-    requestParams = filterNonNullParams({
-      ...otherParams,
-      rankTarget: "BRAND",
-    } as StatisticsFilter);
-    delete requestParams.rankTarget;
+    const { rankTarget, ...otherParams } = filterNonNullParams(params);
+    requestParams = otherParams;
   }
 
   const { data } = await api.get(`/api/admin/statistics/rank/${reqUrl}`, {
