@@ -18,5 +18,5 @@ interface SearchLogParams {
   isResultExists: boolean;
 }
 export async function fetchSearchLog(params: SearchLogParams) {
-  await api.post("/search/log", params);
+  await api.post("/api/search/log", params);
 }
