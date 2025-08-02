@@ -5,7 +5,7 @@ import { statTypes } from "@/types/constants";
 
 interface ErrorStateProps {
   activeStatType: string;
-  setActiveStatType: (type: string) => void;
+  setActiveStatType: React.Dispatch<React.SetStateAction<string>>;
   onRetry: () => void;
 }
 
@@ -16,7 +16,7 @@ const ErrorState = ({ activeStatType, setActiveStatType, onRetry }: ErrorStatePr
       <Card className="border-none">
         <CardHeader>
           <CardTitle className="mt-5 text-xl font-bold">
-            {statTypes.find((type) => type.id === activeStatType)?.label}
+            {statTypes.find((type) => type.id === activeStatType)?.label || "통계"}
           </CardTitle>
         </CardHeader>
         <CardContent className="p-6 pt-0">
