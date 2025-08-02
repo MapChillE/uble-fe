@@ -40,7 +40,6 @@ export default function MapWithBaseLocation({
   const [showSearchBtn, setShowSearchBtn] = useState(false);
   const [isExitingSearchMode, setIsExitingSearchMode] = useState(false);
   const baseLocation = useBaseLocation(currentLocation || DEFAULT_LOCATION);
-  const { getCurrentLocation } = useCurrentLocation();
   const lastBaseLocationRef = useRef<Coordinates>(baseLocation);
 
   const [state, dispatch] = useReducer(mapReducer, {
@@ -49,12 +48,6 @@ export default function MapWithBaseLocation({
     zoom: DEFAULT_ZOOM_LEVEL,
     pins: [],
   });
-
-  useEffect(() => {
-    if (!currentLocation) {
-      getCurrentLocation();
-    }
-  }, [getCurrentLocation]);
 
   const fetchPins = useCallback(
     async (
@@ -257,6 +250,7 @@ export default function MapWithBaseLocation({
     [state.pins, onPinClick]
   );
 
+  // 위치 정보가 없을 때만 로딩 표시
   if (!currentLocation) {
     return (
       <div className="flex h-full w-full items-center justify-center">
