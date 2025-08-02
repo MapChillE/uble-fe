@@ -38,7 +38,7 @@ export default function MapWithBaseLocation({
   const [isInitialized, setIsInitialized] = useState(false);
   const [showSearchBtn, setShowSearchBtn] = useState(false);
   const [isExitingSearchMode, setIsExitingSearchMode] = useState(false);
-  const baseLocation = useBaseLocation();
+  const baseLocation = useBaseLocation(currentLocation || DEFAULT_LOCATION);
   const lastBaseLocationRef = useRef<Coordinates>(baseLocation);
 
   const [state, dispatch] = useReducer(mapReducer, {
