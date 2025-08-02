@@ -10,9 +10,25 @@ import {
   Title,
   Tooltip,
   Legend,
-  type ChartOptions,
 } from "chart.js";
 import { useEffect, useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@workspace/ui/components/select";
+import {
+  transformClickData,
+  transformUsageData,
+  transformLocalData,
+  transformInterestChangeData,
+  transformKeywordsData,
+  getDefaultChartData,
+  getKeywordsDateList,
+  type ChartData,
+} from "../utils/chartDataTransformers";
 
 // Chart.js 등록
 ChartJS.register(
@@ -28,10 +44,12 @@ ChartJS.register(
 
 interface RenderChartProps {
   activeStatType: string;
+  data?: any; // API 응답 데이터
 }
 
-const RenderChart = ({ activeStatType }: RenderChartProps) => {
+const RenderChart = ({ activeStatType, data }: RenderChartProps) => {
   const [chartHeight, setChartHeight] = useState(400);
+  const [selectedDate, setSelectedDate] = useState<string>("");
 
   useEffect(() => {
     const updateHeight = () => {
@@ -43,106 +61,113 @@ const RenderChart = ({ activeStatType }: RenderChartProps) => {
     return () => window.removeEventListener("resize", updateHeight);
   }, []);
 
-  const partnerViewData = {
-    labels: ["스타벅스", "맥도날드", "베스킨라빈스", "도미노피자", "쉐이크쉑"],
-    datasets: [
-      {
-        label: "조회수",
-        data: [4000, 3000, 2000, 2780, 1890],
-        backgroundColor: "rgba(59, 130, 246, 0.8)",
-        borderColor: "rgba(59, 130, 246, 1)",
-        borderWidth: 1,
-        borderRadius: 4,
-      },
-    ],
+  // 데이터가 없을 때 로딩 상태 표시
+  if (!data) {
+    return (
+      <div className="flex h-64 items-center justify-center">
+        <div className="text-center">
+          <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-blue-600"></div>
+          <p className="text-gray-600">차트 데이터를 불러오는 중...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // API 데이터를 차트 데이터로 변환하는 함수
+  const transformApiDataToChartData = (): ChartData => {
+    switch (activeStatType) {
+      case "click":
+        return transformClickData(data) || getDefaultChartData();
+      case "usage":
+        return transformUsageData(data) || getDefaultChartData();
+      case "local":
+        return transformLocalData(data) || getDefaultChartData();
+      case "interest-change":
+        return transformInterestChangeData(data) || getDefaultChartData();
+      case "keywords/daily-top":
+      case "keywords/empty-top":
+        return transformKeywordsData(data, selectedDate) || getDefaultChartData();
+      default:
+        return getDefaultChartData();
+    }
   };
 
-  const districtData = {
-    labels: ["강남구", "서초구", "송파구", "마포구", "종로구"],
-    datasets: [
-      {
-        label: "이용수",
-        data: [3500, 2800, 2400, 2100, 1900],
-        backgroundColor: "rgba(34, 197, 94, 0.8)",
-        borderColor: "rgba(34, 197, 94, 1)",
-        borderWidth: 1,
-        borderRadius: 4,
-      },
-    ],
+  const chartData = transformApiDataToChartData();
+
+  if (!chartData) {
+    return (
+      <div className="flex h-64 items-center justify-center">
+        <p className="text-gray-600">차트 데이터를 표시할 수 없습니다.</p>
+      </div>
+    );
+  }
+
+  // 날짜 선택 컴포넌트 렌더링
+  const renderDateSelector = () => {
+    if (activeStatType === "keywords/daily-top" || activeStatType === "keywords/empty-top") {
+      const dateList = getKeywordsDateList(data);
+
+      if (dateList.length > 0) {
+        const currentDate = selectedDate || dateList[dateList.length - 1]?.date;
+
+        return (
+          <div className="mb-4 flex items-center gap-2">
+            <label className="text-sm font-medium text-gray-700">날짜 선택:</label>
+            <Select value={currentDate} onValueChange={setSelectedDate}>
+              <SelectTrigger className="w-48">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {dateList.map((item) => (
+                  <SelectItem key={item.date} value={item.date}>
+                    {item.formattedDate}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        );
+      }
+    }
+    return null;
   };
 
-  const trendData = {
-    labels: ["1월", "2월", "3월", "4월", "5월", "6월"],
-    datasets: [
-      {
-        label: "카페",
-        data: [4000, 3000, 2000, 2780, 1890, 2390],
-        borderColor: "rgba(59, 130, 246, 1)",
-        backgroundColor: "rgba(59, 130, 246, 0.1)",
-        tension: 0.4,
-        fill: true,
-      },
-      {
-        label: "패스트푸드",
-        data: [2400, 1398, 9800, 3908, 4800, 3800],
-        borderColor: "rgba(34, 197, 94, 1)",
-        backgroundColor: "rgba(34, 197, 94, 0.1)",
-        tension: 0.4,
-        fill: true,
-      },
-      {
-        label: "디저트",
-        data: [2400, 2210, 2290, 2000, 2181, 2500],
-        borderColor: "rgba(251, 191, 36, 1)",
-        backgroundColor: "rgba(251, 191, 36, 0.1)",
-        tension: 0.4,
-        fill: true,
-      },
-    ],
-  };
-
-  const keywordData = {
-    labels: ["스타벅스", "맥도날드", "카페", "치킨", "피자"],
-    datasets: [
-      {
-        label: "검색 횟수",
-        data: [1200, 980, 850, 720, 650],
-        backgroundColor: "rgba(249, 115, 22, 0.8)",
-        borderColor: "rgba(249, 115, 22, 1)",
-        borderWidth: 1,
-        borderRadius: 4,
-      },
-    ],
-  };
   switch (activeStatType) {
     case "click":
     case "usage":
       return (
         <div style={{ height: chartHeight }}>
-          <Bar data={partnerViewData} options={barOptions} />
+          <Bar data={chartData} options={barOptions} />
         </div>
       );
     case "local":
       return (
         <div style={{ height: chartHeight }}>
-          <Bar data={districtData} options={barOptions} />
+          <Bar data={chartData} options={barOptions} />
         </div>
       );
     case "interest-change":
       return (
         <div style={{ height: chartHeight }}>
-          <Line data={trendData} options={lineOptions} />
+          <Line data={chartData} options={lineOptions} />
         </div>
       );
     case "keywords/daily-top":
     case "keywords/empty-top":
       return (
-        <div style={{ height: chartHeight }}>
-          <Bar data={keywordData} options={barOptions} />
+        <div>
+          {renderDateSelector()}
+          <div style={{ height: chartHeight }}>
+            <Bar data={chartData} options={barOptions} />
+          </div>
         </div>
       );
     default:
-      return null;
+      return (
+        <div className="flex h-64 items-center justify-center">
+          <p className="text-gray-600">지원하지 않는 차트 유형입니다.</p>
+        </div>
+      );
   }
 };
 

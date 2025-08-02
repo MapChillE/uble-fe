@@ -35,7 +35,7 @@ const StatisticsFilter = ({ filters, setFilters }: StatisticsFilterProps) => {
               </SelectTrigger>
               <SelectContent>
                 {filterOptions.rankTarget.map((t) => (
-                  <SelectItem key={t} value={t === "BRAND" ? "BRAND" : t}>
+                  <SelectItem key={t} value={t}>
                     {t}
                   </SelectItem>
                 ))}
@@ -46,20 +46,23 @@ const StatisticsFilter = ({ filters, setFilters }: StatisticsFilterProps) => {
           <div>
             <label className="mb-2 block text-sm font-medium text-gray-700">성별</label>
             <Select
-              value={filters.gender}
-              onValueChange={(value: "MALE" | "FEMALE") =>
-                setFilters({ ...filters, gender: value })
+              value={filters.gender || "none"}
+              onValueChange={(value: "MALE" | "FEMALE" | "none") =>
+                setFilters({ ...filters, gender: value === "none" ? null : value })
               }
             >
               <SelectTrigger className="w-full">
-                <SelectValue />
+                <SelectValue placeholder="선택 안함" />
               </SelectTrigger>
               <SelectContent>
-                {filterOptions.gender.map((g) => (
-                  <SelectItem key={g} value={g === "MALE" ? "MALE" : g}>
-                    {g}
-                  </SelectItem>
-                ))}
+                <SelectItem value="none">선택 안함</SelectItem>
+                {filterOptions.gender
+                  .filter((g) => g !== null)
+                  .map((g) => (
+                    <SelectItem key={g} value={g}>
+                      {g}
+                    </SelectItem>
+                  ))}
               </SelectContent>
             </Select>
           </div>
@@ -67,20 +70,26 @@ const StatisticsFilter = ({ filters, setFilters }: StatisticsFilterProps) => {
           <div>
             <label className="mb-2 block text-sm font-medium text-gray-700">나이대</label>
             <Select
-              value={String(filters.ageRange)}
+              value={filters.ageRange ? String(filters.ageRange) : "none"}
               onValueChange={(value) =>
-                setFilters({ ...filters, ageRange: Number(value) as AgeRangeType })
+                setFilters({
+                  ...filters,
+                  ageRange: value === "none" ? null : (Number(value) as AgeRangeType),
+                })
               }
             >
               <SelectTrigger className="w-full">
-                <SelectValue />
+                <SelectValue placeholder="선택 안함" />
               </SelectTrigger>
               <SelectContent>
-                {filterOptions.ageRange.map((age) => (
-                  <SelectItem key={age} value={String(age)}>
-                    {age}
-                  </SelectItem>
-                ))}
+                <SelectItem value="none">선택 안함</SelectItem>
+                {filterOptions.ageRange
+                  .filter((age) => age !== null)
+                  .map((age) => (
+                    <SelectItem key={age} value={String(age)}>
+                      {age}
+                    </SelectItem>
+                  ))}
               </SelectContent>
             </Select>
           </div>
@@ -88,20 +97,23 @@ const StatisticsFilter = ({ filters, setFilters }: StatisticsFilterProps) => {
           <div>
             <label className="mb-2 block text-sm font-medium text-gray-700">사용자 등급</label>
             <Select
-              value={filters.rank}
-              onValueChange={(value: "NONE" | "NORMAL" | "PREMIUM" | "VIP" | "VVIP") =>
-                setFilters({ ...filters, rank: value })
+              value={filters.rank || "none"}
+              onValueChange={(value: "NONE" | "NORMAL" | "PREMIUM" | "VIP" | "VVIP" | "none") =>
+                setFilters({ ...filters, rank: value === "none" ? null : value })
               }
             >
               <SelectTrigger className="w-full">
-                <SelectValue />
+                <SelectValue placeholder="선택 안함" />
               </SelectTrigger>
               <SelectContent>
-                {filterOptions.rank.map((grade) => (
-                  <SelectItem key={grade} value={grade === "NONE" ? "NONE" : grade}>
-                    {grade}
-                  </SelectItem>
-                ))}
+                <SelectItem value="none">선택 안함</SelectItem>
+                {filterOptions.rank
+                  .filter((r) => r !== null)
+                  .map((grade) => (
+                    <SelectItem key={grade} value={grade}>
+                      {grade}
+                    </SelectItem>
+                  ))}
               </SelectContent>
             </Select>
           </div>
@@ -109,36 +121,38 @@ const StatisticsFilter = ({ filters, setFilters }: StatisticsFilterProps) => {
           <div>
             <label className="mb-2 block text-sm font-medium text-gray-700">혜택 타입</label>
             <Select
-              value={filters.benefitType}
-              onValueChange={(value: "VIP" | "LOCAL" | "NORMAL") =>
-                setFilters({ ...filters, benefitType: value })
+              value={filters.benefitType || "none"}
+              onValueChange={(value: "VIP" | "LOCAL" | "NORMAL" | "none") =>
+                setFilters({ ...filters, benefitType: value === "none" ? null : value })
               }
             >
               <SelectTrigger className="w-full">
-                <SelectValue />
+                <SelectValue placeholder="선택 안함" />
               </SelectTrigger>
               <SelectContent>
-                {filterOptions.benefitType.map((type) => (
-                  <SelectItem key={type} value={type === "NORMAL" ? "NORMAL" : type}>
-                    {type}
-                  </SelectItem>
-                ))}
+                <SelectItem value="none">선택 안함</SelectItem>
+                {filterOptions.benefitType
+                  .filter((type) => type !== null)
+                  .map((type) => (
+                    <SelectItem key={type} value={type}>
+                      {type}
+                    </SelectItem>
+                  ))}
               </SelectContent>
             </Select>
           </div>
         </div>
 
         <div className="mt-4 flex space-x-2">
-          <Button>필터 적용</Button>
           <Button
             variant="outline"
             onClick={() =>
               setFilters({
                 rankTarget: "BRAND",
-                gender: "MALE",
-                ageRange: 10,
-                rank: "NONE",
-                benefitType: "NORMAL",
+                gender: null,
+                ageRange: null,
+                rank: null,
+                benefitType: null,
               })
             }
           >
