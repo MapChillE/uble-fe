@@ -38,7 +38,6 @@ const BarcodeContainer = ({
         className={`relative cursor-pointer rounded-lg bg-gray-50 p-6 transition-all duration-300 ${
           !isBarcodeRevealed && barcode ? "hover:bg-gray-100" : ""
         }`}
-        onClick={handleBarcodeClick}
       >
         <div className="text-center">
           {barcode ? (
@@ -59,7 +58,11 @@ const BarcodeContainer = ({
             </div>
           )}
         </div>
-        {!isBarcodeRevealed && barcode && <BarcodeBlur />}
+        {!isBarcodeRevealed && barcode && (
+          <div onClick={handleBarcodeClick}>
+            <BarcodeBlur />
+          </div>
+        )}
       </div>
     </div>
   );
