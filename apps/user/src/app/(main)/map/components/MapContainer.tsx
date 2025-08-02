@@ -9,6 +9,8 @@ import StoreDetailDrawer from "@/app/(main)/map/components/StoreDetailDrawer";
 import MyPlaceDrawer from "@/app/(main)/map/components/MyPlaceDrawer";
 import MyPlaceTriggerBtn from "@/app/(main)/map/components/MyPlaceTriggerBtn";
 import CategorySection from "@/components/common/CategorySection";
+import OfflineBrandFilter from "@/components/common/OfflineBrandFilter";
+import BrandSelectionDrawer from "@/components/common/BrandSelectionDrawer";
 import BenefitConfirmModal from "@/components/modal/BenefitConfirmModal";
 
 import { getStoreSummary } from "@/service/store";
@@ -37,12 +39,62 @@ const MapContainer = () => {
   const [searchStoreId, setSearchStoreId] = useState<number | null>(null);
   const [searchType, setSearchType] = useState<string | null>(null);
   const [searchId, setSearchId] = useState<number | null>(null);
+  const [selectedBrandId, setSelectedBrandId] = useState<number | null>(null);
+  const [selectedBrandName, setSelectedBrandName] = useState<string | null>(null);
+  const [isBrandDrawerOpen, setIsBrandDrawerOpen] = useState(false);
+  const [currentMapCenter, setCurrentMapCenter] = useState<Coordinates | null>(null);
 
   const currentLocation = useLocationStore((s) => s.currentLocation);
   const user = useUserStore((s) => s.user);
 
   const handleSelectCategory = useCallback((category: Category) => {
     setSelectedCategory(category);
+    // 카테고리 변경 시 브랜드 필터 초기화
+    setSelectedBrandId(null);
+    setSelectedBrandName(null);
+    // 검색 모드도 초기화
+    setSearchLocation(null);
+    setSearchType(null);
+    setSearchId(null);
+  }, []);
+
+  const handleBrandSelect = useCallback(
+    (brandId: number | null, brandName?: string) => {
+      setSelectedBrandId(brandId);
+      setSelectedBrandName(brandName || null);
+
+      // 브랜드 선택 시 검색 모드로 전환
+      if (brandId) {
+        // 브랜드 선택 시 카테고리가 전체가 아니면 전체로 초기화
+        if (selectedCategory.categoryId !== 0) {
+          setSelectedCategory(ALL_CATEGORY);
+        }
+
+        // 현재 지도 center를 사용 (없으면 현재 위치 사용)
+        const searchCenter = currentMapCenter || currentLocation;
+        if (searchCenter) {
+          setSearchLocation(searchCenter);
+          setSearchType("BRAND");
+          setSearchId(brandId);
+          // 브랜드 선택 후 drawer 닫기
+          setIsBrandDrawerOpen(false);
+        }
+      } else if (brandId === null) {
+        // 브랜드 선택 해제 시 검색 모드 초기화
+        setSearchLocation(null);
+        setSearchType(null);
+        setSearchId(null);
+      }
+    },
+    [currentLocation, currentMapCenter, selectedCategory.categoryId]
+  );
+
+  const handleOpenBrandDrawer = useCallback(() => {
+    setIsBrandDrawerOpen(true);
+  }, []);
+
+  const handleCloseBrandDrawer = useCallback(() => {
+    setIsBrandDrawerOpen(false);
   }, []);
 
   const { open: openStoreDetail } = useStoreDetailDrawerStore();
@@ -70,6 +122,10 @@ const MapContainer = () => {
     },
     [handleStoreClick]
   );
+
+  const handleMapCenterChange = useCallback((center: Coordinates) => {
+    setCurrentMapCenter(center);
+  }, []);
 
   // URL 파라미터 파싱
   const parseSearchParams = useCallback(() => {
@@ -157,7 +213,7 @@ const MapContainer = () => {
   }
 
   return (
-    <div className="relative h-[100dvh] w-full overflow-hidden">
+    <div className="map-container relative h-screen w-full overflow-hidden">
       <MapWithBaseLocation
         selectedCategory={selectedCategory}
         onPinClick={handlePinClick}
@@ -166,6 +222,7 @@ const MapContainer = () => {
         searchType={searchType}
         searchId={searchId}
         onExitSearchMode={handleExitSearchMode}
+        onMapCenterChange={handleMapCenterChange}
       />
       <div className="absolute left-0 right-0 top-0 z-10">
         <MapSearchSection />
@@ -176,11 +233,28 @@ const MapContainer = () => {
           onSelectCategory={handleSelectCategory}
         />
       </div>
+      <div className="absolute left-4 right-4 top-32 z-10">
+        <OfflineBrandFilter
+          isSelected={!!selectedBrandId}
+          onSelect={() => {
+            // 브랜드 필터 클릭 시 카테고리를 전체로 초기화
+            setSelectedCategory(ALL_CATEGORY);
+            handleOpenBrandDrawer();
+          }}
+          selectedBrandName={selectedBrandName}
+        />
+      </div>
 
       <MyPlaceDrawer trigger={<MyPlaceTriggerBtn />} />
       {/* <CurrentPlaceBtn /> */}
       <StoreDetailDrawer />
       <BenefitConfirmModal />
+      <BrandSelectionDrawer
+        isOpen={isBrandDrawerOpen}
+        onClose={handleCloseBrandDrawer}
+        onBrandSelect={handleBrandSelect}
+        selectedBrandId={selectedBrandId}
+      />
     </div>
   );
 };

@@ -2,10 +2,10 @@
 
 import { useEffect, useMemo, useState, useCallback, useRef, useReducer } from "react";
 import { useDebouncedCallback } from "use-debounce";
-import { useCurrentLocation } from "@/hooks/map/useCurrentLocation";
 import NaverMap, { Pin } from "@/app/(main)/map/components/NaverMap";
 import { Category } from "@/types/category";
 import { useBaseLocation } from "@/hooks/map/useBaseLocation";
+import { useLocationStore } from "@/store/useLocationStore";
 import { DEFAULT_LOCATION, DEFAULT_ZOOM_LEVEL } from "@/types/constants";
 import { Coordinates } from "@/types/map";
 import { mapReducer, MapState, MapAction } from "@/app/(main)/map/reducers/mapReducer";
@@ -21,6 +21,7 @@ interface MapWithBaseLocationProps {
   searchType?: string | null;
   searchId?: number | null;
   onExitSearchMode?: () => void;
+  onMapCenterChange?: (center: Coordinates) => void;
 }
 
 export default function MapWithBaseLocation({
@@ -31,12 +32,13 @@ export default function MapWithBaseLocation({
   searchType,
   searchId,
   onExitSearchMode,
+  onMapCenterChange,
 }: MapWithBaseLocationProps) {
-  const { location: currentLocation, getCurrentLocation } = useCurrentLocation();
+  const currentLocation = useLocationStore((s) => s.currentLocation);
   const [isInitialized, setIsInitialized] = useState(false);
   const [showSearchBtn, setShowSearchBtn] = useState(false);
   const [isExitingSearchMode, setIsExitingSearchMode] = useState(false);
-  const baseLocation = useBaseLocation(currentLocation ?? DEFAULT_LOCATION);
+  const baseLocation = useBaseLocation();
   const lastBaseLocationRef = useRef<Coordinates>(baseLocation);
 
   const [state, dispatch] = useReducer(mapReducer, {
@@ -47,7 +49,9 @@ export default function MapWithBaseLocation({
   });
 
   useEffect(() => {
-    getCurrentLocation();
+    if (!currentLocation) {
+      getCurrentLocation();
+    }
   }, [getCurrentLocation]);
 
   const fetchPins = useCallback(
@@ -70,7 +74,7 @@ export default function MapWithBaseLocation({
             },
           ];
         } else if (searchType === "BRAND" && searchId) {
-          pins = await fetchStorePins(center, bounds, category, state.zoom, baseLocation, searchId);
+          pins = await fetchStorePins(center, bounds, 0, state.zoom, baseLocation, searchId);
         } else if (searchType === "CATEGORY" && searchId) {
           pins = await fetchStorePins(center, bounds, searchId, state.zoom, baseLocation);
         } else {
@@ -107,7 +111,7 @@ export default function MapWithBaseLocation({
         dispatch({ type: "SET_BOUNDS", payload: initialBounds });
         dispatch({ type: "SET_CENTER", payload: currentLocation });
         if (searchType === "BRAND" && searchId) {
-          fetchPins(currentLocation, initialBounds, selectedCategory.categoryId, searchId);
+          fetchPins(currentLocation, initialBounds, 0, searchId);
         } else if (searchType === "CATEGORY" && searchId) {
           fetchPins(currentLocation, initialBounds, searchId);
         } else {
@@ -151,11 +155,22 @@ export default function MapWithBaseLocation({
       const newBounds = createBoundsFromCenterAndZoom(searchLocation, DEFAULT_ZOOM_LEVEL);
       if (newBounds) {
         dispatch({ type: "SET_BOUNDS", payload: newBounds });
-        fetchPins(searchLocation, newBounds, selectedCategory.categoryId);
+        if (searchType === "BRAND" && searchId) {
+          fetchPins(searchLocation, newBounds, 0, searchId);
+        } else {
+          fetchPins(searchLocation, newBounds, selectedCategory.categoryId);
+        }
         setShowSearchBtn(false);
       }
     }
-  }, [searchLocation, isInitialized]);
+  }, [searchLocation, isInitialized, searchType, searchId]);
+
+  // 검색 타입 변경 시 즉시 검색 실행 (bounds 변경 시에는 실행하지 않음)
+  useEffect(() => {
+    if (isInitialized && state.bounds && state.center && searchType === "BRAND" && searchId) {
+      fetchPins(state.center, state.bounds, 0, searchId);
+    }
+  }, [searchType, searchId, isInitialized]); // state.bounds, state.center 제거
 
   // 검색 모드 해제 시 주변 매장 표시
   useEffect(() => {
@@ -170,12 +185,30 @@ export default function MapWithBaseLocation({
       dispatch({ type: "SET_BOUNDS", payload: bounds });
       dispatch({ type: "SET_CENTER", payload: center });
 
+      // 부모 컴포넌트로 현재 지도 center 전달
+      onMapCenterChange?.(center);
+
       if (searchStoreId && searchLocation) {
         setShowSearchBtn(false);
         return;
       }
 
-      // baseLocation과 center가 다르고, 사용자가 실제로 지도를 이동했을 때만 버튼 노출
+      // 브랜드 검색 중일 때는 "현재 위치에서 검색" 버튼 표시
+      if (searchType === "BRAND" && searchId) {
+        // baseLocation과 center가 다르고, 사용자가 실제로 지도를 이동했을 때만 버튼 노출
+        const distance = Math.sqrt(
+          Math.pow(center[0] - baseLocation[0], 2) + Math.pow(center[1] - baseLocation[1], 2)
+        );
+        // 일정 거리 이상 이동했을 때만 버튼 표시 (약 100m)
+        if (distance > 0.001) {
+          setShowSearchBtn(true);
+        } else {
+          setShowSearchBtn(false);
+        }
+        return;
+      }
+
+      // 일반 카테고리 검색 중일 때는 "현재 위치에서 검색" 버튼 표시
       const distance = Math.sqrt(
         Math.pow(center[0] - baseLocation[0], 2) + Math.pow(center[1] - baseLocation[1], 2)
       );
@@ -200,7 +233,11 @@ export default function MapWithBaseLocation({
   const handleSearchHere = () => {
     if (state.bounds && state.center) {
       setShowSearchBtn(false);
-      fetchPins(state.center, state.bounds, selectedCategory.categoryId);
+      if (searchType === "BRAND" && searchId) {
+        fetchPins(state.center, state.bounds, 0, searchId);
+      } else {
+        fetchPins(state.center, state.bounds, selectedCategory.categoryId);
+      }
     }
   };
 
@@ -227,7 +264,7 @@ export default function MapWithBaseLocation({
   }
 
   return (
-    <div className="relative flex h-full w-full">
+    <div className="map-content relative flex h-full w-full">
       <NaverMap
         loc={state.center}
         zoom={state.zoom}
