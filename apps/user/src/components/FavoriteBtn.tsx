@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { BrandContent, BrandListData, FetchBrandsParams } from "@/types/brand";
 import { fetchBrands } from "@/service/brand";
+import useStoreDetailDrawerStore from "@/store/useStoreDetailDrawerStore";
 
 interface FavoriteBtnProps {
   brandId: number;
@@ -17,6 +18,8 @@ interface FavoriteBtnProps {
 const FavoriteBtn = ({ brandId, bookmarked = false, variant }: FavoriteBtnProps) => {
   const queryClient = useQueryClient();
   const [isLiked, setIsLiked] = useState(bookmarked);
+  const { updateBookmarkStatus } = useStoreDetailDrawerStore();
+
   useEffect(() => {
     setIsLiked(bookmarked);
   }, [bookmarked]);
@@ -68,6 +71,8 @@ const FavoriteBtn = ({ brandId, bookmarked = false, variant }: FavoriteBtnProps)
     },
     onSuccess: async (newState) => {
       setIsLiked((prev) => !prev);
+      updateBookmarkStatus(!isLiked); // 현재 상태의 반대값으로 업데이트
+
       // 1) "brands" 로 시작하는 모든 infiniteQuery 키만 골라서
       const brandQueries = queryClient.getQueriesData<{
         pages: BrandListData[];
@@ -122,6 +127,7 @@ const FavoriteBtn = ({ brandId, bookmarked = false, variant }: FavoriteBtnProps)
     },
     onError: (error: Error) => {
       setIsLiked((prev) => !prev); // 실패했으면 상태 복구
+      updateBookmarkStatus(isLiked); // StoreDetailDrawer 상태도 복구
       toast.error("오류가 발생했습니다. 잠시 후 다시 이용해 주세요.");
     },
     onSettled: invalidate,
