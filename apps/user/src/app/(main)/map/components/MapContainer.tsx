@@ -213,7 +213,7 @@ const MapContainer = () => {
   }
 
   return (
-    <div className="relative h-[100dvh] w-full overflow-hidden">
+    <div className="map-container relative h-screen w-full overflow-hidden">
       <MapWithBaseLocation
         selectedCategory={selectedCategory}
         onPinClick={handlePinClick}

@@ -17,9 +17,11 @@ export default function MapLayout({ children }: { children: React.ReactNode }) {
       />
 
       <div
+        className="map-page"
         style={{
           height: "calc(100dvh - 55px - 55px)",
           overflow: "hidden",
+          position: "relative",
         }}
       >
         {children}
