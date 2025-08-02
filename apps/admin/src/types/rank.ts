@@ -40,7 +40,7 @@ export interface UsageRankResponse {
   usageRankList: RankData[];
 }
 
-// 로컬 랭킹 응답
+// 로컬 랭킹 응답 (keywords/daily-top, keywords/empty-top, local 공통)
 export interface LocalRankResponse {
   rankList: RankData[];
 }
