@@ -12,6 +12,7 @@ import { mapReducer, MapState, MapAction } from "@/app/(main)/map/reducers/mapRe
 import { fetchStorePins } from "@/utils/fetchStorePins";
 import { createBoundsFromCenterAndZoom } from "@/utils/mapBounds";
 import SearchModeBtn from "./SearchModeBtn";
+import { useCurrentLocation } from "@/hooks/map/useCurrentLocation";
 
 interface MapWithBaseLocationProps {
   selectedCategory: Category;
@@ -39,6 +40,7 @@ export default function MapWithBaseLocation({
   const [showSearchBtn, setShowSearchBtn] = useState(false);
   const [isExitingSearchMode, setIsExitingSearchMode] = useState(false);
   const baseLocation = useBaseLocation(currentLocation || DEFAULT_LOCATION);
+  const { getCurrentLocation } = useCurrentLocation();
   const lastBaseLocationRef = useRef<Coordinates>(baseLocation);
 
   const [state, dispatch] = useReducer(mapReducer, {
