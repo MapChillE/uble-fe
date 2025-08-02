@@ -92,7 +92,6 @@ interface TrendingSearchesSectionProps {
 const TrendingSearchesSection = ({ onSearchClick }: TrendingSearchesSectionProps) => {
   const { data, isLoading, error } = useTrendingSearches();
   const trendingSearches = data?.trendingSearches || [];
-
   const firstColumnItems = trendingSearches.slice(0, 5);
   const secondColumnItems = trendingSearches.slice(5, 10);
 

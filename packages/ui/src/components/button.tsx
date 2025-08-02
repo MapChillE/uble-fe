@@ -39,6 +39,10 @@ const buttonVariants = cva(
           "rounded-full border border-gray-300 bg-white shadow-lg hover:bg-gray-50 hover:text-gray-900",
         ghost: "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
         none: "",
+
+        category_selected: "rounded-lg bg-[#e8f8f2]/300 text-action-green",
+        category_unselected:
+          "rounded-lg bg-gray-100 text-gray-600 hover:bg-action-green/10 hover:text-action-green",
       },
       size: {
         default: "h-10 px-4 py-2 has-[>svg]:px-3",
