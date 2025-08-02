@@ -72,8 +72,8 @@ export async function fetchStorePins(
         {
           id: -1,
           coords: center,
-          name: "기준 위치",
-          type: "selected",
+          name: "내장소",
+          type: "myplace",
         },
         ...storePins,
       ];
