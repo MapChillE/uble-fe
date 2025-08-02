@@ -41,19 +41,17 @@ export default function NaverMap({
   onZoomChange,
 }: NaverMapProps) {
   const mapRef = useRef<NaverMapInstance | null>(null);
-  const pinsRef = useRef<Pin[]>([]);
   const [lng, lat] = loc;
   const selectedPlaceId = useLocationStore((s) => s.selectedPlaceId);
   const selectedPlace = useLocationStore((s) => s.myPlaces.find((p) => p.id === selectedPlaceId));
 
   // 마커와 클러스터러 통합 관리 훅 사용
-  const { markerRefs, currentMarkerRef, selectedMarkerRef, clustererRef, updateMarkerIcon } =
-    useMarkerAndClusterManager({
-      mapRef,
-      pins,
-      zoom,
-      selectedPlace,
-    });
+  useMarkerAndClusterManager({
+    mapRef,
+    pins,
+    zoom,
+    selectedPlace,
+  });
 
   // 최초 지도 생성
   useEffect(() => {
@@ -85,32 +83,7 @@ export default function NaverMap({
       if (onZoomChange) {
         window.naver.maps.Event.addListener(map, "zoomend", () => {
           const currentZoom = map.getZoom();
-          console.log("zoom", currentZoom);
           onZoomChange(currentZoom);
-
-          // 줌 레벨 변경 시 마커 아이콘 업데이트
-          const currentPins = pinsRef.current;
-          if (currentPins) {
-            const otherPins = currentPins.filter(
-              (p) => p.type !== "current" && p.type !== "selected"
-            );
-
-            // 일반 마커들 업데이트
-            markerRefs.current.forEach((marker, index) => {
-              const pin = otherPins[index];
-              if (pin) {
-                updateMarkerIcon(marker, pin, currentZoom);
-              }
-            });
-
-            // 선택된 마커 업데이트
-            if (selectedMarkerRef.current) {
-              const selectedPin = currentPins.find((p) => p.type === "selected");
-              if (selectedPin) {
-                updateMarkerIcon(selectedMarkerRef.current, selectedPin, currentZoom);
-              }
-            }
-          }
         });
       }
     }
