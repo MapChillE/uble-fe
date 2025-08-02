@@ -1,3 +1,5 @@
+import { ResponseStatus } from "./responseStatus";
+
 export interface Feedback {
   title: string;
   content: string;
@@ -10,4 +12,8 @@ export interface FeedbackData {
   content: Feedback[];
   totalCount: number;
   totalPages: number;
+}
+
+export interface FeedbackResponse extends ResponseStatus {
+  data: FeedbackData;
 }
