@@ -332,18 +332,3 @@ body.map-page-active {
     animation: accordion-up 0.2s ease-out;
   }
 }
-.bg-uble {
-  /* 아주 연한 민트 → 살짝 연한 민트 */
-  background: linear-gradient(180deg, #e7fff4 0%, #cff9ea 100%);
-  position: relative;
-  overflow: hidden;
-}
-
-/* 노이즈 패턴 그대로 (더 밝아진 배경과 어울리도록 투명도 유지) */
-.uble-noise {
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-  background-size: 4px 4px;
-  opacity: 0.45;
-}
