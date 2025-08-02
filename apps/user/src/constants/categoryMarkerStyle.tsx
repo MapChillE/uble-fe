@@ -18,6 +18,9 @@ import {
   Store,
   Popcorn,
   Gem,
+  Search,
+  MapPin,
+  Navigation,
 } from "lucide-react";
 import { ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
@@ -40,6 +43,8 @@ export type CategoryMarkerKey =
   | "VIP콕"
   | "계절"
   | "default";
+
+export type PinType = "store" | "search" | "myplace" | "current" | "selected";
 
 export interface CategoryMarkerStyle {
   color: string;
@@ -185,5 +190,162 @@ export const getCategoryIconByZoom = (category?: string, name?: string, zoom: nu
   `,
     size: new window.naver.maps.Size(markerSize, markerSize + (showText ? 20 : 0)),
     anchor: new window.naver.maps.Point(markerSize / 2, markerSize / 2),
+  };
+};
+
+// 검색결과 마커 아이콘
+export const getSearchResultIcon = (name?: string, zoom: number = 15) => {
+  if (!window.naver?.maps) return null;
+
+  const pinSize = 36;
+  const fontSize = 11;
+  let showText = zoom > 15;
+
+  const iconString = getCategoryIconHTML(() => <Search size={16} color="white" />);
+
+  return {
+    content: `
+    <div style="
+      position: relative;
+      width: ${pinSize}px;
+      height: ${pinSize}px;
+      z-index: 1000;
+    ">
+      <!-- 검색결과 물방울 핀 -->
+      <div style="
+        width: ${pinSize}px;
+        height: ${pinSize}px;
+        transform: rotate(-45deg);
+        background: #6366F1;
+        border-radius: 50% 50% 50% 0;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      ">
+        <div style="transform: rotate(45deg);">
+          ${iconString}
+        </div>
+      </div>
+
+      ${
+        showText && name
+          ? `
+        <!-- 텍스트는 마커 아래로 -->
+        <div style="
+          position: absolute;
+          top: ${pinSize + 4}px;
+          left: 50%;
+          transform: translateX(-50%);
+          font-size: ${fontSize}px;
+          font-weight: bold;
+          color: #333;
+          white-space: nowrap;
+          text-shadow:
+            -1px -1px 0 white,
+             1px -1px 0 white,
+            -1px  1px 0 white,
+             1px  1px 0 white,
+             0px  0px 2px white;
+        ">
+          ${name}
+        </div>
+        `
+          : ""
+      }
+    </div>
+  `,
+    size: new window.naver.maps.Size(pinSize, pinSize + (showText ? 20 : 0)),
+    anchor: new window.naver.maps.Point(pinSize / 2, pinSize),
+  };
+};
+
+// 내장소 마커 아이콘
+export const getMyPlaceIcon = (name?: string, zoom: number = 15) => {
+  if (!window.naver?.maps) return null;
+
+  const pinSize = 36;
+  const fontSize = 11;
+  let showText = zoom > 15;
+
+  const iconString = getCategoryIconHTML(() => <Star size={16} color="white" />);
+
+  return {
+    content: `
+    <div style="
+      position: relative;
+      width: ${pinSize}px;
+      height: ${pinSize}px;
+      z-index: 1000;
+    ">
+      <!-- 내장소 물방울 핀 -->
+      <div style="
+        width: ${pinSize}px;
+        height: ${pinSize}px;
+        transform: rotate(-45deg);
+        background: #FACC15;
+        border-radius: 50% 50% 50% 0;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      ">
+        <div style="transform: rotate(45deg);">
+          ${iconString}
+        </div>
+      </div>
+
+      ${
+        showText && name
+          ? `
+        <!-- 텍스트는 마커 아래로 -->
+        <div style="
+          position: absolute;
+          top: ${pinSize + 4}px;
+          left: 50%;
+          transform: translateX(-50%);
+          font-size: ${fontSize}px;
+          font-weight: bold;
+          color: #333;
+          white-space: nowrap;
+          text-shadow:
+            -1px -1px 0 white,
+             1px -1px 0 white,
+            -1px  1px 0 white,
+             1px  1px 0 white,
+             0px  0px 2px white;
+        ">
+          ${name}
+        </div>
+        `
+          : ""
+      }
+    </div>
+  `,
+    size: new window.naver.maps.Size(pinSize, pinSize + (showText ? 20 : 0)),
+    anchor: new window.naver.maps.Point(pinSize / 2, pinSize),
+  };
+};
+
+// 현위치 마커 아이콘
+export const getCurrentLocationIcon = () => {
+  if (!window.naver?.maps) return null;
+
+  return {
+    content: `<div style="
+        background: #f63b3b;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        border: 2px solid white;
+        box-shadow: 0 0 4px rgba(0,0,0,0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+      ">
+      </div>`,
+    size: new window.naver.maps.Size(20, 20),
+    anchor: new window.naver.maps.Point(10, 10),
   };
 };
