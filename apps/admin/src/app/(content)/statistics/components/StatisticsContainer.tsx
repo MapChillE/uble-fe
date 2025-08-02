@@ -7,10 +7,10 @@ import StatisticsChartContainer from "./StatisticsChartContainer";
 const StatisticsContainer = () => {
   const [filters, setFilters] = useState<StatisticsType>({
     rankTarget: "BRAND",
-    gender: "MALE",
-    ageRange: 10,
-    rank: "NONE",
-    benefitType: "NORMAL",
+    gender: null,
+    ageRange: null,
+    rank: null,
+    benefitType: null,
   });
 
   return (
