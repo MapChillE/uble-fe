@@ -4,6 +4,7 @@ import React, { memo } from "react";
 import { TrendingUp, TrendingDown } from "lucide-react";
 import { Skeleton } from "@workspace/ui/components/skeleton";
 import { useTrendingSearches } from "@/hooks/useTrendingSearches";
+import { TrendingKeywordItem } from "@/types/search";
 
 interface TrendingSearchItemProps {
   id: number;
@@ -17,12 +18,14 @@ const TrendingSearchItem = memo(
   ({ id, keyword, status, onSearchClick }: TrendingSearchItemProps) => {
     const getStatusIcon = (status?: string) => {
       switch (status) {
-        case "rising":
+        case "UP":
           return <TrendingUp className="h-3 w-3 text-red-500" />;
-        case "falling":
+        case "DOWN":
           return <TrendingDown className="h-3 w-3 text-blue-500" />;
-        case "new":
-          return <span className="text-xs font-semibold text-green-600">NEW</span>;
+        case "NEW":
+          return <span className="text-action-green text-xs font-semibold">NEW</span>;
+        case "SAME":
+          return <span className="text-xs font-semibold text-gray-500">-</span>;
         default:
           return null;
       }
@@ -51,16 +54,16 @@ const TrendingSearchList = memo(
     items,
     onSearchClick,
   }: {
-    items: Array<{ id: number; keyword: string; status?: string }>;
+    items: TrendingKeywordItem[];
     onSearchClick: (keyword: string) => void;
   }) => (
     <div className="space-y-2">
       {items.map((item) => (
         <TrendingSearchItem
-          key={item.id}
-          id={item.id}
+          key={item.keyword}
+          id={item.rank}
           keyword={item.keyword}
-          status={item.status}
+          status={item.change}
           onSearchClick={onSearchClick}
         />
       ))}
@@ -91,7 +94,8 @@ interface TrendingSearchesSectionProps {
 
 const TrendingSearchesSection = ({ onSearchClick }: TrendingSearchesSectionProps) => {
   const { data, isLoading, error } = useTrendingSearches();
-  const trendingSearches = data?.trendingSearches || [];
+  const trendingSearches = data?.keywordList || [];
+
   const firstColumnItems = trendingSearches.slice(0, 5);
   const secondColumnItems = trendingSearches.slice(5, 10);
 
@@ -99,15 +103,13 @@ const TrendingSearchesSection = ({ onSearchClick }: TrendingSearchesSectionProps
     <div className="px-4 py-4">
       <div className="mb-3 flex items-center justify-between">
         <h3 className="text-sm font-semibold text-gray-900">실시간 인기 검색어</h3>
-        {data?.lastUpdated && (
-          <span className="text-xs text-gray-500">
-            {new Date(data.lastUpdated).toLocaleTimeString("ko-KR", {
-              hour: "2-digit",
-              minute: "2-digit",
-            })}{" "}
-            기준
-          </span>
-        )}
+        <span className="text-xs text-gray-500">
+          {new Date().toLocaleTimeString("ko-KR", {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}{" "}
+          기준
+        </span>
       </div>
       {isLoading ? (
         <div className="grid grid-cols-2 gap-4">

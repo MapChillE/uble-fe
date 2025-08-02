@@ -41,3 +41,19 @@ export interface MapSuggestionResult {
 export interface MapSuggestionResponse extends responseStatus {
   data: MapSuggestionResult;
 }
+
+export interface TrendingKeywordItem {
+  keyword: string;
+  rank: number;
+  count: number;
+  change: "UP" | "DOWN" | "SAME" | "NEW";
+  diff: number;
+}
+
+export interface KeywordList {
+  keywordList: TrendingKeywordItem[];
+}
+
+export interface KeywordListResponse extends responseStatus {
+  data: KeywordList;
+}

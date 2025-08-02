@@ -1,8 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchTrendingSearches, TrendingSearchResponse } from "@/service/trendingSearch";
+import { fetchTrendingSearches } from "@/service/trendingSearch";
+import { KeywordList } from "@/types/search";
 
 export const useTrendingSearches = () => {
-  return useQuery<TrendingSearchResponse>({
+  return useQuery<KeywordList>({
     queryKey: ["trending-searches"],
     queryFn: fetchTrendingSearches,
     staleTime: 5 * 60 * 1000, // 5분간 fresh 상태 유지
