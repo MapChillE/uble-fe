@@ -144,7 +144,6 @@ const StatisticsFilter = ({ filters, setFilters }: StatisticsFilterProps) => {
         </div>
 
         <div className="mt-4 flex space-x-2">
-          <Button>필터 적용</Button>
           <Button
             variant="outline"
             onClick={() =>
