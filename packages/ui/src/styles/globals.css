@@ -46,8 +46,8 @@ body.map-page-active {
 
 /* map 페이지 전용 스타일 - 헤더/푸터 제외한 높이 */
 .map-page {
-  height: calc(100dvh - 55px - 72px) !important;
-  min-height: calc(100dvh - 55px - 72px) !important;
+  height: calc(100dvh - 55px - 55px) !important;
+  min-height: calc(100dvh - 55px - 55px) !important;
   overflow: hidden !important;
   position: relative !important;
 }
