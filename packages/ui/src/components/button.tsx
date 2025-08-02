@@ -14,7 +14,7 @@ const buttonVariants = cva(
         filter_select:
           "font-semibold bg-action-green text-white border-action-green hover:bg-hover-green shadow-lg",
         filter_unselect:
-          "font-semibold bg-white text-gray-700 border border-gray-300 hover:bg-gray-50",
+          "font-semibold bg-white text-gray-700 shadow-sm border border-gray-300 hover:bg-gray-50",
         disabled: "font-semibold bg-gray-200 text-gray-400",
 
         onb_unselected:

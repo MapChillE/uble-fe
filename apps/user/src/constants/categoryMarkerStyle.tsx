@@ -13,7 +13,11 @@ import {
   Star,
   Calendar,
   HelpCircle,
-  Car, // default
+  Film,
+  Car,
+  Store,
+  Popcorn,
+  Gem,
 } from "lucide-react";
 import { ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
@@ -21,14 +25,17 @@ import { renderToStaticMarkup } from "react-dom/server";
 // Types
 export type CategoryMarkerKey =
   | "액티비티"
-  | "뷰티/건강"
+  | "뷰티/패션"
   | "쇼핑"
-  | "생활/건강"
+  | "생활"
+  | "식당"
   | "문화/여가"
   | "교육"
-  | "여행/교통"
-  | "식당"
+  | "여행"
   | "카페"
+  | "편의점"
+  | "영화관"
+  | "렌트카"
   | "우리동네멤버십"
   | "VIP콕"
   | "계절"
@@ -46,24 +53,24 @@ export interface CategoryIconStyle {
 }
 
 // 공통 데이터 정의
-const CATEGORY_META: Record<
-  CategoryMarkerKey,
-  { icon: any; markerColor: string; textColor: string }
-> = {
+const CATEGORY_META = {
   액티비티: { icon: Activity, markerColor: "#F87171", textColor: "text-red-500" },
-  "뷰티/건강": { icon: HeartPulse, markerColor: "#A16207", textColor: "text-orange-500" },
-  쇼핑: { icon: ShoppingCart, markerColor: "#34D399", textColor: "text-emerald-500" },
-  "생활/건강": { icon: Home, markerColor: "#60A5FA", textColor: "text-blue-500" },
-  "문화/여가": { icon: Theater, markerColor: "#C084FC", textColor: "text-purple-500" },
-  교육: { icon: GraduationCap, markerColor: "#FACC15", textColor: "text-yellow-500" },
-  "여행/교통": { icon: Car, markerColor: "#5EEAD4", textColor: "text-teal-500" },
   식당: { icon: Utensils, markerColor: "#FB7185", textColor: "text-rose-500" },
+  "뷰티/패션": { icon: Heart, markerColor: "#EC4899", textColor: "text-pink-500" },
   카페: { icon: Coffee, markerColor: "#FB923C", textColor: "text-orange-400" },
+  쇼핑: { icon: ShoppingCart, markerColor: "#34D399", textColor: "text-emerald-500" },
+  여행: { icon: Plane, markerColor: "#5EEAD4", textColor: "text-teal-400" },
+  렌트카: { icon: Car, markerColor: "#2DD4BF", textColor: "text-teal-500" },
+  생활: { icon: Home, markerColor: "#60A5FA", textColor: "text-blue-500" },
+  편의점: { icon: Store, markerColor: "#38BDF8", textColor: "text-sky-500" },
+  "문화/여가": { icon: Theater, markerColor: "#C084FC", textColor: "text-purple-500" },
+  영화관: { icon: Popcorn, markerColor: "#A855F7", textColor: "text-purple-600" },
+  VIP콕: { icon: Gem, markerColor: "#7C3AED", textColor: "text-purple-600" },
+  교육: { icon: GraduationCap, markerColor: "#FACC15", textColor: "text-yellow-500" },
+  계절: { icon: Calendar, markerColor: "#22C55E", textColor: "text-green-500" },
   우리동네멤버십: { icon: Users, markerColor: "#1E293B", textColor: "text-slate-700" },
-  VIP콕: { icon: Star, markerColor: "#9869f1", textColor: "text-purple-600" },
-  계절: { icon: Calendar, markerColor: "#22c55e", textColor: "text-green-500" },
-  default: { icon: Star, markerColor: "#FACC15", textColor: "text-yellow-500" },
-};
+  default: { icon: Star, markerColor: "#94A3B8", textColor: "text-slate-500" },
+} as const;
 
 // 카테고리별 아이콘 스타일 정보 반환 (카테고리바용)
 export const getCategoryIconStyle = (categoryName: string): CategoryIconStyle => {
@@ -108,7 +115,7 @@ export const getCategoryIconByZoom = (category?: string, name?: string, zoom: nu
   const { color, icon } = style;
   const iconSize = 16; // 마커 크기에 맞는 아이콘 크기
   const svgString = getCategoryIconHTML(icon, iconSize);
-  
+
   // 줌 레벨에 따른 마커 크기와 텍스트 표시 여부 결정
   const markerSize = 28;
   const fontSize = 11;
