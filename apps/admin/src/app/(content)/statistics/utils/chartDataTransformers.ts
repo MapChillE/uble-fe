@@ -223,23 +223,37 @@ export const getDefaultChartData = (): ChartData => {
   };
 };
 
+interface DateItem {
+  date: string;
+  [key: string]: any;
+}
+
 // 키워드 차트용 날짜 목록 가져오기
-export const getKeywordsDateList = (data: any): { date: string; formattedDate: string }[] => {
+export const getKeywordsDateList = (data: {
+  rankList?: DateItem[];
+}): { date: string; formattedDate: string }[] => {
   if (
     !data.rankList ||
     !Array.isArray(data.rankList) ||
     data.rankList.length === 0 ||
-    !data.rankList[0].date
+    !data.rankList[0]?.date
   ) {
     return [];
   }
 
   const sortedData = data.rankList.sort(
-    (a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime()
+    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
   );
 
-  return sortedData.map((item: any) => {
+  return sortedData.map((item) => {
     const date = new Date(item.date);
+    if (isNaN(date.getTime())) {
+      console.warn(`Invalid date: ${item.date}`);
+      return {
+        date: item.date,
+        formattedDate: item.date,
+      };
+    }
     const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
     return {
       date: item.date,
