@@ -2,10 +2,10 @@
 
 import { useEffect, useMemo, useState, useCallback, useRef, useReducer } from "react";
 import { useDebouncedCallback } from "use-debounce";
-import { useCurrentLocation } from "@/hooks/map/useCurrentLocation";
 import NaverMap, { Pin } from "@/app/(main)/map/components/NaverMap";
 import { Category } from "@/types/category";
 import { useBaseLocation } from "@/hooks/map/useBaseLocation";
+import { useLocationStore } from "@/store/useLocationStore";
 import { DEFAULT_LOCATION, DEFAULT_ZOOM_LEVEL } from "@/types/constants";
 import { Coordinates } from "@/types/map";
 import { mapReducer, MapState, MapAction } from "@/app/(main)/map/reducers/mapReducer";
@@ -32,11 +32,11 @@ export default function MapWithBaseLocation({
   searchId,
   onExitSearchMode,
 }: MapWithBaseLocationProps) {
-  const { location: currentLocation, getCurrentLocation } = useCurrentLocation();
+  const currentLocation = useLocationStore((s) => s.currentLocation);
   const [isInitialized, setIsInitialized] = useState(false);
   const [showSearchBtn, setShowSearchBtn] = useState(false);
   const [isExitingSearchMode, setIsExitingSearchMode] = useState(false);
-  const baseLocation = useBaseLocation(currentLocation ?? DEFAULT_LOCATION);
+  const baseLocation = useBaseLocation();
   const lastBaseLocationRef = useRef<Coordinates>(baseLocation);
 
   const [state, dispatch] = useReducer(mapReducer, {
@@ -45,10 +45,6 @@ export default function MapWithBaseLocation({
     zoom: DEFAULT_ZOOM_LEVEL,
     pins: [],
   });
-
-  useEffect(() => {
-    getCurrentLocation();
-  }, [getCurrentLocation]);
 
   const fetchPins = useCallback(
     async (
@@ -227,7 +223,7 @@ export default function MapWithBaseLocation({
   }
 
   return (
-    <div className="relative flex h-full w-full">
+    <div className="map-content relative flex h-full w-full">
       <NaverMap
         loc={state.center}
         zoom={state.zoom}

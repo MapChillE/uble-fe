@@ -9,6 +9,17 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ========================
+  폰트 정의
+   ======================== */
+@font-face {
+  font-family: "Futura";
+  src: url("/fonts/Futura-Bold.otf") format("opentype");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ========================
   공통 스타일 (스크롤바 제거)
    ======================== */
 .scrollbar-hide {
@@ -21,6 +32,61 @@
 }
 
 /* ========================
+  지도 컨테이너 높이 설정
+   ======================== */
+
+/* 공통 높이 설정 */
+.map-container,
+.map-page,
+body.map-page-active {
+  height: 100vh !important;
+  height: 100dvh !important;
+  overflow: hidden !important;
+}
+
+/* map 페이지 전용 스타일 - 헤더/푸터 제외한 높이 */
+.map-page {
+  height: calc(100dvh - 55px - 72px) !important;
+  min-height: calc(100dvh - 55px - 72px) !important;
+  overflow: hidden !important;
+  position: relative !important;
+}
+
+/* 지도 페이지 컨테이너 */
+.map-page {
+  position: relative !important;
+}
+
+/* 지도 콘텐츠 */
+.map-content {
+  height: 100% !important;
+}
+
+/* 네이버 지도 요소 */
+#naver-map,
+#naver-map[style*="height"] {
+  height: 100% !important;
+  width: 100% !important;
+  max-height: 100vh !important;
+  max-height: 100dvh !important;
+  min-height: 100% !important;
+}
+
+/* 모바일 특화 설정 */
+@media screen and (max-width: 768px) {
+  .map-container {
+    min-height: 100vh !important;
+  }
+
+  /* map 페이지가 있을 때 body 스타일 (최신 브라우저) */
+  body:has(.map-page) {
+    overflow: hidden !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+  }
+}
+
+/* ========================
   모바일 뷰포트 대응
    ======================== */
 
@@ -29,6 +95,14 @@
   .h-screen {
     height: 100dvh;
   }
+}
+
+/* 모바일 safe area 변수 */
+:root {
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
 }
 
 /* Android Chrome, Firefox */
@@ -47,6 +121,7 @@
 
 :root {
   --font-pretendard: "Pretendard";
+  --font-futura: "Futura";
 
   --action-green: #41d596;
   --hover-green: #14b470;
@@ -104,6 +179,7 @@
 
 @theme inline {
   --font-pretendard: var(--font-pretendard);
+  --font-futura: var(--font-futura);
 
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
@@ -215,6 +291,10 @@
 }
 
 @layer utilities {
+  .font-futura {
+    font-family: var(--font-futura);
+  }
+
   .input-underline {
     border-bottom: 2px solid #e5e7eb;
     transition: border-color 0.2s ease;
@@ -251,4 +331,19 @@
   .animate-accordion-up {
     animation: accordion-up 0.2s ease-out;
   }
+}
+.bg-uble {
+  /* 아주 연한 민트 → 살짝 연한 민트 */
+  background: linear-gradient(180deg, #e7fff4 0%, #cff9ea 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 노이즈 패턴 그대로 (더 밝아진 배경과 어울리도록 투명도 유지) */
+.uble-noise {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 4px 4px;
+  opacity: 0.45;
 }

@@ -26,7 +26,7 @@ export default function Header() {
           <>
             <button
               onClick={() => router.push("/home")}
-              className="text-2xl font-bold"
+              className="font-futura text-2xl font-bold"
               aria-label="홈으로 이동"
             >
               Uble
