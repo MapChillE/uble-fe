@@ -3,6 +3,7 @@ import {
   InterestRankApiResponse,
   UsageRankApiResponse,
   LocalRankApiResponse,
+  KeywordsRankResponse,
   RankData,
   InterestRankData,
   InterestRankItem,
@@ -64,14 +65,14 @@ export const transformUsageData = (data: UsageRankApiResponse["data"]): ChartDat
 
 // 로컬 랭킹 차트 데이터 변환
 export const transformLocalData = (data: LocalRankApiResponse["data"]): ChartData | null => {
-  if (!data.rankList) return null;
+  if (!data.usageRankList) return null;
 
   return {
-    labels: data.rankList.map((item: RankData) => item.name),
+    labels: data.usageRankList.map((item: RankData) => item.name),
     datasets: [
       {
         label: "이용 수",
-        data: data.rankList.map((item: RankData) => item.count),
+        data: data.usageRankList.map((item: RankData) => item.count),
         backgroundColor: "rgba(34, 197, 94, 0.8)",
         borderColor: "rgba(34, 197, 94, 1)",
         borderWidth: 1,
@@ -149,18 +150,21 @@ export const transformInterestChangeData = (
 };
 
 // 키워드 차트 데이터 변환 (daily-top, empty-top)
-export const transformKeywordsData = (data: any, selectedDate?: string): ChartData | null => {
+export const transformKeywordsData = (
+  data: KeywordsRankResponse,
+  selectedDate?: string
+): ChartData | null => {
   if (!data.rankList) return null;
 
   // 중첩된 구조인 경우 (daily-top, empty-top)
-  if (Array.isArray(data.rankList) && data.rankList.length > 0 && data.rankList[0].date) {
+  if (Array.isArray(data.rankList) && data.rankList.length > 0 && data.rankList[0]?.date) {
     // 날짜별로 정렬
     const sortedData = data.rankList.sort(
       (a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime()
     );
 
     // 선택된 날짜 또는 가장 최근 날짜 사용
-    const targetDate = selectedDate || sortedData[sortedData.length - 1].date;
+    const targetDate = selectedDate || sortedData[sortedData.length - 1]?.date;
     const selectedDateData = sortedData.find((item: any) => item.date === targetDate);
 
     if (selectedDateData) {

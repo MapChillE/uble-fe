@@ -40,9 +40,17 @@ export interface UsageRankResponse {
   usageRankList: RankData[];
 }
 
-// 로컬 랭킹 응답 (keywords/daily-top, keywords/empty-top, local 공통)
+// 로컬 랭킹 응답 (local API)
 export interface LocalRankResponse {
-  rankList: RankData[];
+  usageRankList: RankData[];
+}
+
+// 키워드 랭킹 응답 (keywords/daily-top, keywords/empty-top)
+export interface KeywordsRankResponse {
+  rankList: {
+    date: string;
+    rankList: RankData[];
+  }[];
 }
 
 // API 요청 파라미터
