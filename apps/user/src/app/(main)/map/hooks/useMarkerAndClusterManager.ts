@@ -55,10 +55,10 @@ export const useMarkerAndClusterManager = ({
   const createMarker = (pin: Pin): NaverMarker => {
     const position = new window.naver.maps.LatLng(pin.coords[1], pin.coords[0]);
 
-    const markerOptions: any = {
+    const markerOptions: naver.maps.MarkerOptions = {
       position,
       map: mapRef.current!,
-      // title: pin.name || "",
+      title: pin.name || "",
     };
 
     // 마커 타입에 따른 zIndex 설정
@@ -79,7 +79,10 @@ export const useMarkerAndClusterManager = ({
         markerOptions.icon = currentIcon;
       }
     } else if (pin.type === "selected") {
-      markerOptions.icon = getCategoryIconByZoom(pin.category, selectedPlace?.name, zoom);
+      const selectedIcon = getCategoryIconByZoom(pin.category, selectedPlace?.name, zoom);
+      if (selectedIcon) {
+        markerOptions.icon = selectedIcon;
+      }
     } else if (pin.type === "store" && pin.category) {
       const icon = getCategoryIconByZoom(pin.category, pin.name, zoom);
       if (icon) {
