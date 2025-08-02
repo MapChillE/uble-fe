@@ -20,6 +20,7 @@ interface StoreDetailDrawerState {
   close: () => void;
   setSnapIndex: (index: number) => void;
   loadDetail: (baseLocation: Coordinates) => Promise<void>;
+  updateBookmarkStatus: (isBookmarked: boolean) => void;
   reset: () => void;
 }
 
@@ -72,6 +73,18 @@ const useStoreDetailDrawerStore = create<StoreDetailDrawerState>((set, get) => (
       toast.error("가맹점 상세 정보를 불러오지 못했습니다.");
       set({ isDetailLoading: false });
     }
+  },
+
+  updateBookmarkStatus: (isBookmarked: boolean) => {
+    const { summary } = get();
+    if (!summary) return;
+
+    set({
+      summary: {
+        ...summary,
+        isBookmarked,
+      },
+    });
   },
 
   reset: () => {

@@ -1,15 +1,15 @@
 "use client";
 
-import { useState, useRef } from "react";
+import React, { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
 
-import { Button } from "@workspace/ui/components/button";
 import SearchInput from "@/components/common/SearchInput";
 import MapSearchResult from "@/app/(main)/map/components/MapSearchResult";
+import SearchSuggestionsSection from "./SearchSuggestionsSection";
 import { useLocationStore } from "@/store/useLocationStore";
+import { useSearchStore } from "@/store/useSearchStore";
 import { fetchMapSearch, fetchSearchLog } from "@/service/mapSearch";
 import { DEFAULT_LOCATION, DEFAULT_ZOOM_LEVEL } from "@/types/constants";
 import { MapSuggestion } from "@/types/search";
@@ -25,114 +25,179 @@ export default function SearchContainer() {
   const router = useRouter();
   const pathname = usePathname();
   const urlParams = useSearchParams();
-  const currentLoc = useLocationStore((s) => s.currentLocation);
+  const currentLocation = useLocationStore((s) => s.currentLocation);
+  const { addRecentSearch } = useSearchStore();
+
+  // URL 파라미터 업데이트 함수 - useCallback으로 최적화
+  const updateUrlParams = useCallback(
+    (newQuery: string) => {
+      const p = new URLSearchParams(urlParams);
+      newQuery ? p.set("q", newQuery) : p.delete("q");
+      router.replace(`${pathname}?${p.toString()}`);
+    },
+    [urlParams, router, pathname]
+  );
 
   /** 검색 & (필요 시) 로그 */
-  const runSearch = async (keyword: string, via: "ENTER" | "AUTO") => {
-    setLoading(true);
-    try {
-      const res = await fetchMapSearch({
-        keyword,
-        latitude: currentLoc?.[1] ?? DEFAULT_LOCATION[1],
-        longitude: currentLoc?.[0] ?? DEFAULT_LOCATION[0],
-      });
-      setResults(res.suggestionList);
+  const runSearch = useCallback(
+    async (keyword: string, via: "ENTER" | "AUTO") => {
+      setLoading(true);
 
-      if (via === "ENTER") {
-        await fetchSearchLog({
+      try {
+        const res = await fetchMapSearch({
           keyword,
-          searchType: "ENTER",
-          isResultExists: res.suggestionList.length > 0,
+          latitude: currentLocation?.[1] ?? DEFAULT_LOCATION[1],
+          longitude: currentLocation?.[0] ?? DEFAULT_LOCATION[0],
         });
+        setResults(res.suggestionList);
+
+        if (via === "ENTER") {
+          addRecentSearch(keyword);
+          await fetchSearchLog({
+            keyword,
+            searchType: "ENTER",
+            isResultExists: res.suggestionList.length > 0,
+          });
+        }
+      } catch (err) {
+        console.error(err);
+        toast.error("검색 중 오류가 발생했습니다.");
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      console.error(err);
-      toast.error("검색 중 오류가 발생했습니다.");
-    } finally {
-      setLoading(false);
-    }
-  };
+    },
+    [currentLocation, addRecentSearch]
+  );
 
   /** 입력 자동완성 (디바운스) */
-  const debouncedAutoSearch = useDebouncedCallback((v: string) => {
-    if (enterFiredRef.current) {
-      // ENTER 직후 첫 AUTO 무시
-      enterFiredRef.current = false;
-      return;
-    }
-    v.trim() ? runSearch(v, "AUTO") : setResults([]);
-  }, 200);
+  const debouncedAutoSearch = useCallback(
+    useDebouncedCallback((v: string) => {
+      if (enterFiredRef.current) {
+        // ENTER 직후 첫 AUTO 무시
+        enterFiredRef.current = false;
+        return;
+      }
+      v.trim() ? runSearch(v, "AUTO") : setResults([]);
+    }, 200),
+    [runSearch]
+  );
 
-  const handleBack = () => router.back();
+  const handleBack = useCallback(() => {
+    // 1. 검색 결과가 있거나 검색어가 입력된 상태라면 초기 상태로 돌아가기
+    if (query.trim() || results.length > 0) {
+      setQuery("");
+      setResults([]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const v = e.target.value;
-    setQuery(v);
-    debouncedAutoSearch(v);
+      // URL 파라미터도 초기화
+      updateUrlParams("");
 
-    /* 주소창 파라미터 갱신 */
-    const p = new URLSearchParams(urlParams);
-    v ? p.set("q", v) : p.delete("q");
-    router.replace(`${pathname}?${p.toString()}`);
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if ((e.nativeEvent as any).isComposing) return; // IME 조합 중 무시
-    if (e.key !== "Enter") return;
-    if (enterFiredRef.current) return; // 중복 차단
-
-    e.preventDefault();
-    const v = e.currentTarget.value.trim();
-    if (!v) return;
-
-    enterFiredRef.current = true;
-    debouncedAutoSearch.cancel();
-    runSearch(v, "ENTER");
-    setTimeout(() => {
-      enterFiredRef.current = false;
-    }, 200); // 200 ms 후 풀기
-  };
-
-  const handleResultClick = async (item: MapSuggestion) => {
-    if (!item.latitude || !item.longitude) {
-      toast.error("위치 정보를 찾을 수 없습니다.");
+      // 입력창 포커스
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
       return;
     }
 
-    /* 클릭 로그 */
-    await fetchSearchLog({ keyword: query, searchType: "CLICK", isResultExists: true });
+    // 2. 초기 상태라면 map 페이지로 이동
+    router.push("/map");
+  }, [query, results.length, updateUrlParams, router]);
 
-    /* 파라미터 조립 후 라우팅 */
-    const p = new URLSearchParams({
-      lat: item.latitude.toString(),
-      lng: item.longitude.toString(),
-      searchQuery: query,
-    });
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const v = e.target.value;
+      setQuery(v);
+      debouncedAutoSearch(v);
 
-    if (item.type === "STORE") {
-      p.set("storeId", item.id.toString());
+      /* 주소창 파라미터 갱신 */
+      updateUrlParams(v);
+    },
+    [debouncedAutoSearch, updateUrlParams]
+  );
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if ((e.nativeEvent as any).isComposing) return; // IME 조합 중 무시
+      if (e.key !== "Enter") return;
+      if (enterFiredRef.current) return; // 중복 차단
+
+      e.preventDefault();
+      const v = e.currentTarget.value.trim();
+      if (!v) return;
+
+      enterFiredRef.current = true;
+      debouncedAutoSearch.cancel();
+      runSearch(v, "ENTER");
+      setTimeout(() => {
+        enterFiredRef.current = false;
+      }, 200); // 200 ms 후 풀기
+    },
+    [debouncedAutoSearch, runSearch]
+  );
+
+  const handleResultClick = useCallback(
+    async (item: MapSuggestion) => {
+      if (!item.latitude || !item.longitude) {
+        toast.error("위치 정보를 찾을 수 없습니다.");
+        return;
+      }
+
+      /* 클릭 로그 */
+      await fetchSearchLog({ keyword: query, searchType: "CLICK", isResultExists: true });
+
+      /* 파라미터 조립 후 라우팅 */
+      const p = new URLSearchParams({
+        lat: item.latitude.toString(),
+        lng: item.longitude.toString(),
+        searchQuery: query,
+      });
+
+      if (item.type === "STORE") {
+        p.set("storeId", item.id.toString());
+      } else {
+        p.set("zoom", DEFAULT_ZOOM_LEVEL.toString());
+        p.set("type", item.type);
+        p.set("id", item.id.toString());
+      }
+      router.push(`/map?${p.toString()}`);
+    },
+    [query, router]
+  );
+
+  const handleSuggestionClick = useCallback(
+    (keyword: string) => {
+      setQuery(keyword);
+      if (inputRef.current) {
+        inputRef.current.value = keyword;
+      }
+      runSearch(keyword, "ENTER");
+    },
+    [runSearch]
+  );
+
+  // URL 파라미터에서 초기 상태 감지
+  useEffect(() => {
+    const searchQuery = urlParams.get("q") ?? "";
+
+    if (!searchQuery) {
+      setQuery("");
+      setResults([]);
     } else {
-      p.set("zoom", DEFAULT_ZOOM_LEVEL.toString());
-      p.set("type", item.type);
-      p.set("id", item.id.toString());
+      setQuery(searchQuery);
     }
-    router.push(`/map?${p.toString()}`);
-  };
+  }, [urlParams.get("q")]);
 
   return (
     <div className="flex h-full flex-col bg-white">
       {/* 헤더 */}
       <div className="flex items-center gap-3 border-b border-gray-200 px-4 py-3">
-        <Button variant="ghost" size="sm" onClick={handleBack} className="p-2">
-          <ArrowLeft className="h-5 w-5" />
-        </Button>
-
         <div className="flex-1">
           <SearchInput
             ref={inputRef}
             searchQuery={query}
             onChange={handleChange}
             onKeyDown={handleKeyDown}
+            onBackClick={handleBack}
+            showBackButton={true}
             placeholder="검색어를 입력하세요"
           />
         </div>
@@ -144,10 +209,12 @@ export default function SearchContainer() {
           <div className="flex h-full items-center justify-center" />
         ) : results.length ? (
           <MapSearchResult searchResults={results} onResultClick={handleResultClick} />
-        ) : (
+        ) : query ? (
           <div className="flex h-full items-center justify-center text-gray-500">
             검색 결과가 없습니다.
           </div>
+        ) : (
+          <SearchSuggestionsSection onSearchClick={handleSuggestionClick} />
         )}
       </div>
     </div>
