@@ -72,7 +72,7 @@ export const useMarkerAndClusterManager = ({
       markerOptions.zIndex = 100; // 일반 카테고리 마커는 가장 아래
     }
 
-    // 현위치 마커일 경우 커스텀 스타일 적용
+    // 마커 타입에 따른 아이콘 설정
     if (pin.type === "current") {
       const currentIcon = getCurrentLocationIcon();
       if (currentIcon) {
@@ -80,21 +80,17 @@ export const useMarkerAndClusterManager = ({
       }
     } else if (pin.type === "selected") {
       markerOptions.icon = getCategoryIconByZoom(pin.category, selectedPlace?.name, zoom);
-    }
-    // 카테고리별 마커 아이콘 적용
-    if (pin.type === "store" && pin.category) {
+    } else if (pin.type === "store" && pin.category) {
       const icon = getCategoryIconByZoom(pin.category, pin.name, zoom);
       if (icon) {
         markerOptions.icon = icon;
       }
     } else if (pin.type === "search") {
-      // 검색결과 마커 아이콘 적용
       const icon = getSearchResultIcon(pin.name, zoom);
       if (icon) {
         markerOptions.icon = icon;
       }
     } else if (pin.type === "myplace") {
-      // 내장소 마커 아이콘 적용
       const icon = getMyPlaceIcon(pin.name, zoom);
       if (icon) {
         markerOptions.icon = icon;
