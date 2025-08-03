@@ -15,14 +15,17 @@ export const TOTAL_STEPS = 5;
 /** 개발 단계에서 사용할 기본 카테고리 목록 */
 export const CATEGORIES = {
   1: "액티비티",
-  2: "뷰티/건강",
+  2: "뷰티/패션",
   3: "쇼핑",
-  4: "생활/건강",
+  4: "생활",
   5: "식당",
   6: "문화/여가",
   7: "교육",
-  8: "여행/교통",
+  8: "여행",
   9: "카페",
+  10: "편의점",
+  11: "영화관",
+  12: "렌트카",
 } as const;
 
 // export type Category = (typeof CATEGORIES)[number];

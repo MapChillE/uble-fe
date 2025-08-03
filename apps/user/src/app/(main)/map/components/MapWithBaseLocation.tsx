@@ -12,6 +12,7 @@ import { mapReducer, MapState, MapAction } from "@/app/(main)/map/reducers/mapRe
 import { fetchStorePins } from "@/utils/fetchStorePins";
 import { createBoundsFromCenterAndZoom } from "@/utils/mapBounds";
 import SearchModeBtn from "./SearchModeBtn";
+import { useCurrentLocation } from "@/hooks/map/useCurrentLocation";
 
 interface MapWithBaseLocationProps {
   selectedCategory: Category;
@@ -47,12 +48,6 @@ export default function MapWithBaseLocation({
     zoom: DEFAULT_ZOOM_LEVEL,
     pins: [],
   });
-
-  useEffect(() => {
-    if (!currentLocation) {
-      getCurrentLocation();
-    }
-  }, [getCurrentLocation]);
 
   const fetchPins = useCallback(
     async (
@@ -255,6 +250,7 @@ export default function MapWithBaseLocation({
     [state.pins, onPinClick]
   );
 
+  // 위치 정보가 없을 때만 로딩 표시
   if (!currentLocation) {
     return (
       <div className="flex h-full w-full items-center justify-center">

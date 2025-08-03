@@ -28,13 +28,28 @@ const CategoryBar = ({ selectedCategory, onSelectCategory }: CategoryBarProps) =
         return (
           <Button
             key={cat.categoryId}
-            variant={isSelected ? "filter_select" : "filter_unselect"}
+            variant="filter_unselect"
             size="sm"
             onClick={() => onSelectCategory(cat)}
             className="flex items-center gap-2"
+            style={{
+              borderColor: isSelected
+                ? cat.categoryId === 0
+                  ? "rgba(65, 213, 150, 0.3)"
+                  : `${iconStyle.markerColor}40`
+                : "",
+            }}
           >
             {cat.categoryId !== 0 && <div className={iconStyle.color}>{iconStyle.icon()}</div>}
-            <span>{cat.categoryName}</span>
+            <span
+              style={
+                isSelected
+                  ? { color: cat.categoryId === 0 ? "#41d596" : iconStyle.markerColor }
+                  : {}
+              }
+            >
+              {cat.categoryName}
+            </span>
           </Button>
         );
       })}

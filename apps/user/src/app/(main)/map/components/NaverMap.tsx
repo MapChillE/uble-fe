@@ -2,15 +2,9 @@
 
 import { useEffect, useRef } from "react";
 import { Coordinates } from "@/types/map";
-import type { NaverMap as NaverMapInstance, NaverMapOptions, NaverMarker } from "@/types/map";
-import {
-  CATEGORY_MARKER_STYLE,
-  CategoryMarkerKey,
-  getCategoryIconHTML,
-  getCategoryIconByZoom,
-} from "@/constants/categoryMarkerStyle";
-import { MarkerClustering } from "@/types/markerClustering";
+import type { NaverMap as NaverMapInstance, NaverMapOptions } from "@/types/map";
 import { useLocationStore } from "@/store/useLocationStore";
+import { useMarkerAndClusterManager } from "@/app/(main)/map/hooks/useMarkerAndClusterManager";
 
 const mapId = "naver-map";
 
@@ -31,33 +25,6 @@ interface NaverMapProps {
   onZoomChange?: (zoom: number) => void;
 }
 
-// 카테고리별 아이콘 반환 함수 (기본 - 줌 레벨 고려하지 않음)
-function getCategoryIcon(category?: string, name?: string) {
-  if (!window.naver?.maps) return null;
-
-  const key: CategoryMarkerKey = (category as CategoryMarkerKey) ?? "default";
-  const style = CATEGORY_MARKER_STYLE[key] ?? CATEGORY_MARKER_STYLE["default"];
-  const { color, icon } = style;
-  const iconSize = 16;
-  const svgString = getCategoryIconHTML(icon, iconSize);
-
-  return {
-    content: `
-        <div style="display:flex;flex-direction:column;align-items:center;">
-          <div style="background:${color};width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;">
-            ${svgString}
-          </div>
-          <div style="margin-top:4px;font-size:11px;font-weight:bold;color:#333;white-space:nowrap;
-          text-shadow:-1px -1px 0 white,1px -1px 0 white,-1px 1px 0 white,1px 1px 0 white,0px 0px 2px white;">
-          ${name ?? ""}
-          </div>
-        </div>
-      `,
-    size: new window.naver.maps.Size(28, 28),
-    anchor: new window.naver.maps.Point(14, 28),
-  };
-}
-
 /**
  * 지도에 마커, 클러스터러 등을 표시하는 컴포넌트
  * @param loc 지도 중심 좌표
@@ -74,70 +41,17 @@ export default function NaverMap({
   onZoomChange,
 }: NaverMapProps) {
   const mapRef = useRef<NaverMapInstance | null>(null);
-  const markerRefs = useRef<NaverMarker[]>([]);
-  const clustererRef = useRef<MarkerClustering | null>(null);
-  const currentMarkerRef = useRef<NaverMarker | null>(null);
-  const selectedMarkerRef = useRef<NaverMarker | null>(null);
-  const pinsRef = useRef<Pin[]>([]);
   const [lng, lat] = loc;
   const selectedPlaceId = useLocationStore((s) => s.selectedPlaceId);
   const selectedPlace = useLocationStore((s) => s.myPlaces.find((p) => p.id === selectedPlaceId));
 
-  // 마커 아이콘 업데이트 함수
-  const updateMarkerIcon = (marker: NaverMarker, pin: Pin, currentZoom: number) => {
-    if (pin.type === "current" || pin.type === "selected") {
-      return;
-    } else if (pin.type === "store" && pin.category) {
-      const icon = getCategoryIconByZoom(pin.category, pin.name, currentZoom);
-      if (icon) {
-        marker.setIcon(icon);
-      }
-    }
-  };
-
-  // 마커 생성 함수
-  const createMarker = (pin: Pin): NaverMarker => {
-    const position = new window.naver.maps.LatLng(pin.coords[1], pin.coords[0]);
-
-    const markerOptions: any = {
-      position,
-      map: mapRef.current!,
-      // title: pin.name || "",
-    };
-
-    // 현위치 마커일 경우 커스텀 스타일 적용
-    if (pin.type === "current") {
-      markerOptions.icon = {
-        content: `<div style="
-            background: #f63b3b;
-            width: 15px;
-            height: 15px;
-            border-radius: 50%;
-            border: 2px solid white;
-            box-shadow: 0 0 4px rgba(0,0,0,0.3);  
-          "></div>`,
-        size: new window.naver.maps.Size(20, 20),
-        anchor: new window.naver.maps.Point(10, 10),
-      };
-    } else if (pin.type === "selected") {
-      markerOptions.icon = getCategoryIconByZoom(pin.category, selectedPlace?.name, zoom);
-    }
-    // 카테고리별 마커 아이콘 적용
-    if (pin.type === "store" && pin.category) {
-      const icon = getCategoryIconByZoom(pin.category, pin.name, zoom);
-      if (icon) {
-        markerOptions.icon = icon;
-      }
-    }
-
-    const marker = new window.naver.maps.Marker(markerOptions);
-
-    if (pin.onClick) {
-      window.naver.maps.Event.addListener(marker, "click", pin.onClick);
-    }
-
-    return marker;
-  };
+  // 마커와 클러스터러 통합 관리 훅 사용
+  useMarkerAndClusterManager({
+    mapRef,
+    pins,
+    zoom,
+    selectedPlace,
+  });
 
   // 최초 지도 생성
   useEffect(() => {
@@ -169,132 +83,18 @@ export default function NaverMap({
       if (onZoomChange) {
         window.naver.maps.Event.addListener(map, "zoomend", () => {
           const currentZoom = map.getZoom();
-          console.log("zoom", currentZoom);
           onZoomChange(currentZoom);
-
-          // 줌 레벨 변경 시 마커 아이콘 업데이트
-          const currentPins = pinsRef.current;
-          if (currentPins) {
-            const otherPins = currentPins.filter(
-              (p) => p.type !== "current" && p.type !== "selected"
-            );
-
-            // 일반 마커들 업데이트
-            markerRefs.current.forEach((marker, index) => {
-              const pin = otherPins[index];
-              if (pin) {
-                updateMarkerIcon(marker, pin, currentZoom);
-              }
-            });
-
-            // 선택된 마커 업데이트
-            if (selectedMarkerRef.current) {
-              const selectedPin = currentPins.find((p) => p.type === "selected");
-              if (selectedPin) {
-                updateMarkerIcon(selectedMarkerRef.current, selectedPin, currentZoom);
-              }
-            }
-          }
         });
       }
     }
   }, [loc, onBoundsChange, onZoomChange]);
 
-  // 마커/클러스터러 관리
+  // center 이동
   useEffect(() => {
-    if (!mapRef.current || !window.naver || !window.MarkerClustering) return;
-
-    // center 이동
-    mapRef.current.setCenter(new window.naver.maps.LatLng(lat, lng));
-
-    // 기존 마커 제거
-    markerRefs.current.forEach((marker) => marker.setMap(null));
-    markerRefs.current = [];
-
-    // 기존 클러스터러 제거
-    if (clustererRef.current) {
-      clustererRef.current.setMap(null);
-      clustererRef.current = null;
+    if (mapRef.current) {
+      mapRef.current.setCenter(new window.naver.maps.LatLng(lat, lng));
     }
-
-    // 기존 현위치 마커 제거
-    if (currentMarkerRef.current) {
-      currentMarkerRef.current.setMap(null);
-      currentMarkerRef.current = null;
-    }
-
-    // pins가 없거나 빈 배열이면 마커 제거
-    if (!pins || pins.length === 0) {
-      return;
-    }
-
-    // 현위치 마커 분리
-    const currentPin = pins.find((pin) => pin.type === "current");
-    const selectedPin = pins.find((pin) => pin.type === "selected");
-    const otherPins = pins.filter((pin) => pin.type !== "current" && pin.type !== "selected");
-
-    // 현위치 마커 생성 및 지도에 표시
-    if (currentPin) {
-      currentMarkerRef.current = createMarker(currentPin);
-      currentMarkerRef.current.setMap(mapRef.current);
-    }
-
-    if (selectedPin) {
-      selectedMarkerRef.current = createMarker(selectedPin);
-      selectedMarkerRef.current.setMap(mapRef.current);
-    }
-
-    // 나머지 마커 생성
-    const newMarkers = otherPins.map((pin) => createMarker(pin));
-    markerRefs.current = newMarkers;
-
-    // 클러스터러 생성 (현위치 제외)
-    const HTMLMARKER = {
-      content: `
-  <div style='
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-      background: linear-gradient(135deg, #34D399, #10B981);
-    color: white;
-    font-weight: bold;
-    font-size: 16px;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  '><span id='cluster-count'></span></div>`,
-      size: new window.naver.maps.Size(44, 44),
-      anchor: new window.naver.maps.Point(22, 44),
-    };
-    clustererRef.current = new window.MarkerClustering({
-      // TODO: 클러스터 사이즈 변경 필요
-      minClusterSize: 4,
-      maxZoom: 14,
-      map: mapRef.current,
-      markers: newMarkers,
-      disableClickZoom: false,
-      gridSize: 150,
-      icons: [HTMLMARKER],
-      indexGenerator: [10, 50, 100, 200, 500],
-      stylingFunction: (clusterMarker: any, count: number) => {
-        const el = clusterMarker.getElement().querySelector("span#cluster-count");
-        if (el) el.innerHTML = count;
-      },
-    });
-
-    // 클린업 시 현위치 마커도 제거
-    return () => {
-      if (currentMarkerRef.current) {
-        currentMarkerRef.current.setMap(null);
-        currentMarkerRef.current = null;
-      }
-      if (selectedMarkerRef.current) {
-        selectedMarkerRef.current.setMap(null);
-        selectedMarkerRef.current = null;
-      }
-    };
-  }, [pins, loc, zoom]);
+  }, [loc, lat, lng]);
 
   return <div id={mapId} style={{ width: "100%", height: "100%" }} />;
 }
