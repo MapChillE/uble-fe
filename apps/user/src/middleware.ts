@@ -14,7 +14,7 @@ export const config = {
      * - workbox-*.js (PWA workbox files)
      * - kakaocallback (카카오 로그인 콜백)
      */
-    "/((?!api|_next/static|_next/image|favicon.ico|sw.js|manifest.json|workbox-|kakaocallback).*)",
+    "/((?!api/|_next/|favicon.ico|sw.js|manifest.json|workbox-|kakaocallback).*)",
   ],
 };
 
