@@ -84,7 +84,7 @@ const SearchSection = () => {
   };
 
   return (
-    <section className="p-4">
+    <section className="bg-white p-2">
       <AutoCompleteInput
         searchQuery={searchQuery}
         onChange={handleChange}
