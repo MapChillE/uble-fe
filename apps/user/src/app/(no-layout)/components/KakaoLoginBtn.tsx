@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { toast } from "sonner";
 
 const KakaoLoginBtn = () => {
@@ -19,7 +20,7 @@ const KakaoLoginBtn = () => {
   return (
     <div className="flex justify-center">
       <button onClick={login}>
-        <img src="kakao_login.png" alt="카카오 로그인" />
+        <Image src="/assets/kakao_login_button.png" alt="카카오 로그인" width={300} height={100} />
       </button>
     </div>
   );
