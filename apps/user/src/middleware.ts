@@ -3,18 +3,14 @@ import type { NextRequest } from "next/server";
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - sw.js (service worker)
-     * - manifest.json (PWA manifest)
-     * - workbox-*.js (PWA workbox files)
-     * - kakaocallback (카카오 로그인 콜백)
-     */
-    "/((?!api/|_next/|_next/static/|_next/image/|favicon.ico|manifest.json|sw.js|workbox-|icons/|robots.txt|app.*).*)",
+    "/",
+    "/favorites",
+    "/home",
+    "/map",
+    "/mypage",
+    "/mypage/history",
+    "/partnerships",
+    "/signup",
   ],
 };
 
