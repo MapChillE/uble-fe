@@ -19,6 +19,7 @@ const pwaOptions = {
     // Next 자체 빌드 매니페스트
     /_next\/_buildManifest\.js$/,
     // 필요시 더 추가…
+    /_middleware\.ts$/,
   ],
 };
 
