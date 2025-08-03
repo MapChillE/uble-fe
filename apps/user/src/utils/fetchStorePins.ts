@@ -72,7 +72,7 @@ export async function fetchStorePins(
         {
           id: -1,
           coords: center,
-          name: "내장소",
+          name: "",
           type: "myplace",
         },
         ...storePins,
