@@ -15,11 +15,13 @@ export default function RootLayout({
     <Fragment>
       <HydrateData />
       <ConfirmModal />
-      <Header />
-      <ReactQueryProvider>
-        <main style={{ paddingBottom: "55px" }}>{children}</main>
-      </ReactQueryProvider>
-      <Footer />
+      <div className="mx-auto max-w-[1080px]">
+        <Header />
+        <ReactQueryProvider>
+          <main className="bg-gray-50 pb-[55px]">{children}</main>
+        </ReactQueryProvider>
+        <Footer />
+      </div>
     </Fragment>
   );
 }
