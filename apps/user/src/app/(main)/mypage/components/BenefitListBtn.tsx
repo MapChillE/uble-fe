@@ -12,9 +12,9 @@ const BenefitListBtn = () => {
     >
       <div className="flex items-center space-x-3">
         <Gift className="h-5 w-5 text-gray-600" />
-        <span className="font-medium text-gray-900">혜택 사용 내역</span>
+        <span className="text-gray-900">혜택 사용 내역</span>
       </div>
-      <ChevronRight className="h-5 w-5 text-gray-400" />
+      <ChevronRight className="h-4 w-4 text-gray-400" />
     </button>
   );
 };
