@@ -52,7 +52,7 @@ const PersonalSection = () => {
         isScroll
         Scrollref={scrollContainerRef}
       />
-      <div className="left-55 absolute -top-3 z-10 -translate-x-1/2">
+      <div className="left-55 z-3 absolute -top-3 -translate-x-1/2">
         <Image src="/assets/uble_character_hi.png" alt="Uble character" width={80} height={80} />
       </div>
 

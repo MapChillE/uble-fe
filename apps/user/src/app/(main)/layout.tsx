@@ -15,12 +15,14 @@ export default function RootLayout({
     <Fragment>
       <HydrateData />
       <ConfirmModal />
-      <div className="mx-auto max-w-[1080px]">
-        <Header />
-        <ReactQueryProvider>
-          <main className="bg-gray-50 pb-[55px]">{children}</main>
-        </ReactQueryProvider>
-        <Footer />
+      <div className="bg-gray-100">
+        <div className="mx-auto max-w-[1080px] bg-white">
+          <Header />
+          <ReactQueryProvider>
+            <main className="pb-[55px]">{children}</main>
+          </ReactQueryProvider>
+          <Footer />
+        </div>
       </div>
     </Fragment>
   );
