@@ -1,5 +1,5 @@
 import { useRef, useEffect } from "react";
-import type { NaverMarker, NaverMap as NaverMapInstance } from "@/types/map";
+import type { NaverMarker, NaverMap as NaverMapInstance, MyPlace } from "@/types/map";
 import { MarkerClustering } from "@/types/markerClustering";
 import { Pin } from "@/app/(main)/map/components/NaverMap";
 import {
@@ -13,7 +13,7 @@ interface UseMarkerAndClusterManagerProps {
   mapRef: React.RefObject<NaverMapInstance | null>;
   pins: Pin[] | undefined;
   zoom: number;
-  selectedPlace?: any;
+  selectedPlace?: MyPlace;
 }
 
 export const useMarkerAndClusterManager = ({
