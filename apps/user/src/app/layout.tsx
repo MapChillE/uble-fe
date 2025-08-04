@@ -19,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" suppressHydrationWarning className="h-full">
+    <html lang="ko" suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
 
@@ -40,12 +40,12 @@ export default function RootLayout({
             `}
         </Script>
       </head>
-      <body className="m-0 h-full overflow-hidden p-0">
+      <body className="h-screen">
         <Providers>
           <ServiceWorkerRegister />
           <PreventMobileZoom />
           <Toaster richColors position="top-center" />
-          <main className="h-full">{children}</main>
+          <main>{children}</main>
         </Providers>
       </body>
     </html>
