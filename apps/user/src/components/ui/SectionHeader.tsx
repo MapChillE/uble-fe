@@ -1,10 +1,10 @@
 import { scroll } from "@/utils/scroll";
 import { Button } from "@workspace/ui/components/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { RefObject } from "react";
+import { RefObject, ReactNode } from "react";
 
 interface SectionHeaderProps {
-  title: string;
+  title: string | ReactNode;
   isScroll?: boolean;
   Scrollref?: RefObject<HTMLDivElement | null>;
 }

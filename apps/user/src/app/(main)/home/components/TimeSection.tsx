@@ -1,7 +1,7 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
 
-import { Fragment, useRef } from "react";
+import { Fragment, useEffect, useRef, useState, useMemo } from "react";
 import SectionHeader from "@/components/ui/SectionHeader";
 import DynamicCard from "@/components/ui/DynamicCard";
 import { fetchTimeRecommend } from "@/service/brand";
@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import SectionSkeleton from "./ui/SectionSkeleton";
 import SectionError from "./ui/SectionError";
 import EmptyRecommend from "./ui/EmptyRecommend";
+import { DEFAULT_MESSAGE, TIME_MESSAGES } from "@/types/constants";
 
 const TimeSection = () => {
   const { data, isLoading, isError } = useQuery({
@@ -17,26 +18,44 @@ const TimeSection = () => {
   });
   const router = useRouter();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [currentTime, setCurrentTime] = useState<number>(0);
 
+  useEffect(() => {
+    const now = new Date();
+    setCurrentTime(now.getHours());
+  }, []);
+
+  // 현재 시간에 해당하는 시간대 메시지
+  const timeMessage = useMemo(() => {
+    const message =
+      TIME_MESSAGES.find((timeSlot) => currentTime >= timeSlot.min && currentTime < timeSlot.max) ??
+      DEFAULT_MESSAGE;
+
+    return (
+      <span>
+        {message.firstLine},
+        <br />
+        {message.secondLine}
+      </span>
+    );
+  }, [currentTime]);
+
+  // 로딩 상태
   if (isLoading) {
-    // Skeleton UI
     return <SectionSkeleton />;
   }
 
+  // 에러 상태
   if (isError || !data) {
-    // 사용자 친화적 에러 UI
     return <SectionError />;
   }
 
   const { recommendationsList } = data.data;
+
   return (
     <Fragment>
       <div className="space-y-4">
-        <SectionHeader
-          title="이시간 가장 인기있는 제휴처"
-          isScroll
-          Scrollref={scrollContainerRef}
-        />
+        <SectionHeader title={timeMessage} isScroll Scrollref={scrollContainerRef} />
         <div
           className="scrollbar-hide flex gap-4 overflow-x-auto px-4 pb-2"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}

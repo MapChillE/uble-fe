@@ -48,11 +48,20 @@ const PersonalSection = () => {
   return (
     <div className="relative pt-4">
       <SectionHeader
-        title={`${nickname ? nickname : "회원"}님을 위한 혜택`}
+        title={
+          <>
+            <span className="text-md">
+              오직{" "}
+              <span className="text-action-green font-bold">{nickname ? nickname : "회원"}</span>
+              님을 위한 <br />
+              오늘의 스페셜 혜택
+            </span>
+          </>
+        }
         isScroll
         Scrollref={scrollContainerRef}
       />
-      <div className="left-55 z-3 absolute -top-3 -translate-x-1/2">
+      <div className="left-55 z-3 absolute top-3 -translate-x-1/2">
         <Image src="/assets/uble_character_hi.png" alt="Uble character" width={80} height={80} />
       </div>
 
