@@ -14,6 +14,7 @@ import BrandSelectionDrawer from "@/components/common/BrandSelectionDrawer";
 import BenefitConfirmModal from "@/components/modal/BenefitConfirmModal";
 
 import { getStoreSummary } from "@/service/store";
+import { fetchNearestStore } from "@/service/brand";
 import { useLocationStore } from "@/store/useLocationStore";
 import useStoreDetailDrawerStore from "@/store/useStoreDetailDrawerStore";
 
@@ -43,23 +44,29 @@ const MapContainer = () => {
   const [selectedBrandName, setSelectedBrandName] = useState<string | null>(null);
   const [isBrandDrawerOpen, setIsBrandDrawerOpen] = useState(false);
   const [currentMapCenter, setCurrentMapCenter] = useState<Coordinates | null>(null);
+  const [isLoadingStore, setIsLoadingStore] = useState(false); // 매장 로딩 상태 추적
 
   const currentLocation = useLocationStore((s) => s.currentLocation);
   const user = useUserStore((s) => s.user);
 
-  const handleSelectCategory = useCallback((category: Category) => {
-    setSelectedCategory(category);
-    // 카테고리 변경 시 브랜드 필터 초기화
-    setSelectedBrandId(null);
-    setSelectedBrandName(null);
-    // 검색 모드도 초기화
-    setSearchLocation(null);
-    setSearchType(null);
-    setSearchId(null);
-  }, []);
+  const handleSelectCategory = useCallback(
+    (category: Category) => {
+      setSelectedCategory(category);
+      // 카테고리 변경 시 브랜드 필터 초기화
+      setSelectedBrandId(null);
+      setSelectedBrandName(null);
+      // 검색 모드도 초기화
+      setSearchLocation(null);
+      setSearchType(null);
+      setSearchId(null);
+      // URL 파라미터 제거하여 기본 모드로 전환
+      router.push("/map");
+    },
+    [router]
+  );
 
   const handleBrandSelect = useCallback(
-    (brandId: number | null, brandName?: string) => {
+    async (brandId: number | null, brandName?: string) => {
       setSelectedBrandId(brandId);
       setSelectedBrandName(brandName || null);
 
@@ -70,14 +77,53 @@ const MapContainer = () => {
           setSelectedCategory(ALL_CATEGORY);
         }
 
-        // 현재 지도 center를 사용 (없으면 현재 위치 사용)
-        const searchCenter = currentMapCenter || currentLocation;
-        if (searchCenter) {
-          setSearchLocation(searchCenter);
-          setSearchType("BRAND");
-          setSearchId(brandId);
-          // 브랜드 선택 후 drawer 닫기
-          setIsBrandDrawerOpen(false);
+        // 현재 위치 정보 (지도 center 또는 현재 위치)
+        const currentPosition = currentMapCenter || currentLocation;
+        console.log("브랜드 필터링 시도:", {
+          brandId,
+          brandName,
+          currentPosition,
+          currentMapCenter,
+          currentLocation,
+        });
+
+        if (currentPosition) {
+          try {
+            // 브랜드의 가장 가까운 매장 위치 조회
+            const nearestStoreResponse = await fetchNearestStore({
+              brandId,
+              latitude: currentPosition[1], // 위도
+              longitude: currentPosition[0], // 경도
+            });
+
+            const nearestStoreLocation: Coordinates = [
+              nearestStoreResponse.data.longitude,
+              nearestStoreResponse.data.latitude,
+            ];
+
+            console.log("가장 가까운 매장 위치 조회 성공:", {
+              brandId,
+              nearestStoreLocation,
+              originalPosition: currentPosition,
+            });
+
+            // 가장 가까운 매장 위치로 이동
+            setSearchLocation(nearestStoreLocation);
+            setSearchType("BRAND");
+            setSearchId(brandId);
+            // 브랜드 선택 후 drawer 닫기
+            setIsBrandDrawerOpen(false);
+          } catch (error) {
+            console.error("가장 가까운 매장 위치 조회 실패:", error);
+            // API 실패 시 기존 로직으로 fallback
+            console.log("fallback: 현재 위치 사용");
+            setSearchLocation(currentPosition);
+            setSearchType("BRAND");
+            setSearchId(brandId);
+            setIsBrandDrawerOpen(false);
+          }
+        } else {
+          console.error("브랜드 필터링 실패: currentPosition이 없음");
         }
       } else if (brandId === null) {
         // 브랜드 선택 해제 시 검색 모드 초기화
@@ -101,23 +147,44 @@ const MapContainer = () => {
 
   const handleStoreClick = useCallback(
     async (storeId: number, location: Coordinates) => {
+      // 이미 로딩 중이면 중복 실행 방지
+      if (isLoadingStore) {
+        console.log("매장 정보 로딩 중, 중복 실행 방지:", storeId);
+        return;
+      }
+
+      console.log("매장 정보 로딩 시작:", storeId);
+      setIsLoadingStore(true);
+
       try {
         const summary = await getStoreSummary({
           latitude: location[1],
           longitude: location[0],
           storeId: storeId,
         });
+        console.log("매장 정보 로딩 완료:", storeId);
         openStoreDetail(summary);
       } catch (error) {
+        console.error("매장 정보 로딩 실패:", storeId, error);
         toast.error("가맹점 정보를 불러오지 못했습니다.");
+      } finally {
+        setIsLoadingStore(false);
       }
     },
-    [openStoreDetail]
+    [openStoreDetail, isLoadingStore]
   );
 
   const handlePinClick = useCallback(
     async (pin: Pin) => {
       if (!pin.id) return;
+
+      console.log("핀 클릭:", {
+        pinId: pin.id,
+        pinCoords: pin.coords,
+        currentSearchLocation: searchLocation,
+        searchType,
+      });
+
       await handleStoreClick(pin.id, pin.coords);
     },
     [handleStoreClick]
@@ -126,6 +193,63 @@ const MapContainer = () => {
   const handleMapCenterChange = useCallback((center: Coordinates) => {
     setCurrentMapCenter(center);
   }, []);
+
+  // currentLocation이 로드되면 currentMapCenter 초기화
+  useEffect(() => {
+    if (currentLocation && !currentMapCenter) {
+      setCurrentMapCenter(currentLocation);
+    }
+  }, [currentLocation, currentMapCenter]);
+
+  // 브랜드 필터링 디버깅
+  useEffect(() => {
+    console.log("브랜드 필터링 상태:", {
+      searchLocation,
+      searchType,
+      searchId,
+      currentMapCenter,
+      currentLocation,
+    });
+  }, [searchLocation, searchType, searchId, currentMapCenter, currentLocation]);
+
+  // 브랜드 선택 시 searchLocation 설정 확인
+  useEffect(() => {
+    if (searchType === "BRAND" && searchId && !searchLocation) {
+      console.log("브랜드 선택됨 but searchLocation 없음:", {
+        searchType,
+        searchId,
+        currentMapCenter,
+        currentLocation,
+      });
+      // searchLocation이 없으면 currentMapCenter 또는 currentLocation 사용
+      const location = currentMapCenter || currentLocation;
+      if (location) {
+        console.log("searchLocation 설정:", location);
+        setSearchLocation(location);
+      }
+    }
+  }, [searchType, searchId, searchLocation, currentMapCenter, currentLocation]);
+
+  // 브랜드 필터링 상태 추적
+  useEffect(() => {
+    console.log("브랜드 필터링 상태 변경:", {
+      searchType,
+      searchId,
+      searchLocation,
+      selectedBrandId,
+      selectedBrandName,
+      currentMapCenter,
+      currentLocation,
+    });
+  }, [
+    searchType,
+    searchId,
+    searchLocation,
+    selectedBrandId,
+    selectedBrandName,
+    currentMapCenter,
+    currentLocation,
+  ]);
 
   // URL 파라미터 파싱
   const parseSearchParams = useCallback(() => {
@@ -169,8 +293,8 @@ const MapContainer = () => {
       if (!isNaN(parsedStoreId)) {
         setSearchLocation(location);
         setSearchStoreId(parsedStoreId);
-        // storeId로 drawer 열기
-        handleStoreClick(parsedStoreId, location);
+        setSearchType("STORE");
+        // handleStoreClick은 MapWithBaseLocation에서 처리하므로 여기서는 제거
       }
     } else if (type === "BRAND" && id) {
       // 2. BRAND 타입: 해당 위치로 이동하고 brandId로 검색
@@ -210,6 +334,14 @@ const MapContainer = () => {
 
   if (!currentLocation || !user) {
     return <div>현재 위치를 불러오는 중입니다...</div>;
+  }
+
+  // URL 파라미터가 있는 경우 파싱이 완료될 때까지 대기
+  const { type, id, lat, lng, storeId } = parseSearchParams();
+  const hasSearchParams = !!(lat && lng && (storeId || (type && id)));
+
+  if (hasSearchParams && !searchLocation && !searchType && !searchStoreId) {
+    return <div>검색 정보를 불러오는 중입니다...</div>;
   }
 
   return (
