@@ -313,7 +313,7 @@ export default function UbleLanding() {
             <div className="lg:w-1/2">
               <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.3 }}>
                 <Image
-                  src="search.gif"
+                  src="/intro/search.gif"
                   alt="Search with autocomplete"
                   width={300}
                   height={600}
@@ -484,25 +484,25 @@ export default function UbleLanding() {
               {
                 title: "홈 화면",
                 description: "오늘의 스페셜 & 추천 제휴처 카드",
-                image: "/home.png",
+                image: "/intro/home.png",
                 icon: <Star className="h-6 w-6" />,
               },
               {
                 title: "검색 탭",
                 description: "검색창 + 추천 검색어 리스트",
-                image: "/search.png",
+                image: "/intro/search.png",
                 icon: <Search className="h-6 w-6" />,
               },
               {
                 title: "지도 탭",
                 description: "내 위치 중심으로 주변 제휴처 지도",
-                image: "/map.png",
+                image: "/intro/map.png",
                 icon: <MapPin className="h-6 w-6" />,
               },
               {
                 title: "마이페이지",
                 description: "사용자 프로필, 혜택 사용 내역",
-                image: "/mypage.png",
+                image: "/intro/mypage.png",
                 icon: <User className="h-6 w-6" />,
               },
             ].map((item, index) => (
@@ -560,7 +560,7 @@ export default function UbleLanding() {
             >
               <div className="space-y-6">
                 <div className="flex items-start gap-4">
-                  <div className="bg-hover-green flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold text-white">
+                  <div className="bg-hover-green flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white">
                     1
                   </div>
                   <p className="text-lg text-gray-700">
@@ -568,7 +568,7 @@ export default function UbleLanding() {
                   </p>
                 </div>
                 <div className="flex items-start gap-4">
-                  <div className="bg-hover-green flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold text-white">
+                  <div className="bg-hover-green flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white">
                     2
                   </div>
                   <p className="text-lg text-gray-700">
@@ -576,7 +576,7 @@ export default function UbleLanding() {
                   </p>
                 </div>
                 <div className="flex items-start gap-4">
-                  <div className="bg-hover-green flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold text-white">
+                  <div className="bg-hover-green flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white">
                     3
                   </div>
                   <p className="text-lg text-gray-700">
