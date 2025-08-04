@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { toast } from "sonner";
 
 export default function MapInitializer() {
   useEffect(() => {
@@ -14,7 +15,7 @@ export default function MapInitializer() {
           resolve();
         };
         script.onerror = (err) => {
-          reject(err);
+          reject(new Error("네이버 지도 스크립트 로드에 실패했습니다."));
         };
         document.head.appendChild(script);
       });
@@ -31,7 +32,7 @@ export default function MapInitializer() {
             resolve();
           } else if (retry++ > maxRetry) {
             clearInterval(interval);
-            reject("naver.maps 로드 실패");
+            reject(new Error("네이버 지도 초기화에 실패했습니다."));
           }
         }, 50);
       });
@@ -48,8 +49,13 @@ export default function MapInitializer() {
       try {
         await loadNaverScript();
         await waitForNaver();
-        loadClusteringScript();
-      } catch (err) {}
+        await loadClusteringScript();
+      } catch (err) {
+        toast.error("지도 로드에 실패했습니다.", {
+          description: "페이지를 새로고침하거나 잠시 후 다시 시도해주세요.",
+          duration: 5000,
+        });
+      }
     };
 
     initialize();
