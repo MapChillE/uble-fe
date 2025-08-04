@@ -4,21 +4,12 @@ interface SearchModeBtnProps {
   isSearchMode: boolean;
   onExit: () => void;
   onSearchHere: () => void;
-  searchType?: string | null;
 }
 
-const SearchModeBtn = ({ isSearchMode, onExit, onSearchHere, searchType }: SearchModeBtnProps) => {
+const SearchModeBtn = ({ isSearchMode, onExit, onSearchHere }: SearchModeBtnProps) => {
   const getButtonText = () => {
     if (isSearchMode) {
-      if (searchType === "STORE") {
-        return "주변 매장 보기";
-      } else if (searchType === "BRAND") {
-        return "주변 브랜드 보기";
-      } else if (searchType === "CATEGORY") {
-        return "주변 카테고리 보기";
-      } else {
-        return "주변 매장 보기";
-      }
+      return "주변 매장 보기";
     } else {
       return "현 지도에서 검색";
     }
