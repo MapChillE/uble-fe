@@ -33,7 +33,12 @@ const AgeSection = () => {
   return (
     <div className="space-y-4">
       <SectionHeader
-        title={`${ageRange}대 ${gender === "MALE" ? "남성" : "여성"} 추천 제휴처`}
+        title={
+          <>
+            <span className="text-md">이런 제휴처는 어떠세요?</span>
+            <br />#{ageRange}대 #{gender === "MALE" ? "남성" : "여성"}
+          </>
+        }
         isScroll
         Scrollref={scrollContainerRef}
       />
