@@ -84,6 +84,7 @@ export interface FetchBrandsParams {
   categoryId?: number;
   season?: string;
   type?: string;
+  benefitCategory?: null | "GIFT" | "DISCOUNT";
   lastBrandId?: number;
   size?: number;
 }
