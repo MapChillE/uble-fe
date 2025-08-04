@@ -25,7 +25,6 @@ import { Pin } from "@/app/(main)/map/components/NaverMap";
 import { toast } from "sonner";
 import useUserStore from "@/store/useUserStore";
 import { Coordinates } from "@/types/map";
-import CurrentPlaceBtn from "./CurrentPlaceBtn";
 
 /**
  * 지도 컨테이너 컴포넌트 (내부 로직)
@@ -79,13 +78,6 @@ const MapContainer = () => {
 
         // 현재 위치 정보 (지도 center 또는 현재 위치)
         const currentPosition = currentMapCenter || currentLocation;
-        console.log("브랜드 필터링 시도:", {
-          brandId,
-          brandName,
-          currentPosition,
-          currentMapCenter,
-          currentLocation,
-        });
 
         if (currentPosition) {
           try {
@@ -101,12 +93,6 @@ const MapContainer = () => {
               nearestStoreResponse.data.latitude,
             ];
 
-            console.log("가장 가까운 매장 위치 조회 성공:", {
-              brandId,
-              nearestStoreLocation,
-              originalPosition: currentPosition,
-            });
-
             // 가장 가까운 매장 위치로 이동
             setSearchLocation(nearestStoreLocation);
             setSearchType("BRAND");
@@ -114,16 +100,12 @@ const MapContainer = () => {
             // 브랜드 선택 후 drawer 닫기
             setIsBrandDrawerOpen(false);
           } catch (error) {
-            console.error("가장 가까운 매장 위치 조회 실패:", error);
             // API 실패 시 기존 로직으로 fallback
-            console.log("fallback: 현재 위치 사용");
             setSearchLocation(currentPosition);
             setSearchType("BRAND");
             setSearchId(brandId);
             setIsBrandDrawerOpen(false);
           }
-        } else {
-          console.error("브랜드 필터링 실패: currentPosition이 없음");
         }
       } else if (brandId === null) {
         // 브랜드 선택 해제 시 검색 모드 초기화
@@ -149,11 +131,8 @@ const MapContainer = () => {
     async (storeId: number, location: Coordinates) => {
       // 이미 로딩 중이면 중복 실행 방지
       if (isLoadingStore) {
-        console.log("매장 정보 로딩 중, 중복 실행 방지:", storeId);
         return;
       }
-
-      console.log("매장 정보 로딩 시작:", storeId);
       setIsLoadingStore(true);
 
       try {
@@ -162,10 +141,8 @@ const MapContainer = () => {
           longitude: location[0],
           storeId: storeId,
         });
-        console.log("매장 정보 로딩 완료:", storeId);
         openStoreDetail(summary);
       } catch (error) {
-        console.error("매장 정보 로딩 실패:", storeId, error);
         toast.error("가맹점 정보를 불러오지 못했습니다.");
       } finally {
         setIsLoadingStore(false);
@@ -177,13 +154,6 @@ const MapContainer = () => {
   const handlePinClick = useCallback(
     async (pin: Pin) => {
       if (!pin.id) return;
-
-      console.log("핀 클릭:", {
-        pinId: pin.id,
-        pinCoords: pin.coords,
-        currentSearchLocation: searchLocation,
-        searchType,
-      });
 
       await handleStoreClick(pin.id, pin.coords);
     },
@@ -201,55 +171,16 @@ const MapContainer = () => {
     }
   }, [currentLocation, currentMapCenter]);
 
-  // 브랜드 필터링 디버깅
-  useEffect(() => {
-    console.log("브랜드 필터링 상태:", {
-      searchLocation,
-      searchType,
-      searchId,
-      currentMapCenter,
-      currentLocation,
-    });
-  }, [searchLocation, searchType, searchId, currentMapCenter, currentLocation]);
-
   // 브랜드 선택 시 searchLocation 설정 확인
   useEffect(() => {
     if (searchType === "BRAND" && searchId && !searchLocation) {
-      console.log("브랜드 선택됨 but searchLocation 없음:", {
-        searchType,
-        searchId,
-        currentMapCenter,
-        currentLocation,
-      });
       // searchLocation이 없으면 currentMapCenter 또는 currentLocation 사용
       const location = currentMapCenter || currentLocation;
       if (location) {
-        console.log("searchLocation 설정:", location);
         setSearchLocation(location);
       }
     }
-  }, [searchType, searchId, searchLocation, currentMapCenter, currentLocation]);
-
-  // 브랜드 필터링 상태 추적
-  useEffect(() => {
-    console.log("브랜드 필터링 상태 변경:", {
-      searchType,
-      searchId,
-      searchLocation,
-      selectedBrandId,
-      selectedBrandName,
-      currentMapCenter,
-      currentLocation,
-    });
-  }, [
-    searchType,
-    searchId,
-    searchLocation,
-    selectedBrandId,
-    selectedBrandName,
-    currentMapCenter,
-    currentLocation,
-  ]);
+  }, [searchType, searchId, searchLocation, currentLocation]);
 
   // URL 파라미터 파싱
   const parseSearchParams = useCallback(() => {
