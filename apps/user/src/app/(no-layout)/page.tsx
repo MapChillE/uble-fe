@@ -3,6 +3,8 @@
 import Image from "next/image";
 import { motion, Variants } from "framer-motion";
 import KakaoLoginBtn from "./components/KakaoLoginBtn";
+import { ArrowRight } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const taglineVariants: Variants = {
   hidden: {},
@@ -28,6 +30,7 @@ const lineVariants: Variants = {
 };
 
 export default function Page() {
+  const router = useRouter();
   return (
     <main className="from-action-green/10 to-action-green/10 fixed inset-0 z-0 flex min-h-screen flex-col justify-between overflow-hidden overscroll-none bg-gradient-to-b via-slate-50">
       <motion.span
@@ -82,7 +85,20 @@ export default function Page() {
           </motion.p>
         </motion.div>
       </section>
-
+      <motion.div
+        onClick={() => router.push("/intro")}
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5, duration: 0.8 }}
+        className="mb-2 mt-6 flex cursor-pointer flex-col items-center text-center"
+      >
+        <div className="bg-action-green/10 hover:bg-action-green/20 flex items-center space-x-2 rounded-full px-4 py-2 transition">
+          <span className="text-action-green font-semibold">
+            처음이세요? UBLE 서비스 소개부터 볼게요
+          </span>
+          <ArrowRight className="text-action-green h-5 w-5" />
+        </div>
+      </motion.div>
       <motion.div
         className="flex-shrink-0 px-6 pb-10"
         style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 2rem)" }}
