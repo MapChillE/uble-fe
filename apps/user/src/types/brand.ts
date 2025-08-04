@@ -62,6 +62,7 @@ export interface BrandDetailData {
   benefits: BrandBenefit[];
   isBookmarked: boolean;
   isVIPcock: boolean;
+  online: boolean;
 }
 
 /**
@@ -106,4 +107,30 @@ export interface TimeRecommendResponse extends responseStatus {
 
 export interface PersonalRecommendResponse extends responseStatus {
   data: TimeAndPersonalRecommendData;
+}
+
+/**
+ * 브랜드의 가장 가까운 제휴처 매장 위경도 조회 응답 타입
+ */
+export interface NearestStoreData {
+  /** 위도 */
+  latitude: number;
+  /** 경도 */
+  longitude: number;
+}
+
+export interface NearestStoreResponse extends responseStatus {
+  data: NearestStoreData;
+}
+
+/**
+ * 브랜드의 가장 가까운 제휴처 매장 위경도 조회 파라미터 타입
+ */
+export interface NearestStoreParams {
+  /** 브랜드 ID */
+  brandId: number;
+  /** 현재 위치 위도 */
+  latitude: number;
+  /** 현재 위치 경도 */
+  longitude: number;
 }
