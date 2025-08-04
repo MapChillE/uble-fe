@@ -16,7 +16,7 @@ const SearchModeBtn = ({ isSearchMode, onExit, onSearchHere }: SearchModeBtnProp
   };
 
   return (
-    <div className="sm:bottom-35 md:bottom-35 lg:bottom-35 absolute bottom-60 left-1/2 z-20 -translate-x-1/2">
+    <div className="top-30 absolute left-1/2 z-20 -translate-x-1/2">
       <Button
         className="rounded-full"
         variant="filter_select"
