@@ -1,4 +1,4 @@
-import MapInitializer from "@/components/MapInitailizer";
+import MapInitializer from "@/components/MapInitializer";
 
 export default function MapLayout({ children }: { children: React.ReactNode }) {
   return (
