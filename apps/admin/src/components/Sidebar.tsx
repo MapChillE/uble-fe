@@ -15,7 +15,7 @@ export function Sidebar({ isMobileMenuOpen, onMobileMenuClose }: AdminSidebarPro
   const pathname = usePathname();
 
   const menuItems = [
-    // { id: "dashboard", label: "대시보드", icon: Home, href: "/" },
+    { id: "dashboard", label: "대시보드", icon: Home, href: "/dashboard" },
     { id: "statistics", label: "통계 조회", icon: BarChart3, href: "/statistics" },
     { id: "feedback", label: "사용자 피드백", icon: MessageSquare, href: "/feedback" },
   ];
