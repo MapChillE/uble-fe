@@ -29,7 +29,7 @@ const lineVariants: Variants = {
 
 export default function Page() {
   return (
-    <main className="from-action-green/10 to-action-green/10 fixed inset-0 z-0 flex min-h-screen flex-col justify-between overflow-hidden overscroll-none bg-gradient-to-b via-slate-50">
+    <main className="from-action-green/10 to-action-green/10 fixed inset-0 z-0 flex flex-col justify-between overflow-hidden overscroll-none bg-gradient-to-b via-slate-50">
       <motion.span
         className="bg-action-green/20 pointer-events-none absolute -left-40 -top-40 block h-[25rem] w-[25rem] rounded-full blur-3xl"
         initial={{ scale: 0 }}
@@ -48,6 +48,7 @@ export default function Page() {
           initial={{ y: -30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ type: "spring", stiffness: 120, damping: 15 }}
+          className="z-10"
         >
           <Image
             src="/assets/uble_character.png"

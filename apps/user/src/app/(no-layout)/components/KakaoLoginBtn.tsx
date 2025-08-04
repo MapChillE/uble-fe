@@ -18,10 +18,7 @@ const KakaoLoginBtn = () => {
   };
 
   return (
-    <div
-      className="flex justify-center pb-10"
-      style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 2rem)" }}
-    >
+    <div className="flex justify-center">
       <button onClick={login} className="w-full max-w-xs">
         <Image
           src="/assets/kakao_login_button.png"
