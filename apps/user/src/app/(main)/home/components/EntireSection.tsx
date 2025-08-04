@@ -15,11 +15,13 @@ import ErrorState from "./ui/ErrorState";
 import EmptyState from "./ui/EmptyState";
 import { ALL_CATEGORY } from "@/types/constants";
 import { useRouter } from "next/navigation";
+import BenefitCategorySelector, { BenefitCategory } from "./ui/BenefitCategorySelector";
 
-const PAGE_SIZE = 8;
+const PAGE_SIZE = 9;
 
 export default function EntireSection() {
   const [categorys, setCategorys] = useState<Category>(ALL_CATEGORY);
+  const [benefitCategory, setBenefitCategory] = useState<BenefitCategory>(null);
   const router = useRouter();
 
   const params = useMemo<FetchBrandsParams>(
@@ -34,9 +36,10 @@ export default function EntireSection() {
           : categorys.categoryId === "LOCAL"
             ? "LOCAL"
             : undefined,
+      benefitCategory,
       size: PAGE_SIZE,
     }),
-    [categorys.categoryId]
+    [categorys.categoryId, benefitCategory]
   );
   const queryKey = useMemo(() => ["brands", params] as const, [params]);
 
@@ -62,6 +65,13 @@ export default function EntireSection() {
 
       <div className="pl-4 pr-4">
         <CategorySection selectedCategory={categorys} onSelectCategory={setCategorys} />
+      </div>
+
+      <div className="pl-4 pr-4">
+        <BenefitCategorySelector
+          selectedCategory={benefitCategory}
+          onSelectCategory={setBenefitCategory}
+        />
       </div>
 
       {isLoading && <LoadingState />}
