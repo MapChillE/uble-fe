@@ -47,16 +47,47 @@ const StatCard: React.FC<StatCardProps> = ({
   /**변화율 계산 후 변화율 표시용 변수*/
   const change = previousValue !== undefined ? calculateChange(value, previousValue) : null;
 
+  // 색상별 클래스 매핑
+  const colorClasses = {
+    green: {
+      border: "border-green-500",
+      icon: "text-green-600",
+      value: "text-green-600",
+    },
+    orange: {
+      border: "border-orange-500",
+      icon: "text-orange-600",
+      value: "text-orange-600",
+    },
+    purple: {
+      border: "border-purple-500",
+      icon: "text-purple-600",
+      value: "text-purple-600",
+    },
+    blue: {
+      border: "border-blue-500",
+      icon: "text-blue-600",
+      value: "text-blue-600",
+    },
+    red: {
+      border: "border-red-500",
+      icon: "text-red-600",
+      value: "text-red-600",
+    },
+  };
+
+  const classes = colorClasses[color];
+
   return (
-    <Card className={cn("border-l-4", `border-${color}-500`)}>
+    <Card className={cn("border-l-4", classes.border)}>
       <CardContent className="p-4 md:p-6">
         <div className="mb-2 flex items-center justify-between">
-          <Icon className={cn("h-8 w-8", `text-${color}-600`)} />
+          <Icon className={cn("h-8 w-8", classes.icon)} />
           <span className="text-xs text-gray-500">{subtitle}</span>
         </div>
         <div>
           <p className="mb-1 text-sm font-medium text-gray-600">{title}</p>
-          <p className={cn("text-2xl font-bold md:text-4xl", `text-${color}-600`)}>
+          <p className={cn("text-2xl font-bold md:text-4xl", classes.value)}>
             {formatNumber(value)}
           </p>
           {showChange && change && (
