@@ -29,7 +29,7 @@ const lineVariants: Variants = {
 
 export default function Page() {
   return (
-    <div className="from-action-green/10 to-action-green/10 fixed inset-0 z-0 flex flex-col justify-between overflow-hidden overscroll-none bg-gradient-to-b via-slate-50">
+    <div className="from-action-green/10 to-action-green/10 relative flex h-[100dvh] flex-col items-center justify-between overflow-hidden overscroll-none bg-gradient-to-b via-slate-50">
       <motion.span
         className="bg-action-green/20 pointer-events-none absolute -left-40 -top-40 block h-[25rem] w-[25rem] rounded-full blur-3xl"
         initial={{ scale: 0 }}
@@ -85,13 +85,17 @@ export default function Page() {
       </section>
 
       <motion.div
-        className="flex-shrink-0 px-6 pb-10"
-        style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 2rem)" }}
+        className="flex-shrink-0 px-6"
+        style={{
+          paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 1rem)",
+        }}
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
       >
-        <KakaoLoginBtn />
+        <div className="z-10 md:pb-8">
+          <KakaoLoginBtn />
+        </div>
       </motion.div>
     </div>
   );
