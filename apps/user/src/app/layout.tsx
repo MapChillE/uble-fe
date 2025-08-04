@@ -22,7 +22,7 @@ export default function RootLayout({
     <html lang="ko" suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
-
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="manifest.json" />
         <meta name="color-scheme" content="light" />
         <title>Uble</title>
