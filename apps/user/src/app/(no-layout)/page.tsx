@@ -46,7 +46,7 @@ export default function Page() {
         transition={{ duration: 10, repeat: Infinity, repeatType: "mirror" }}
       />
 
-      <section className="flex flex-[2] flex-col items-center justify-center gap-2 px-6 text-center">
+      <section className="flex flex-[3] flex-col items-center justify-center gap-2 px-6 text-center">
         <motion.div
           initial={{ y: -30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
