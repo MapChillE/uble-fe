@@ -47,7 +47,7 @@ const SearchSection = () => {
   const handleAutoSelect = async (query: string) => {
     // 자동완성 클릭 로그 전송 (사용자가 입력한 검색어 사용)
     await fetchSearchLog({
-      keyword: searchQuery,
+      keyword: query,
       searchType: "CLICK",
       isResultExists: true,
     });
