@@ -123,6 +123,9 @@ export default function SearchContainer() {
       const v = e.currentTarget.value.trim();
       if (!v) return;
 
+      // 모바일에서 키보드 숨기기
+      e.currentTarget.blur();
+
       enterFiredRef.current = true;
       debouncedAutoSearch.cancel();
       runSearch(v, "ENTER");
