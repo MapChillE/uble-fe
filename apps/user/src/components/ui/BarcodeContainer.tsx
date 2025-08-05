@@ -4,16 +4,13 @@ import { Fragment, useEffect, useState } from "react";
 import BarcodeBlur from "./BarcodeBlur";
 import useUserStore from "@/store/useUserStore";
 import useBenefitConfirmModalStore from "@/store/useBenefitConfirmModalStore";
+import { StoreDetail } from "@/types/store";
 
 const BarcodeContainer = ({
-  storeId,
-  isVIPcock,
-  vipOnly,
+  storeDetail,
   initialRevealed = false,
 }: {
-  storeId: number;
-  isVIPcock: boolean;
-  vipOnly: boolean;
+  storeDetail: StoreDetail;
   initialRevealed?: boolean;
 }) => {
   const [isBarcodeRevealed, setIsBarcodeRevealed] = useState(initialRevealed);
@@ -23,15 +20,17 @@ const BarcodeContainer = ({
   useEffect(() => {
     close();
   }, []);
+
   const handleBarcodeClick = () => {
     if (!isBarcodeRevealed) {
-      setInfo(storeId, isVIPcock, vipOnly);
+      setInfo(storeDetail.storeId, storeDetail);
       setOnSuccess(() => {
         setIsBarcodeRevealed(true);
       });
       open();
     }
   };
+
   return (
     <div className="space-y-2 pt-4">
       <div

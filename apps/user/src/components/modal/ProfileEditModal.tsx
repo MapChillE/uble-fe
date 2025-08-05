@@ -56,7 +56,7 @@ const ProfileEditModal = () => {
           </div>
         ) : (
           <Fragment>
-            <div className="flex-1 overflow-y-auto px-1">
+            <div className="scrollbar-hide flex-1 overflow-y-auto px-1">
               <div className="space-y-6 py-4">
                 {/* 요금제 등급 */}
                 <MembershipGradeSelector grade={formData.rank} onChange={handleRankChange} />

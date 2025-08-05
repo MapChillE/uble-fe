@@ -20,18 +20,6 @@
 }
 
 /* ========================
-  공통 스타일 (스크롤바 제거)
-   ======================== */
-.scrollbar-hide {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-}
-
-.scrollbar-hide::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
-}
-
-/* ========================
   지도 컨테이너 높이 설정
    ======================== */
 
@@ -330,5 +318,17 @@ body.map-page-active {
 
   .animate-accordion-up {
     animation: accordion-up 0.2s ease-out;
+  }
+
+  /* ========================
+  공통 스타일 (스크롤바 제거)
+   ======================== */
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
   }
 }
