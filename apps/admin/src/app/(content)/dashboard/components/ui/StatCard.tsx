@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { Card, CardContent } from "@workspace/ui/components/card";
 import { cn } from "@workspace/ui/lib/utils";
 import { LucideIcon } from "lucide-react";
@@ -109,4 +109,4 @@ const StatCard: React.FC<StatCardProps> = ({
   );
 };
 
-export default StatCard;
+export default memo(StatCard);

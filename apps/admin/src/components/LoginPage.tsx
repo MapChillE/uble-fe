@@ -1,15 +1,15 @@
 "use client";
 import { User } from "lucide-react";
+import { toast } from "sonner";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@workspace/ui/components/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@workspace/ui/components/card";
 import { Input } from "@workspace/ui/components/input";
 import { Label } from "@workspace/ui/components/label";
-import { useState } from "react";
 import { apiHandler } from "@api/apiHandler";
 import { adminLogin } from "@/service/login";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 
 const LoginPage = () => {
   const [code, setCode] = useState<string>("");
@@ -21,7 +21,7 @@ const LoginPage = () => {
     const response = await apiHandler(() => adminLogin(code));
     if (response.data?.statusCode === 0) {
       toast.info("로그인 되었습니다.");
-      router.push("/statistics");
+      router.push("/dashboard");
     } else {
       toast.error("코드가 일치하지 않습니다.");
     }
