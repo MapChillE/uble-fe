@@ -1,6 +1,6 @@
 import { responseStatus } from "./api";
 
-export type BenefitType = "NORMAL" | "VIP";
+export type BenefitType = "NORMAL" | "VIP" | "LOCAL";
 
 export interface UsageRegistRequest {
   benefitType: BenefitType;

@@ -7,11 +7,11 @@ import useBenefitConfirmModalStore from "@/store/useBenefitConfirmModalStore";
 import { UsageRegistRequest } from "@/types/usage";
 import { apiHandler } from "@api/apiHandler";
 import { setUsage } from "@/service/usage";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 
 const BenefitConfirmModal = () => {
-  const { isOpen, close, storeId, isVIPcock, vipOnly, onSuccess } = useBenefitConfirmModalStore();
+  const { isOpen, close, storeId, storeDetail, onSuccess } = useBenefitConfirmModalStore();
   const [isLoading, setIsLoading] = useState(false);
   const queryClient = useQueryClient();
 
@@ -23,7 +23,8 @@ const BenefitConfirmModal = () => {
     queryClient.invalidateQueries({ queryKey: ["userStatistics"] });
     queryClient.invalidateQueries({ queryKey: ["usageHistory"] });
   };
-  const handleYes = async (benefitType: "NORMAL" | "VIP" = "NORMAL") => {
+
+  const handleYes = async (benefitType: "NORMAL" | "VIP" | "LOCAL" = "NORMAL") => {
     if (storeId !== null) {
       setIsLoading(true);
       const params: UsageRegistRequest = { benefitType };
@@ -42,64 +43,78 @@ const BenefitConfirmModal = () => {
     } else {
       toast.error("네트워크 오류가 발생했습니다.");
     }
+  };
 
-    // 필요시 추가 로직
+  // 혜택 타입별 상태 확인
+  const getBenefitTypeStatus = () => {
+    if (!storeDetail) return [];
+
+    const benefitTypes = ["NORMAL", "VIP", "LOCAL"] as const;
+    const status = [];
+
+    for (const type of benefitTypes) {
+      const hasBenefit = storeDetail.benefitList.some((benefit) => benefit.type === type);
+      if (hasBenefit) {
+        const isAvailable =
+          (type === "NORMAL" && storeDetail.normalAvailable) ||
+          (type === "VIP" && storeDetail.vipAvailable) ||
+          (type === "LOCAL" && storeDetail.localAvailable);
+
+        status.push({
+          type,
+          available: isAvailable,
+          disabled: !isAvailable,
+        });
+      }
+    }
+
+    return status;
+  };
+
+  const benefitStatus = getBenefitTypeStatus();
+
+  const getButtonText = (type: string) => {
+    switch (type) {
+      case "NORMAL":
+        return "일반 혜택";
+      case "VIP":
+        return "VIP콕";
+      case "LOCAL":
+        return "우리동네";
+      default:
+        return "혜택 사용";
+    }
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="z-120 w-full max-w-xs">
+      <DialogContent className="z-120 w-[250px]">
         <DialogHeader>
           <DialogTitle className="text-center text-lg font-semibold">
             혜택을 사용하시겠어요?
           </DialogTitle>
         </DialogHeader>
-        <div className="flex flex-wrap justify-center space-x-3 pt-2">
-          <Button type="button" variant="modal_cancel" onClick={handleClose}>
+        <div className="flex flex-col justify-center gap-2 pt-2">
+          {benefitStatus.map(({ type, disabled }) => (
+            <Button
+              key={type}
+              type="button"
+              onClick={() => handleYes(type)}
+              variant="modal_submit"
+              disabled={isLoading || disabled}
+              className="mx-auto w-full max-w-[200px]"
+            >
+              {getButtonText(type)}
+            </Button>
+          ))}
+          <Button
+            type="button"
+            variant="modal_cancel"
+            onClick={handleClose}
+            className="mx-auto w-full max-w-[200px]"
+          >
             아니요
           </Button>
-          {isVIPcock && vipOnly && (
-            <Button
-              type="button"
-              onClick={() => handleYes("VIP")}
-              variant="modal_submit"
-              disabled={isLoading}
-            >
-              VIP콕 혜택
-            </Button>
-          )}
-
-          {isVIPcock && !vipOnly && (
-            <>
-              <Button
-                type="button"
-                onClick={() => handleYes("NORMAL")}
-                variant="modal_submit"
-                disabled={isLoading}
-              >
-                일반 혜택
-              </Button>
-              <Button
-                type="button"
-                onClick={() => handleYes("VIP")}
-                variant="modal_submit"
-                disabled={isLoading}
-              >
-                VIP콕 혜택
-              </Button>
-            </>
-          )}
-
-          {!isVIPcock && (
-            <Button
-              type="button"
-              onClick={() => handleYes("NORMAL")}
-              variant="modal_submit"
-              disabled={isLoading}
-            >
-              일반 혜택
-            </Button>
-          )}
         </div>
       </DialogContent>
     </Dialog>
