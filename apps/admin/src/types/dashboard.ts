@@ -1,3 +1,5 @@
+import { ResponseStatus } from "./responseStatus";
+
 // 랭킹 아이템 기본 타입
 export interface RankItem {
   name: string;
@@ -21,7 +23,7 @@ export interface DashboardData {
 }
 
 // 대시보드 API 응답 타입
-export interface DashboardResponse {
+export interface DashboardResponse extends ResponseStatus {
   data: DashboardData;
 }
 
