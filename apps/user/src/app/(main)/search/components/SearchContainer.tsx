@@ -60,7 +60,6 @@ export default function SearchContainer() {
           });
         }
       } catch (err) {
-        console.error(err);
         toast.error("검색 중 오류가 발생했습니다.");
       } finally {
         setLoading(false);

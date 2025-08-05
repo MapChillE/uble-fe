@@ -6,6 +6,8 @@ import {
   FetchBrandsParams,
   PersonalRecommendResponse,
   TimeRecommendResponse,
+  NearestStoreResponse,
+  NearestStoreParams,
 } from "@/types/brand";
 import { Coordinates } from "@/types/map";
 import api from "@api/http-commons";
@@ -85,5 +87,24 @@ export const fetchOfflineBrandNames = async (
       hasNext: false,
       lastCursorId: 0,
     };
+  }
+};
+
+export const fetchNearestStore = async (
+  params: NearestStoreParams
+): Promise<NearestStoreResponse> => {
+  const { brandId, latitude, longitude } = params;
+
+  try {
+    const { data } = await api.get<NearestStoreResponse>(`/api/brands/${brandId}/stores/nearest`, {
+      params: {
+        latitude,
+        longitude,
+      },
+    });
+    return data;
+  } catch (error) {
+    toast.error("가장 가까운 제휴처 매장 정보를 불러오는데 실패했습니다.");
+    throw error;
   }
 };
