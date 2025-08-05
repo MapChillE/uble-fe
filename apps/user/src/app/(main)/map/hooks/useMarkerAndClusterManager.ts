@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useCallback } from "react";
 import type { NaverMarker, NaverMap as NaverMapInstance, MyPlace } from "@/types/map";
 import { MarkerClustering } from "@/types/markerClustering";
 import { Pin } from "@/app/(main)/map/components/NaverMap";
@@ -26,6 +26,7 @@ export const useMarkerAndClusterManager = ({
   const currentMarkerRef = useRef<NaverMarker | null>(null);
   const selectedMarkerRef = useRef<NaverMarker | null>(null);
   const clustererRef = useRef<MarkerClustering | null>(null);
+  const previousZoomRef = useRef<number>(zoom);
 
   // 마커 아이콘 업데이트 함수
   const updateMarkerIcon = (marker: NaverMarker, pin: Pin, currentZoom: number) => {
@@ -233,7 +234,32 @@ export const useMarkerAndClusterManager = ({
         selectedMarkerRef.current = null;
       }
     };
-  }, [pins, zoom, selectedPlace]);
+  }, [pins, selectedPlace]);
+
+  // zoom 변경 시 마커 아이콘만 업데이트
+  useEffect(() => {
+    if (!mapRef.current || !window.naver) return;
+
+    // 줌 레벨 15를 기준으로 매장명 표시 여부가 변경되는지 확인
+    const shouldShowText = zoom > 15;
+    const previousShouldShowText = previousZoomRef.current > 15; // 이전 줌 레벨 기준
+
+    // 매장명 표시 여부가 변경되는 경우에만 아이콘 업데이트
+    if (shouldShowText !== previousShouldShowText) {
+      // 기존 마커들의 아이콘만 업데이트
+      const otherPins =
+        pins?.filter((pin) => pin.type !== "current" && pin.type !== "selected") || [];
+      markerRefs.current.forEach((marker, index) => {
+        const pin = otherPins[index];
+        if (pin) {
+          updateMarkerIcon(marker, pin, zoom);
+        }
+      });
+    }
+
+    // 현재 줌 레벨을 이전 줌 레벨로 저장
+    previousZoomRef.current = zoom;
+  }, [zoom, pins]);
 
   return {
     markerRefs,
