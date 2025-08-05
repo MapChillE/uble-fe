@@ -68,17 +68,7 @@ export default function MapWithBaseLocation({
       const currentZoom = zoom || state.zoom;
       let pins: Pin[] = [];
       try {
-        if (searchStoreId && searchLocation) {
-          pins = [
-            {
-              id: searchStoreId,
-              coords: searchLocation,
-              name: " ",
-              category: "store",
-              type: "store",
-            },
-          ];
-        } else if (searchType === "BRAND" && searchId) {
+        if (searchType === "BRAND" && searchId) {
           pins = await fetchStorePins(center, bounds, 0, currentZoom, baseLocation, searchId);
         } else if (searchType === "CATEGORY" && searchId) {
           pins = await fetchStorePins(center, bounds, searchId, currentZoom, baseLocation);
@@ -163,23 +153,23 @@ export default function MapWithBaseLocation({
       state,
       setShowSearchBtn,
       setHasSearched,
+      hasSearched,
       onMapCenterChange,
+      onExitSearchMode,
       fetchPins,
     });
 
-  const pinsWithClick = useMemo(
-    () =>
-      state.pins.map((pin) => ({
-        ...pin,
-        onClick:
-          pin.type === "current" || pin.type === "myplace"
-            ? () => undefined
-            : () => {
-                onPinClick(pin);
-              },
-      })),
-    [state.pins, onPinClick]
-  );
+  const pinsWithClick = useMemo(() => {
+    return state.pins.map((pin) => ({
+      ...pin,
+      onClick:
+        pin.type === "current" || pin.type === "myplace"
+          ? () => undefined
+          : () => {
+              onPinClick(pin);
+            },
+    }));
+  }, [state.pins, onPinClick]);
 
   // 위치 정보가 없을 때만 로딩 표시
   if (!currentLocation) {
@@ -199,9 +189,9 @@ export default function MapWithBaseLocation({
         onBoundsChange={handleBoundsChange}
         onZoomChange={handleZoomChange}
       />
-      {(showSearchBtn || (searchStoreId && searchLocation)) && (
+      {(showSearchBtn || (searchType && !hasSearched)) && (
         <SearchModeBtn
-          isSearchMode={!!(searchStoreId && searchLocation)}
+          isSearchMode={!!searchType}
           onExit={handleShowNearbyStores}
           onSearchHere={handleSearchHere}
         />

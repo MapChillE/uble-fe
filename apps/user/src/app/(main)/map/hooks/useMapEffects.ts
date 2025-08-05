@@ -120,7 +120,7 @@ export const useMapEffects = ({
     }
   }, [selectedPlaceId]);
 
-  // 카테고리 변경시 현재 위치에서 fetchPins (baseLocation 변경과 중복되지 않도록)
+  // 카테고리 변경시 현재 위치에서 fetchPins (baseLocation 변경과 중복되지 않도록, STORE 타입 제외)
   useEffect(() => {
     if (isInitialized && state.bounds && state.center && !searchType && !isChangingBaseLocation) {
       // baseLocation 변경으로 인한 fetchPins와 중복되지 않도록 약간의 지연
@@ -141,7 +141,9 @@ export const useMapEffects = ({
       const isInitialSearch =
         searchLocation[0] === state.center[0] && searchLocation[1] === state.center[1];
 
-      if (!isInitialSearch) {
+      // 검색 모드가 있고 아직 검색하지 않은 경우에만 지도 중심 변경
+      // 이미 검색이 완료된 상태에서는 지도 중심을 변경하지 않음 (핀 클릭 시 원래 위치로 돌아가는 것 방지)
+      if (!isInitialSearch && !hasSearched && searchType) {
         dispatch({ type: "SET_CENTER", payload: searchLocation });
         const newBounds = createBoundsFromCenterAndZoom(searchLocation, DEFAULT_ZOOM_LEVEL);
         if (newBounds) {
@@ -180,9 +182,7 @@ export const useMapEffects = ({
       } else if (searchType === "CATEGORY" && searchId) {
         fetchPins(state.center, state.bounds, searchId, undefined, state.zoom);
       } else if (searchType === "STORE" && searchStoreId) {
-        // STORE 타입: 해당 위치로 이동하고 storeId로 drawer 열기
-        fetchPins(state.center, state.bounds, selectedCategory.categoryId, undefined, state.zoom);
-        // 검색 위치 변경 시에만 drawer 열기 (중복 방지)
+        // STORE 타입: 매장 핀만 생성하고 drawer 열기 (전체 검색 실행하지 않음)
         const storePin: Pin = {
           id: searchStoreId,
           coords: state.center,
@@ -190,6 +190,9 @@ export const useMapEffects = ({
           category: "store",
           type: "store",
         };
+        // 매장 핀만 dispatch
+        dispatch({ type: "SET_PINS", payload: [storePin] });
+        // drawer 열기
         onPinClick(storePin);
       }
 
@@ -238,10 +241,10 @@ export const useMapEffects = ({
 
   // 검색 모드 해제 시 주변 매장 표시
   useEffect(() => {
-    if (isExitingSearchMode && isInitialized && state.bounds && state.center) {
+    if (isExitingSearchMode && isInitialized && state.bounds && state.center && !searchType) {
       fetchPins(state.center, state.bounds, selectedCategory.categoryId, undefined, state.zoom);
       setIsExitingSearchMode(false);
       setHasSearched(false); // 검색 모드 해제 시 리셋
     }
-  }, [isExitingSearchMode, isInitialized, fetchPins, selectedCategory.categoryId]);
+  }, [isExitingSearchMode, isInitialized, fetchPins, selectedCategory.categoryId, searchType]);
 };

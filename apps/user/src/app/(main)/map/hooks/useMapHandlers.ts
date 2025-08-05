@@ -12,7 +12,9 @@ interface UseMapHandlersProps {
   state: { center: Coordinates; bounds: naver.maps.LatLngBounds | null; zoom: number };
   setShowSearchBtn: (show: boolean) => void;
   setHasSearched: (searched: boolean) => void;
+  hasSearched: boolean;
   onMapCenterChange?: (center: Coordinates) => void;
+  onExitSearchMode?: () => void;
   fetchPins: (
     center: Coordinates,
     bounds: naver.maps.LatLngBounds,
@@ -32,7 +34,9 @@ export const useMapHandlers = ({
   state,
   setShowSearchBtn,
   setHasSearched,
+  hasSearched,
   onMapCenterChange,
+  onExitSearchMode,
   fetchPins,
 }: UseMapHandlersProps) => {
   // bounds 변경 핸들러 (디바운스 적용)
@@ -44,9 +48,15 @@ export const useMapHandlers = ({
       // 부모 컴포넌트로 현재 지도 center 전달
       onMapCenterChange?.(center);
 
-      // 검색 모드가 있을 때만 "현재 위치에서 검색" 버튼 표시
-      if (searchType && searchLocation) {
-        setShowSearchBtn(true);
+      // 검색 모드가 있을 때 버튼 표시 로직
+      if (searchType) {
+        if (hasSearched) {
+          // 이미 주변 매장 보기를 실행한 상태에서 bounds가 변경되면 다시 검색 가능하도록 리셋
+          setHasSearched(false);
+          setShowSearchBtn(true);
+        } else {
+          setShowSearchBtn(true);
+        }
       } else {
         setShowSearchBtn(false);
       }
@@ -88,28 +98,28 @@ export const useMapHandlers = ({
 
   // "주변 매장 보기" 버튼 클릭 핸들러
   const handleShowNearbyStores = useCallback(() => {
-    if (searchLocation && state.bounds) {
+    if (state.bounds) {
       setShowSearchBtn(false);
-      setHasSearched(false);
+      setHasSearched(true); // 주변 매장 보기 실행 시 검색 완료 상태로 설정
+
+      // 현재 지도 중심을 검색 중심점으로 사용
+      const searchCenter = state.center;
 
       // 검색 타입에 따라 다른 동작
       if (searchType === "STORE" && searchStoreId) {
-        // STORE 타입: 검색 결과 위치에서 주변 매장 검색
-        fetchPins(searchLocation, state.bounds, selectedCategory.categoryId, undefined, state.zoom);
+        fetchPins(searchCenter, state.bounds, selectedCategory.categoryId, undefined, state.zoom);
       } else if (searchType === "BRAND" && searchId) {
-        // BRAND 타입: 검색 결과 위치에서 브랜드 검색
-        fetchPins(searchLocation, state.bounds, 0, searchId, state.zoom);
+        fetchPins(searchCenter, state.bounds, 0, searchId, state.zoom);
       } else if (searchType === "CATEGORY" && searchId) {
-        // CATEGORY 타입: 검색 결과 위치에서 카테고리 검색
-        fetchPins(searchLocation, state.bounds, searchId, undefined, state.zoom);
+        fetchPins(searchCenter, state.bounds, searchId, undefined, state.zoom);
       } else {
-        // 일반: 검색 결과 위치에서 주변 매장 검색
-        fetchPins(searchLocation, state.bounds, selectedCategory.categoryId, undefined, state.zoom);
+        fetchPins(searchCenter, state.bounds, selectedCategory.categoryId, undefined, state.zoom);
       }
     }
   }, [
     searchLocation,
     state.bounds,
+    state.center,
     state.zoom,
     searchType,
     searchStoreId,
@@ -117,6 +127,7 @@ export const useMapHandlers = ({
     selectedCategory.categoryId,
     setShowSearchBtn,
     setHasSearched,
+    onExitSearchMode,
     fetchPins,
   ]);
 

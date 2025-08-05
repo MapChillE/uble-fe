@@ -60,15 +60,7 @@ export const useMapInitialization = ({
             } else if (searchType === "CATEGORY" && searchId) {
               fetchPins(searchLocation, searchBounds, searchId, undefined, state.zoom);
             } else if (searchType === "STORE" && searchStoreId) {
-              // STORE 타입: 해당 위치로 이동하고 storeId로 drawer 열기
-              fetchPins(
-                searchLocation,
-                searchBounds,
-                selectedCategory.categoryId,
-                undefined,
-                state.zoom
-              );
-              // 초기화 시에만 drawer 열기 (중복 방지)
+              // STORE 타입: 매장 핀만 생성하고 drawer 열기 (전체 검색 실행하지 않음)
               const storePin: Pin = {
                 id: searchStoreId,
                 coords: searchLocation,
@@ -76,6 +68,9 @@ export const useMapInitialization = ({
                 category: "store",
                 type: "store",
               };
+              // 매장 핀만 dispatch
+              dispatch({ type: "SET_PINS", payload: [storePin] });
+              // drawer 열기
               onPinClick(storePin);
             }
           }
