@@ -1,8 +1,7 @@
 "use client";
 
-import { Bell, Search, User, Menu } from "lucide-react";
+import { User, Menu } from "lucide-react";
 import { Button } from "@workspace/ui/components/button";
-import { Input } from "@workspace/ui/components/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@workspace/ui/components/avatar";
 
 interface AdminHeaderProps {
