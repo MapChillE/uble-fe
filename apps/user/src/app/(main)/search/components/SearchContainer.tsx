@@ -185,6 +185,13 @@ export default function SearchContainer() {
     }
   }, [urlParams.get("q")]);
 
+  // 페이지 로드 시 검색창 자동 포커스
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
+
   return (
     <div className="flex h-full flex-col bg-white">
       {/* 헤더 */}
