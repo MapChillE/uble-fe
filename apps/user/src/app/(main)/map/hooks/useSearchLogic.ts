@@ -103,17 +103,8 @@ export const useSearchLogic = ({
     setHasSearched(false);
   }, [setShowSearchBtn, setHasSearched]);
 
-  // 검색 타입별 버튼 텍스트 반환
-  const getSearchButtonText = useCallback(() => {
-    if (searchType === "STORE") return "주변 매장 보기";
-    if (searchType === "BRAND") return "주변 브랜드 보기";
-    if (searchType === "CATEGORY") return "주변 카테고리 보기";
-    return "주변 매장 보기";
-  }, [searchType]);
-
   return {
     executeSearch,
     resetSearchState,
-    getSearchButtonText,
   };
 };
