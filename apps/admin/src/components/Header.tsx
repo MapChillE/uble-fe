@@ -22,7 +22,6 @@ export function Header({ onMobileMenuToggle }: AdminHeaderProps) {
 
         <div className="flex items-center space-x-2 md:space-x-4">
           <Avatar className="h-8 w-8 md:h-10 md:w-10">
-            <AvatarImage src="/placeholder.svg?height=32&width=32" />
             <AvatarFallback>
               <User className="h-4 w-4" />
             </AvatarFallback>
