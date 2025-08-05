@@ -345,7 +345,7 @@ const StatisticsCharts = ({ data }: StatisticsChartsProps) => {
   return (
     <div ref={containerRef} className="space-y-6 py-2">
       {/* 카테고리 랭킹 차트 */}
-      <Card className="border border-0 p-4 shadow-none transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+      <Card className="border border-0 py-4 shadow-none transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <BarChart3 className="h-5 w-5 animate-pulse text-blue-500" />
@@ -364,7 +364,7 @@ const StatisticsCharts = ({ data }: StatisticsChartsProps) => {
       </Card>
 
       {/* 브랜드 랭킹 차트 */}
-      <Card className="border border-0 p-4 shadow-none transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+      <Card className="border border-0 py-4 shadow-none transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Target className="h-5 w-5 animate-pulse text-green-500" />
@@ -395,7 +395,7 @@ const StatisticsCharts = ({ data }: StatisticsChartsProps) => {
 
       {/* 사용 패턴 비교 */}
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <Card className="border border-0 p-4 shadow-none transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+        <Card className="border border-0 py-4 shadow-none transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Clock className="h-5 w-5 animate-pulse text-orange-500" />
@@ -424,7 +424,7 @@ const StatisticsCharts = ({ data }: StatisticsChartsProps) => {
         </Card>
 
         {/* 사용 패턴 정보 */}
-        <Card className="border border-0 p-4 shadow-none transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+        <Card className="border border-0 py-4 shadow-none transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Clock className="h-5 w-5 animate-pulse text-indigo-500" />
