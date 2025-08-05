@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@workspace/ui/components/card";
 
 interface ChartCardProps {
@@ -20,4 +20,4 @@ const ChartCard: React.FC<ChartCardProps> = ({ title, children, fixedHeight = tr
   );
 };
 
-export default ChartCard;
+export default memo(ChartCard);
