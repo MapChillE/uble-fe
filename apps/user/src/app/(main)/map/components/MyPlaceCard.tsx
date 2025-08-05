@@ -86,16 +86,6 @@ export default function MyPlaceCard({
           size="icon"
           onClick={(e) => {
             e.stopPropagation();
-            handleEditName();
-          }}
-        >
-          <Pencil className="h-4 w-4 text-gray-400 hover:text-gray-600" />
-        </Button>
-        <Button
-          variant="none"
-          size="icon"
-          onClick={(e) => {
-            e.stopPropagation();
             handleDelete();
           }}
         >
