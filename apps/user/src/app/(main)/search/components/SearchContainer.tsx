@@ -141,7 +141,7 @@ export default function SearchContainer() {
       }
 
       /* 클릭 로그 */
-      await fetchSearchLog({ keyword: query, searchType: "CLICK", isResultExists: true });
+      await fetchSearchLog({ keyword: item.suggestion, searchType: "CLICK", isResultExists: true });
 
       /* 파라미터 조립 후 라우팅 */
       const p = new URLSearchParams({
