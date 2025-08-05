@@ -9,7 +9,7 @@ import { Category } from "@/types/category";
 /** 카테고리 우선순위 정렬 함수 */
 const sortCategoriesByPriority = (categories: Category[]): Category[] => {
   /** 우선순위 카테고리 배열 */
-  const priorityOrder = ["편의점", "카페", "식당", "영화관", "VIP콕"];
+  const priorityOrder = ["카페", "식당", "편의점", "영화관", "쇼핑"];
   const sortedCategories: Category[] = [];
   const remainingCategories: Category[] = [];
 
