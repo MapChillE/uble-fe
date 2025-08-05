@@ -1,26 +1,25 @@
 import { create } from "zustand";
+import { StoreDetail } from "@/types/store";
 
 interface BenefitConfirmModalState {
   isOpen: boolean;
   storeId: number | null;
-  isVIPcock: boolean;
-  vipOnly: boolean;
+  storeDetail: StoreDetail | null;
   onSuccess: (() => void) | null;
   open: () => void;
   close: () => void;
-  setInfo: (storeId: number, isVIPcock: boolean, vipOnly: boolean) => void;
+  setInfo: (storeId: number, storeDetail: StoreDetail) => void;
   setOnSuccess: (cb: (() => void) | null) => void;
 }
 
 const useBenefitConfirmModalStore = create<BenefitConfirmModalState>((set) => ({
   isOpen: false,
   storeId: null,
-  isVIPcock: false,
-  vipOnly: false,
+  storeDetail: null,
   onSuccess: null,
   open: () => set({ isOpen: true }),
   close: () => set({ isOpen: false }),
-  setInfo: (storeId, isVIPcock, vipOnly) => set({ storeId, isVIPcock, vipOnly }),
+  setInfo: (storeId, storeDetail) => set({ storeId, storeDetail }),
   setOnSuccess: (cb) => set({ onSuccess: cb }),
 }));
 
