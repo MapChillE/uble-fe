@@ -54,7 +54,7 @@ const BenefitConfirmModal = () => {
             혜택을 사용하시겠어요?
           </DialogTitle>
         </DialogHeader>
-        <div className="flex flex-wrap justify-center space-x-3 pt-2">
+        <div className="flex justify-center space-x-3 pt-2">
           <Button type="button" variant="modal_cancel" onClick={handleClose}>
             아니요
           </Button>
