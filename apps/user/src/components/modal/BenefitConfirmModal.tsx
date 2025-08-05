@@ -7,7 +7,7 @@ import useBenefitConfirmModalStore from "@/store/useBenefitConfirmModalStore";
 import { UsageRegistRequest } from "@/types/usage";
 import { apiHandler } from "@api/apiHandler";
 import { setUsage } from "@/service/usage";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 
 const BenefitConfirmModal = () => {
@@ -45,63 +45,33 @@ const BenefitConfirmModal = () => {
     }
   };
 
-  // 혜택 타입별 사용 가능 여부 확인
-  const getAvailableBenefitTypes = () => {
+  // 혜택 타입별 상태 확인
+  const getBenefitTypeStatus = () => {
     if (!storeDetail) return [];
 
-    const availableTypes = [];
+    const benefitTypes = ["NORMAL", "VIP", "LOCAL"] as const;
+    const status = [];
 
-    // NORMAL 혜택 확인
-    const hasNormalBenefit = storeDetail.benefitList.some((benefit) => benefit.type === "NORMAL");
-    if (hasNormalBenefit && storeDetail.normalAvailable) {
-      availableTypes.push("NORMAL");
+    for (const type of benefitTypes) {
+      const hasBenefit = storeDetail.benefitList.some((benefit) => benefit.type === type);
+      if (hasBenefit) {
+        const isAvailable =
+          (type === "NORMAL" && storeDetail.normalAvailable) ||
+          (type === "VIP" && storeDetail.vipAvailable) ||
+          (type === "LOCAL" && storeDetail.localAvailable);
+
+        status.push({
+          type,
+          available: isAvailable,
+          disabled: !isAvailable,
+        });
+      }
     }
 
-    // VIP 혜택 확인
-    const hasVIPBenefit = storeDetail.benefitList.some((benefit) => benefit.type === "VIP");
-    if (hasVIPBenefit && storeDetail.vipAvailable) {
-      availableTypes.push("VIP");
-    }
-
-    // LOCAL 혜택 확인
-    const hasLocalBenefit = storeDetail.benefitList.some((benefit) => benefit.type === "LOCAL");
-    if (hasLocalBenefit && storeDetail.localAvailable) {
-      availableTypes.push("LOCAL");
-    }
-
-    return availableTypes;
+    return status;
   };
 
-  // 혜택 타입별 사용 불가능 여부 확인 (disabled 상태용)
-  const getDisabledBenefitTypes = () => {
-    if (!storeDetail) return [];
-
-    const disabledTypes = [];
-
-    // NORMAL 혜택 확인
-    const hasNormalBenefit = storeDetail.benefitList.some((benefit) => benefit.type === "NORMAL");
-    if (hasNormalBenefit && !storeDetail.normalAvailable) {
-      disabledTypes.push("NORMAL");
-    }
-
-    // VIP 혜택 확인
-    const hasVIPBenefit = storeDetail.benefitList.some((benefit) => benefit.type === "VIP");
-    if (hasVIPBenefit && !storeDetail.vipAvailable) {
-      disabledTypes.push("VIP");
-    }
-
-    // LOCAL 혜택 확인
-    const hasLocalBenefit = storeDetail.benefitList.some((benefit) => benefit.type === "LOCAL");
-    if (hasLocalBenefit && !storeDetail.localAvailable) {
-      disabledTypes.push("LOCAL");
-    }
-
-    return disabledTypes;
-  };
-
-  const availableTypes = getAvailableBenefitTypes();
-  const disabledTypes = getDisabledBenefitTypes();
-  const allTypes = [...availableTypes, ...disabledTypes];
+  const benefitStatus = getBenefitTypeStatus();
 
   const getButtonText = (type: string) => {
     switch (type) {
@@ -125,13 +95,13 @@ const BenefitConfirmModal = () => {
           </DialogTitle>
         </DialogHeader>
         <div className="flex flex-col justify-center gap-2 pt-2">
-          {allTypes.map((type) => (
+          {benefitStatus.map(({ type, disabled }) => (
             <Button
               key={type}
               type="button"
-              onClick={() => handleYes(type as "NORMAL" | "VIP" | "LOCAL")}
+              onClick={() => handleYes(type)}
               variant="modal_submit"
-              disabled={isLoading || disabledTypes.includes(type)}
+              disabled={isLoading || disabled}
               className="mx-auto w-full max-w-[200px]"
             >
               {getButtonText(type)}
