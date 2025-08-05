@@ -15,7 +15,7 @@ export default function OfflineBrandFilter({
   selectedBrandName,
 }: OfflineBrandFilterProps) {
   return (
-    <div className="px-0 py-0">
+    <div className="select-none px-0 py-0">
       <Button
         variant={isSelected ? "category_selected" : "category_unselected"}
         size="sm"

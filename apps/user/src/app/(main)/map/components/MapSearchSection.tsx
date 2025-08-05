@@ -35,7 +35,7 @@ const MapSearchSection = () => {
   };
 
   return (
-    <section className="px-4 py-3">
+    <section className="select-none px-4 py-3">
       <div onClick={handleInputClick} className="cursor-pointer">
         <SearchInput
           searchQuery={searchQuery}

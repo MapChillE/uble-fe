@@ -20,7 +20,7 @@ const CategoryBar = ({ selectedCategory, onSelectCategory }: CategoryBarProps) =
   }
 
   return (
-    <nav className="scrollbar-hide flex gap-2 overflow-x-auto overflow-y-hidden whitespace-nowrap py-3">
+    <nav className="scrollbar-hide flex select-none gap-2 overflow-x-auto overflow-y-hidden whitespace-nowrap py-3">
       {categories.map((cat) => {
         const iconStyle = getCategoryIconStyle(cat.categoryName);
         const isSelected = selectedCategory.categoryId === cat.categoryId;
