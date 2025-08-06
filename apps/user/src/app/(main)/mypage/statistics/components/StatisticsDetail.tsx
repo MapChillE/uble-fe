@@ -3,18 +3,20 @@
 import { fetchUserStatisticsDetail } from "@/service/user";
 import { StaticsDetailDataResponse } from "@/types/profile";
 import { useQuery } from "@tanstack/react-query";
-import { BarChart3, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { Fragment } from "react";
 import StatisticsCharts from "./StatisticsChart";
+import useUserStore from "@/store/useUserStore";
 
 const StatisticsDetail = () => {
+  const user = useUserStore((state) => state.user);
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["userStatisticsDetail"] as const,
     queryFn: fetchUserStatisticsDetail,
     select: (res: StaticsDetailDataResponse) => res.data,
   });
 
-  if (isLoading) {
+  if (!user || isLoading) {
     return (
       <div className="flex h-32 items-center justify-center">
         <Loader2 className="h-6 w-6 animate-spin text-gray-400" />

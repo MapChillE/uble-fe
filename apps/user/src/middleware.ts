@@ -9,6 +9,7 @@ export const config = {
     "/map",
     "/mypage",
     "/mypage/history",
+    "/mypage/statistics",
     "/partnerships",
     "/signup",
   ],
