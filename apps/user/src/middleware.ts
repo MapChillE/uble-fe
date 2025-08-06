@@ -11,6 +11,7 @@ export const config = {
     "/mypage/history",
     "/partnerships",
     "/signup",
+    "/mypage/history",
   ],
 };
 
