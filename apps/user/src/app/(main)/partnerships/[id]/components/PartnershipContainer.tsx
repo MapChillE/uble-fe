@@ -35,7 +35,7 @@ const PartnershipContainer = ({ id }: { id: string }) => {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-[300px] flex-col items-center justify-center py-10">
+      <div className="flex min-h-[calc(100dvh-159px)] flex-col items-center justify-center py-10">
         <div className="border-action-green mb-6 h-12 w-12 animate-spin rounded-full border-b-4 border-t-4 border-gray-200" />
         <div className="text-action-green mb-2 text-lg font-semibold">잠시만 기다려 주세요</div>
         <div className="text-gray-500">제휴사 정보를 불러오고 있습니다...</div>
@@ -48,7 +48,7 @@ const PartnershipContainer = ({ id }: { id: string }) => {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="min-h-[calc(100dvh-159px)] space-y-4">
       <div className="space-y-4 p-4">
         <PartnershipHeader {...data} />
         <PartnershipBenefitList {...data} />

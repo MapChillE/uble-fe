@@ -25,13 +25,15 @@ const ConfirmModal = () => {
     <Dialog open={isOpen} onOpenChange={close}>
       <DialogContent className="w-full max-w-xs">
         <DialogHeader>
-          <DialogTitle className="text-center text-lg font-semibold">{message}</DialogTitle>
+          <DialogTitle className="whitespace-pre-line text-center text-lg font-semibold">
+            {message}
+          </DialogTitle>
         </DialogHeader>
         <div className="flex justify-center space-x-3 pt-2">
-          <Button variant="modal_cancel" onClick={close}>
+          <Button variant="modal_submit" onClick={close}>
             {cancelText}
           </Button>
-          <Button variant="modal_submit" onClick={handleConfirm} disabled={isLoading}>
+          <Button variant="modal_cancel" onClick={handleConfirm} disabled={isLoading}>
             {confirmText}
           </Button>
         </div>

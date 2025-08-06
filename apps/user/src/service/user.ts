@@ -1,4 +1,5 @@
 import {
+  CancelPartnershipRes,
   FeedbackForm,
   FeedbackRegistRes,
   InfoForm,
@@ -50,5 +51,10 @@ export const fetchUserStatistics = async (): Promise<StaticsPreviewResponse> => 
 
 export const fetchUserStatisticsDetail = async (): Promise<StaticsDetailDataResponse> => {
   const { data } = await api.get("/api/users/statistics");
+  return data;
+};
+
+export const cancelPartnership = async (): Promise<CancelPartnershipRes> => {
+  const { data } = await api.delete("api/auth/withdraw");
   return data;
 };
