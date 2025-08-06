@@ -123,6 +123,9 @@ export default function SearchContainer() {
       const v = e.currentTarget.value.trim();
       if (!v) return;
 
+      // 모바일에서 키보드 숨기기
+      e.currentTarget.blur();
+
       enterFiredRef.current = true;
       debouncedAutoSearch.cancel();
       runSearch(v, "ENTER");
@@ -184,6 +187,13 @@ export default function SearchContainer() {
       setQuery(searchQuery);
     }
   }, [urlParams.get("q")]);
+
+  // 페이지 로드 시 검색창 자동 포커스
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
 
   return (
     <div className="flex h-full flex-col bg-white">

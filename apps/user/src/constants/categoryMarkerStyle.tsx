@@ -144,6 +144,10 @@ export const getCategoryIconByZoom = (category?: string, name?: string, zoom: nu
       position: relative;
       width: ${markerSize}px;
       height: ${markerSize}px;
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
     ">
       <!-- 마커 원 -->
       <div style="
@@ -210,6 +214,10 @@ export const getSearchResultIcon = (name?: string, zoom: number = 15) => {
       width: ${pinSize}px;
       height: ${pinSize}px;
       z-index: 1000;
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
     ">
       <!-- 검색결과 물방울 핀 -->
       <div style="
@@ -277,6 +285,10 @@ export const getMyPlaceIcon = (name?: string, zoom: number = 15) => {
       width: ${pinSize}px;
       height: ${pinSize}px;
       z-index: 1000;
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
     ">
       <!-- 내장소 물방울 핀 -->
       <div style="
@@ -343,6 +355,10 @@ export const getCurrentLocationIcon = () => {
         align-items: center;
         justify-content: center;
         z-index: 1000;
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
       ">
       </div>`,
     size: new window.naver.maps.Size(20, 20),

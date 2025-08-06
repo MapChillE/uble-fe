@@ -58,7 +58,9 @@ const MyPlaceDrawer = ({ trigger }: MyPlaceDrawerProps) => {
         <Drawer.Trigger asChild>{trigger}</Drawer.Trigger>
         <Drawer.Portal>
           <Drawer.Overlay className="z-80 fixed inset-0 bg-black/40" />
-          <Drawer.Content className="z-100 fixed bottom-0 left-0 right-0 mx-auto max-w-md rounded-t-2xl bg-white p-6 shadow-lg">
+          <Drawer.Content
+            className={`z-100 fixed bottom-0 left-0 right-0 mx-auto max-w-md rounded-t-2xl bg-white p-6 shadow-lg ${showForm ? "pb-32" : ""}`}
+          >
             <Drawer.Title className="mb-4 overflow-y-auto text-lg font-bold">내 장소</Drawer.Title>
             {/* 장소 카드 목록 */}
             {places.length === 0 && !showForm ? (
