@@ -111,3 +111,7 @@ export interface StaticsPreviewData {
 export interface StaticsPreviewResponse extends responseStatus {
   data: StaticsPreviewData;
 }
+
+export interface CancelPartnershipRes extends responseStatus {
+  data: null;
+}
