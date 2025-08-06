@@ -73,7 +73,7 @@ const CATEGORY_META = {
   VIP콕: { icon: Gem, markerColor: "#7C3AED", textColor: "text-purple-600" },
   교육: { icon: GraduationCap, markerColor: "#FACC15", textColor: "text-yellow-500" },
   계절: { icon: Calendar, markerColor: "#22C55E", textColor: "text-green-500" },
-  우리동네멤버십: { icon: Users, markerColor: "#1E293B", textColor: "text-slate-700" },
+  우리동네멤버십: { icon: Users, markerColor: "#A16207", textColor: "text-amber-700" },
   default: { icon: Star, markerColor: "#94A3B8", textColor: "text-slate-500" },
 } as const;
 
