@@ -10,7 +10,7 @@ const BarcodeContainer = ({
   storeDetail,
   initialRevealed = false,
 }: {
-  storeDetail: StoreDetail;
+  storeDetail?: StoreDetail;
   initialRevealed?: boolean;
 }) => {
   const [isBarcodeRevealed, setIsBarcodeRevealed] = useState(initialRevealed);
@@ -22,7 +22,7 @@ const BarcodeContainer = ({
   }, []);
 
   const handleBarcodeClick = () => {
-    if (!isBarcodeRevealed) {
+    if (!isBarcodeRevealed && storeDetail) {
       setInfo(storeDetail.storeId, storeDetail);
       setOnSuccess(() => {
         setIsBarcodeRevealed(true);
@@ -57,7 +57,7 @@ const BarcodeContainer = ({
             </div>
           )}
         </div>
-        {!isBarcodeRevealed && barcode && (
+        {!isBarcodeRevealed && barcode && storeDetail && (
           <div onClick={handleBarcodeClick}>
             <BarcodeBlur />
           </div>
