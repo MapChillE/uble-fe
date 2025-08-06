@@ -3,7 +3,6 @@ import { Drawer } from "vaul";
 import { Button } from "@workspace/ui/components/button";
 import MyPlaceList from "./MyPlaceList";
 import MyPlaceForm from "./MyPlaceForm";
-import CurrentLocationCard from "@/app/(main)/map/components/CurrentLocationCard";
 import { useLocationStore } from "@/store/useLocationStore";
 import useNaverServiceReady from "@/hooks/map/useNaverServiceReady";
 import { GeocodingResult, MyPlace } from "@/types/map";
@@ -61,12 +60,6 @@ const MyPlaceDrawer = ({ trigger }: MyPlaceDrawerProps) => {
           <Drawer.Overlay className="z-80 fixed inset-0 bg-black/40" />
           <Drawer.Content className="z-100 fixed bottom-0 left-0 right-0 mx-auto max-w-md rounded-t-2xl bg-white p-6 shadow-lg">
             <Drawer.Title className="mb-4 overflow-y-auto text-lg font-bold">내 장소</Drawer.Title>
-            {/* 현재 위치 카드 */}
-            <CurrentLocationCard
-              isSelected={selectedPlaceId === -1}
-              onClick={() => setSelectedPlaceId(-1)}
-            />
-            <hr className="my-4 text-gray-300" />
             {/* 장소 카드 목록 */}
             {places.length === 0 && !showForm ? (
               <div className="rounded-lg bg-gray-50 p-4 text-center text-sm text-gray-500">
