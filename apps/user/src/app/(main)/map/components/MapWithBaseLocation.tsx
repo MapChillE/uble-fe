@@ -104,7 +104,6 @@ export default function MapWithBaseLocation({
     lastBaseLocationRef,
   });
 
-  // 모든 useEffect 로직들을 useMapEffects 훅으로 관리
   // baseLocation 변경 감지 (내 장소 변경)
   useEffect(() => {
     if (
@@ -135,7 +134,7 @@ export default function MapWithBaseLocation({
         setIsChangingBaseLocation(false);
       }, 500);
     }
-  }, [baseLocation, selectedCategory.categoryId, fetchPins, searchType]);
+  }, [baseLocation, selectedCategory.categoryId, fetchPins]);
 
   // selectedPlaceId 변경 감지 (내 장소 버튼 클릭 감지)
   useEffect(() => {
