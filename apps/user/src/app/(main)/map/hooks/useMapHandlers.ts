@@ -48,19 +48,14 @@ export const useMapHandlers = ({
       // 부모 컴포넌트로 현재 지도 center 전달
       onMapCenterChange?.(center);
 
-      // 검색 모드가 있을 때 버튼 표시 로직
-      if (searchType) {
-        if (hasSearched) {
-          // 이미 주변 매장 보기를 실행한 상태에서 bounds가 변경되면 다시 검색 가능하도록 리셋
-          setHasSearched(false);
-          setShowSearchBtn(true);
-        } else {
-          setShowSearchBtn(true);
-        }
-      } else {
-        setShowSearchBtn(false);
+      // bounds가 변경되면 항상 "현 지도에서 검색" 버튼 표시
+      setShowSearchBtn(true);
+      // 검색 모드가 있었고 이미 검색을 완료한 상태라면 리셋
+      if (searchType && hasSearched) {
+        setHasSearched(false);
       }
     },
+
     150
   );
 

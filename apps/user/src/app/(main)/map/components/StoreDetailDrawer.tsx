@@ -13,7 +13,7 @@ interface StoreDetailDrawerProps {
   trigger?: React.ReactNode;
 }
 
-const snapPoints = [0.9, 1];
+const snapPoints = [0.95, 1];
 
 const StoreDetailDrawer = ({ trigger }: StoreDetailDrawerProps) => {
   const isOpen = useStoreDetailDrawerStore((s) => s.isOpen);
@@ -56,13 +56,16 @@ const StoreDetailDrawer = ({ trigger }: StoreDetailDrawerProps) => {
           <Drawer.Title className="text-center text-base font-bold"></Drawer.Title>
           {summary && (
             <div className="max-h-[75vh] overflow-y-auto p-4">
-              {snapIndex === 0 ? (
-                <SummaryCard data={summary} />
-              ) : isDetailLoading ? (
-                <StoreDetailSkeleton />
-              ) : detail ? (
-                <DetailCard data={detail} />
-              ) : null}
+              <SummaryCard data={summary} />
+              {snapIndex === 1 && (
+                <>
+                  {isDetailLoading ? (
+                    <StoreDetailSkeleton />
+                  ) : detail ? (
+                    <DetailCard data={detail} />
+                  ) : null}
+                </>
+              )}
             </div>
           )}
           <Drawer.Description></Drawer.Description>
