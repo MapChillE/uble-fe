@@ -8,6 +8,7 @@ import MapWithBaseLocation from "@/app/(main)/map/components/MapWithBaseLocation
 import StoreDetailDrawer from "@/app/(main)/map/components/StoreDetailDrawer";
 import MyPlaceDrawer from "@/app/(main)/map/components/MyPlaceDrawer";
 import MyPlaceTriggerBtn from "@/app/(main)/map/components/MyPlaceTriggerBtn";
+import CurrentLocationBtn from "@/app/(main)/map/components/CurrentLocationBtn";
 import CategorySection from "@/components/common/CategorySection";
 import OfflineBrandFilter from "@/components/common/OfflineBrandFilter";
 import BrandSelectionDrawer from "@/components/common/BrandSelectionDrawer";
@@ -254,14 +255,15 @@ const MapContainer = () => {
     router.push("/map");
   }, [router]);
 
-  // 에러 처리 및 초기화
-  const handleError = useCallback((message: string) => {
-    toast.error(message);
-    setSearchLocation(null);
-    setSearchStoreId(null);
-    setSearchType(null);
-    setSearchId(null);
-  }, []);
+  // 현재 위치로 이동
+  const handleMoveToCurrentLocation = useCallback(() => {
+    if (currentLocation) {
+      // 지도 중심을 현재 위치로 변경하고 현재 위치 마커 포함하여 핀들 다시 가져오기
+      setCurrentMapCenter(currentLocation);
+    } else {
+      toast.error("현재 위치를 가져올 수 없습니다.");
+    }
+  }, [currentLocation]);
 
   if (!currentLocation || !user) {
     return <div>현재 위치를 불러오는 중입니다...</div>;
@@ -284,6 +286,7 @@ const MapContainer = () => {
         searchStoreId={searchStoreId}
         searchType={searchType}
         searchId={searchId}
+        currentMapCenter={currentMapCenter}
         onExitSearchMode={handleExitSearchMode}
         onMapCenterChange={handleMapCenterChange}
       />
@@ -309,7 +312,7 @@ const MapContainer = () => {
       </div>
 
       <MyPlaceDrawer trigger={<MyPlaceTriggerBtn />} />
-      {/* <CurrentPlaceBtn /> */}
+      <CurrentLocationBtn onClick={handleMoveToCurrentLocation} disabled={!currentLocation} />
       <StoreDetailDrawer />
       <BenefitConfirmModal />
       <BrandSelectionDrawer

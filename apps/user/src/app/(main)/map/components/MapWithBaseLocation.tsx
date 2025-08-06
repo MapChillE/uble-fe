@@ -9,7 +9,7 @@ import { useMapInitialization } from "@/app/(main)/map/hooks/useMapInitializatio
 import { useMapHandlers } from "@/app/(main)/map/hooks/useMapHandlers";
 import { DEFAULT_LOCATION, DEFAULT_ZOOM_LEVEL } from "@/types/constants";
 import { Coordinates } from "@/types/map";
-import { mapReducer, MapState, MapAction } from "@/app/(main)/map/reducers/mapReducer";
+import { mapReducer } from "@/app/(main)/map/reducers/mapReducer";
 import { fetchStorePins } from "@/utils/fetchStorePins";
 import { createBoundsFromCenterAndZoom } from "@/utils/mapBounds";
 import SearchModeBtn from "./SearchModeBtn";
@@ -21,6 +21,7 @@ interface MapWithBaseLocationProps {
   searchStoreId?: number | null;
   searchType?: string | null;
   searchId?: number | null;
+  currentMapCenter?: Coordinates | null;
   onExitSearchMode?: () => void;
   onMapCenterChange?: (center: Coordinates) => void;
 }
@@ -32,6 +33,7 @@ export default function MapWithBaseLocation({
   searchStoreId,
   searchType,
   searchId,
+  currentMapCenter,
   onExitSearchMode,
   onMapCenterChange,
 }: MapWithBaseLocationProps) {
@@ -104,6 +106,18 @@ export default function MapWithBaseLocation({
     lastBaseLocationRef,
   });
 
+  // currentMapCenter 변경 감지하여 지도 중심 업데이트
+  useEffect(() => {
+    if (currentMapCenter && isInitialized) {
+      dispatch({ type: "SET_CENTER", payload: currentMapCenter });
+      const newBounds = createBoundsFromCenterAndZoom(currentMapCenter, state.zoom);
+      if (newBounds) {
+        dispatch({ type: "SET_BOUNDS", payload: newBounds });
+      }
+    }
+  }, [currentMapCenter, isInitialized, state.zoom]);
+
+  // 모든 useEffect 로직들을 useMapEffects 훅으로 관리
   // baseLocation 변경 감지 (내 장소 변경)
   useEffect(() => {
     if (
@@ -134,7 +148,7 @@ export default function MapWithBaseLocation({
         setIsChangingBaseLocation(false);
       }, 500);
     }
-  }, [baseLocation, selectedCategory.categoryId, fetchPins]);
+  }, [baseLocation, selectedCategory.categoryId, fetchPins, searchType]);
 
   // selectedPlaceId 변경 감지 (내 장소 버튼 클릭 감지)
   useEffect(() => {
