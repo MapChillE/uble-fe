@@ -21,7 +21,7 @@ const MyPlaceDrawer = ({ trigger }: MyPlaceDrawerProps) => {
   const places = useLocationStore((s) => s.myPlaces);
   const selectedPlaceId = useLocationStore((s) => s.selectedPlaceId);
   const setSelectedPlaceId = useLocationStore((s) => s.setSelectedPlaceId);
-  const serviceReady = useNaverServiceReady();
+  const { serviceReady } = useNaverServiceReady();
 
   // Drawer 열릴 때 서버에서 myPlaces 다시 불러오기
   useEffect(() => {
