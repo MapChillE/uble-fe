@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useImperativeHandle, forwardRef } from "react";
 import { Coordinates } from "@/types/map";
 import type { NaverMap as NaverMapInstance, NaverMapOptions } from "@/types/map";
 import { useLocationStore } from "@/store/useLocationStore";
@@ -15,6 +15,13 @@ export interface Pin {
   onClick?: () => void;
   type?: string; // 예: "store", "current", "favorite" 등
   category?: string;
+}
+
+export interface NaverMapRef {
+  getMap: () => NaverMapInstance | null;
+  getCurrentBounds: () => naver.maps.LatLngBounds | null;
+  getCurrentCenter: () => Coordinates | null;
+  getCurrentZoom: () => number;
 }
 
 interface NaverMapProps {
@@ -33,68 +40,97 @@ interface NaverMapProps {
  * @param onBoundsChange 지도 바운드 변경 시 호출되는 함수
  * @returns 지도 컴포넌트
  */
-export default function NaverMap({
-  loc,
-  zoom = 15,
-  pins,
-  onBoundsChange,
-  onZoomChange,
-}: NaverMapProps) {
-  const mapRef = useRef<NaverMapInstance | null>(null);
-  const [lng, lat] = loc;
-  const selectedPlaceId = useLocationStore((s) => s.selectedPlaceId);
-  const selectedPlace = useLocationStore((s) => s.myPlaces.find((p) => p.id === selectedPlaceId));
+const NaverMap = forwardRef<NaverMapRef, NaverMapProps>(
+  ({ loc, zoom = 16, pins, onBoundsChange, onZoomChange }, ref) => {
+    const mapRef = useRef<NaverMapInstance | null>(null);
+    const [lng, lat] = loc;
+    const selectedPlaceId = useLocationStore((s) => s.selectedPlaceId);
+    const selectedPlace = useLocationStore((s) => s.myPlaces.find((p) => p.id === selectedPlaceId));
 
-  // 마커와 클러스터러 통합 관리 훅 사용
-  useMarkerAndClusterManager({
-    mapRef,
-    pins,
-    zoom,
-    selectedPlace,
-  });
+    // 마커와 클러스터러 통합 관리 훅 사용
+    useMarkerAndClusterManager({
+      mapRef,
+      pins,
+      zoom,
+      selectedPlace,
+    });
 
-  // 최초 지도 생성
-  useEffect(() => {
-    if (!mapRef.current && typeof window !== "undefined" && window.naver) {
-      const mapOptions: NaverMapOptions = {
-        center: new window.naver.maps.LatLng(lat, lng),
-        zoom: zoom,
-        scaleControl: true,
-        mapDataControl: true,
-        logoControlOptions: {
-          position: window.naver.maps.Position.BOTTOM_LEFT,
+    // 외부에서 map 객체와 관련 메서드들에 접근할 수 있도록 노출
+    useImperativeHandle(
+      ref,
+      () => ({
+        getMap: () => mapRef.current,
+        getCurrentBounds: () => {
+          if (mapRef.current) {
+            return mapRef.current.getBounds() as naver.maps.LatLngBounds;
+          }
+          return null;
         },
-      };
-      const map = new window.naver.maps.Map(mapId, mapOptions);
-      mapRef.current = map;
-      // bounds_changed 이벤트 리스너 등록
-      if (onBoundsChange) {
-        window.naver.maps.Event.addListener(map, "bounds_changed", () => {
-          const bounds = map.getBounds();
-          const center = map.getCenter();
-          const latLngCenter = center as naver.maps.LatLng;
-          onBoundsChange(bounds as naver.maps.LatLngBounds, [
-            latLngCenter.lng(),
-            latLngCenter.lat(),
-          ]);
-        });
+        getCurrentCenter: () => {
+          if (mapRef.current) {
+            const center = mapRef.current.getCenter();
+            const latLngCenter = center as naver.maps.LatLng;
+            return [latLngCenter.lng(), latLngCenter.lat()];
+          }
+          return null;
+        },
+        getCurrentZoom: () => {
+          if (mapRef.current) {
+            return mapRef.current.getZoom();
+          }
+          return zoom;
+        },
+      }),
+      [zoom]
+    );
+
+    // 최초 지도 생성
+    useEffect(() => {
+      if (!mapRef.current && typeof window !== "undefined" && window.naver) {
+        const mapOptions: NaverMapOptions = {
+          center: new window.naver.maps.LatLng(lat, lng),
+          zoom: zoom,
+          scaleControl: true,
+          mapDataControl: true,
+          logoControlOptions: {
+            position: window.naver.maps.Position.BOTTOM_LEFT,
+          },
+        };
+        const map = new window.naver.maps.Map(mapId, mapOptions);
+        mapRef.current = map;
+        // bounds_changed 이벤트 리스너 등록
+        if (onBoundsChange) {
+          window.naver.maps.Event.addListener(map, "bounds_changed", () => {
+            const bounds = map.getBounds();
+            const center = map.getCenter();
+            const latLngCenter = center as naver.maps.LatLng;
+            onBoundsChange(bounds as naver.maps.LatLngBounds, [
+              latLngCenter.lng(),
+              latLngCenter.lat(),
+            ]);
+          });
+        }
+
+        if (onZoomChange) {
+          window.naver.maps.Event.addListener(map, "zoomend", () => {
+            const currentZoom = map.getZoom();
+            onZoomChange(currentZoom);
+          });
+        }
       }
+    }, [loc, onBoundsChange, onZoomChange]);
 
-      if (onZoomChange) {
-        window.naver.maps.Event.addListener(map, "zoomend", () => {
-          const currentZoom = map.getZoom();
-          onZoomChange(currentZoom);
-        });
+    // center 이동
+    useEffect(() => {
+      if (mapRef.current) {
+        mapRef.current.setCenter(new window.naver.maps.LatLng(lat, lng));
       }
-    }
-  }, [loc, onBoundsChange, onZoomChange]);
+    }, [loc, lat, lng]);
 
-  // center 이동
-  useEffect(() => {
-    if (mapRef.current) {
-      mapRef.current.setCenter(new window.naver.maps.LatLng(lat, lng));
-    }
-  }, [loc, lat, lng]);
+    return <div id={mapId} style={{ width: "100%", height: "100%" }} />;
+  }
+);
 
-  return <div id={mapId} style={{ width: "100%", height: "100%" }} />;
-}
+NaverMap.displayName = "NaverMap";
+
+export default NaverMap;

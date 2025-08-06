@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Coordinates } from "@/types/map";
 import { createBoundsFromCenterAndZoom } from "@/utils/mapBounds";
 import { DEFAULT_ZOOM_LEVEL } from "@/types/constants";
@@ -6,8 +6,6 @@ import { Pin } from "@/app/(main)/map/components/NaverMap";
 
 interface UseMapInitializationProps {
   currentLocation: Coordinates | null;
-  isInitialized: boolean;
-  setIsInitialized: (initialized: boolean) => void;
   searchLocation: Coordinates | null;
   searchType: string | null;
   searchId: number | null;
@@ -28,8 +26,6 @@ interface UseMapInitializationProps {
 
 export const useMapInitialization = ({
   currentLocation,
-  isInitialized,
-  setIsInitialized,
   searchLocation,
   searchType,
   searchId,
@@ -41,8 +37,11 @@ export const useMapInitialization = ({
   onPinClick,
   lastBaseLocationRef,
 }: UseMapInitializationProps) => {
+  // 초기화 완료 상태 추적
+  const isInitializedRef = useRef(false);
+
   useEffect(() => {
-    if (currentLocation && !isInitialized) {
+    if (currentLocation && !isInitializedRef.current) {
       const initialBounds = createBoundsFromCenterAndZoom(currentLocation, DEFAULT_ZOOM_LEVEL);
       if (initialBounds) {
         dispatch({ type: "SET_BOUNDS", payload: initialBounds });
@@ -56,9 +55,9 @@ export const useMapInitialization = ({
           if (searchBounds) {
             dispatch({ type: "SET_BOUNDS", payload: searchBounds });
             if (searchType === "BRAND" && searchId) {
-              fetchPins(searchLocation, searchBounds, 0, searchId, state.zoom);
+              fetchPins(searchLocation, searchBounds, 0, searchId, DEFAULT_ZOOM_LEVEL);
             } else if (searchType === "CATEGORY" && searchId) {
-              fetchPins(searchLocation, searchBounds, searchId, undefined, state.zoom);
+              fetchPins(searchLocation, searchBounds, searchId, undefined, DEFAULT_ZOOM_LEVEL);
             } else if (searchType === "STORE" && searchStoreId) {
               // STORE 타입: 매장 핀만 생성하고 drawer 열기 (전체 검색 실행하지 않음)
               const storePin: Pin = {
@@ -81,27 +80,24 @@ export const useMapInitialization = ({
             initialBounds,
             selectedCategory.categoryId,
             undefined,
-            state.zoom
+            DEFAULT_ZOOM_LEVEL
           );
         }
 
         lastBaseLocationRef.current = currentLocation;
-        setIsInitialized(true);
+        isInitializedRef.current = true; // 초기화 완료 표시
       }
     }
   }, [
     currentLocation,
-    isInitialized,
-    setIsInitialized,
     searchLocation,
     searchType,
     searchId,
     searchStoreId,
-    selectedCategory.categoryId,
-    state.zoom,
     dispatch,
     fetchPins,
     onPinClick,
     lastBaseLocationRef,
+    selectedCategory.categoryId,
   ]);
 };

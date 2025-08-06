@@ -21,8 +21,8 @@ export function useCurrentLocation() {
       const defaultOptions = {
         enableHighAccuracy: true,
         timeout: 10000,
-        maximumAge: 300000, // 5분 캐시 (기본값)
-        forceRefresh: false, // 기본값: 캐싱 사용
+        maximumAge: 0, // 캐시 비활성화 (매번 새로운 위치 요청)
+        forceRefresh: true, // 강제 새로고침 (캐시 무시)
       };
 
       const finalOptions = { ...defaultOptions, ...options };

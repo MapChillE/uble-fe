@@ -193,9 +193,8 @@ const MapContainer = () => {
     const lat = searchParams.get("lat");
     const lng = searchParams.get("lng");
     const storeId = searchParams.get("storeId");
-    const zoom = parseInt(searchParams.get("zoom") || "15");
 
-    return { type, id, lat, lng, storeId, zoom };
+    return { type, id, lat, lng, storeId };
   }, [searchParams]);
 
   // URL 파라미터 변경 감지 및 처리
@@ -223,16 +222,18 @@ const MapContainer = () => {
 
     // type에 따른 처리
     if ((type === "STORE" || storeId) && storeId) {
-      // 1. STORE 타입: 해당 위치로 이동하고 storeId로 drawer 열기
+      // STORE 타입: 해당 위치로 이동하고 storeId로 drawer 열기
       const parsedStoreId = parseInt(storeId, 10);
       if (!isNaN(parsedStoreId)) {
         setSearchLocation(location);
         setSearchStoreId(parsedStoreId);
         setSearchType("STORE");
-        // handleStoreClick은 MapWithBaseLocation에서 처리하므로 여기서는 제거
+
+        // STORE 타입일 때는 즉시 drawer 열기
+        handleStoreClick(parsedStoreId, location);
       }
     } else if (type === "BRAND" && id) {
-      // 2. BRAND 타입: 해당 위치로 이동하고 brandId로 검색
+      // BRAND 타입: 해당 위치로 이동하고 brandId로 검색
       const parsedId = parseInt(id, 10);
       if (!isNaN(parsedId)) {
         setSearchLocation(location);
@@ -240,7 +241,7 @@ const MapContainer = () => {
         setSearchId(parsedId);
       }
     } else if (type === "CATEGORY" && id) {
-      // 3. CATEGORY 타입: 해당 위치로 이동하고 categoryId로 검색
+      // CATEGORY 타입: 해당 위치로 이동하고 categoryId로 검색
       const parsedId = parseInt(id, 10);
       if (!isNaN(parsedId)) {
         setSearchLocation(location);
@@ -277,7 +278,12 @@ const MapContainer = () => {
   }, [getCurrentLocation, setCurrentLocation, setCurrentMapCenter]);
 
   if (!currentLocation || !user) {
-    return <div>현재 위치를 불러오는 중입니다...</div>;
+    return (
+      <div className="flex h-full w-full flex-col items-center justify-center">
+        <div className="border-t-action-green mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-4 border-gray-300"></div>
+        <p className="text-gray-600">현재 위치를 불러오는 중...</p>
+      </div>
+    );
   }
 
   // URL 파라미터가 있는 경우 파싱이 완료될 때까지 대기
@@ -285,7 +291,12 @@ const MapContainer = () => {
   const hasSearchParams = !!(lat && lng && (storeId || (type && id)));
 
   if (hasSearchParams && !searchLocation && !searchType && !searchStoreId) {
-    return <div>검색 정보를 불러오는 중입니다...</div>;
+    return (
+      <div className="flex h-full w-full flex-col items-center justify-center">
+        <div className="border-t-action-green mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-4 border-gray-300"></div>
+        <p className="text-gray-600">검색 정보를 불러오는 중...</p>
+      </div>
+    );
   }
 
   return (
