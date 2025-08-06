@@ -113,38 +113,6 @@ export const useMarkerAndClusterManager = ({
     }
   };
 
-  // 클릭된 마커에 꼬리를 추가하는 함수
-  const addTailToMarker = (marker: NaverMarker, color: string) => {
-    const element = marker.getElement();
-    if (!element) return;
-
-    // 기존 꼬리 제거
-    const existingTail = element.querySelector(".marker-tail");
-    if (existingTail) {
-      existingTail.remove();
-    }
-
-    // 애니메이션 스타일 추가
-    const style = document.createElement("style");
-    style.textContent = `
-      @keyframes tailAppear {
-        0% {
-          transform: translateX(-50%) rotate(-45deg) scale(0);
-          opacity: 0;
-        }
-        50% {
-          transform: translateX(-50%) rotate(-45deg) scale(1.2);
-          opacity: 0.8;
-        }
-        100% {
-          transform: translateX(-50%) rotate(-45deg) scale(1);
-          opacity: 1;
-        }
-      }
-    `;
-    document.head.appendChild(style);
-  };
-
   // 마커 아이콘 업데이트 함수
   const updateMarkerIcon = (marker: NaverMarker, pin: Pin, currentZoom: number) => {
     if (pin.type === "current" || pin.type === "selected") {
