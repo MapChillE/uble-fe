@@ -18,6 +18,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@workspace/ui/componen
 import { TrendingUp, BarChart3, Clock, Target } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { getCategoryIconStyle } from "@/constants/categoryMarkerStyle";
+import { createChartOptions } from "./chartOptions";
 
 // Chart.js 등록
 ChartJS.register(
@@ -204,143 +205,7 @@ const StatisticsCharts = ({ data }: StatisticsChartsProps) => {
   };
 
   // 차트 옵션들
-  const barOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    animation: {
-      duration: isVisible ? 2000 : 0,
-      easing: "easeInOutQuart" as const,
-    },
-    plugins: {
-      legend: {
-        display: false,
-      },
-      tooltip: {
-        backgroundColor: "rgba(0, 0, 0, 0.8)",
-        titleColor: "#fff",
-        bodyColor: "#fff",
-        borderColor: "rgba(255, 255, 255, 0.1)",
-        borderWidth: 0,
-        cornerRadius: 8,
-        animation: {
-          duration: 300,
-        },
-      },
-    },
-    scales: {
-      y: {
-        beginAtZero: true,
-        grid: {
-          color: "rgba(0, 0, 0, 0.1)",
-        },
-        ticks: {
-          color: "#6b7280",
-        },
-        animation: {
-          duration: 1500,
-        },
-      },
-      x: {
-        grid: {
-          display: false,
-        },
-        ticks: {
-          color: "#6b7280",
-        },
-        animation: {
-          duration: 1500,
-        },
-      },
-    },
-  };
-
-  const lineOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    animation: {
-      duration: isVisible ? 2000 : 0,
-      easing: "easeInOutQuart" as const,
-    },
-    plugins: {
-      legend: {
-        display: false,
-      },
-      tooltip: {
-        backgroundColor: "rgba(0, 0, 0, 0.8)",
-        titleColor: "#fff",
-        bodyColor: "#fff",
-        borderColor: "rgba(255, 255, 255, 0.1)",
-        borderWidth: 1,
-        cornerRadius: 8,
-        animation: {
-          duration: 300,
-        },
-      },
-    },
-    scales: {
-      y: {
-        beginAtZero: true,
-        grid: {
-          color: "rgba(0, 0, 0, 0.1)",
-        },
-        ticks: {
-          color: "#6b7280",
-        },
-        animation: {
-          duration: 1500,
-        },
-      },
-      x: {
-        grid: {
-          display: false,
-        },
-        ticks: {
-          color: "#6b7280",
-        },
-        animation: {
-          duration: 1500,
-        },
-      },
-    },
-  };
-
-  const doughnutOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    layout: {
-      padding: {
-        top: 10,
-        bottom: 10,
-        left: 10,
-        right: 10,
-      },
-    },
-    animation: {
-      duration: isVisible ? 2000 : 0,
-      easing: "easeInOutQuart" as const,
-    },
-    plugins: {
-      legend: {
-        position: "bottom" as const,
-        labels: {
-          color: "#6b7280",
-          padding: 20,
-          usePointStyle: true,
-        },
-      },
-      tooltip: {
-        backgroundColor: "rgba(0, 0, 0, 0.8)",
-        titleColor: "#fff",
-        bodyColor: "#fff",
-        borderColor: "rgba(255, 255, 255, 0.1)",
-        borderWidth: 1,
-        cornerRadius: 8,
-        animation: {
-          duration: 300,
-        },
-      },
-    },
-  };
+  const { barOptions, lineOptions, doughnutOptions } = createChartOptions(isVisible);
 
   return (
     <div ref={containerRef} className="space-y-6 py-2">
