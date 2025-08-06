@@ -211,9 +211,9 @@ export default function MapWithBaseLocation({
       searchLocation &&
       searchType &&
       !hasSearched && // 아직 검색하지 않은 경우에만 실행
-      // 지도 중심이 검색 위치와 일치할 때만 실행
-      currentCenter[0] === searchLocation[0] &&
-      currentCenter[1] === searchLocation[1]
+      // 지도 중심이 검색 위치 근처에 있을 때 실행 (더 관대한 조건)
+      Math.abs(currentCenter[0] - searchLocation[0]) < 0.01 &&
+      Math.abs(currentCenter[1] - searchLocation[1]) < 0.01
     ) {
       if (searchType === "BRAND" && searchId) {
         fetchPins(currentCenter, currentBounds, 0, searchId, currentZoom);

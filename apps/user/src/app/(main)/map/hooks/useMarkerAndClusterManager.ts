@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import type { NaverMarker, NaverMap as NaverMapInstance, MyPlace } from "@/types/map";
 import { MarkerClustering } from "@/types/markerClustering";
 import { Pin } from "@/app/(main)/map/components/NaverMap";
@@ -7,6 +7,8 @@ import {
   getSearchResultIcon,
   getMyPlaceIcon,
   getCurrentLocationIcon,
+  CATEGORY_MARKER_STYLE,
+  CategoryMarkerKey,
 } from "@/constants/categoryMarkerStyle";
 
 interface UseMarkerAndClusterManagerProps {
@@ -27,6 +29,121 @@ export const useMarkerAndClusterManager = ({
   const selectedMarkerRef = useRef<NaverMarker | null>(null);
   const clustererRef = useRef<MarkerClustering | null>(null);
   const previousZoomRef = useRef<number>(zoom);
+  const [selectedMarkerId, setSelectedMarkerId] = useState<number | null>(null);
+
+  // 클릭된 마커에 강조 효과를 추가하는 함수
+  const addEmphasisToMarker = (marker: NaverMarker, color: string) => {
+    const element = marker.getElement();
+    if (!element) return;
+
+    // 기존 강조 효과 제거
+    const existingEmphasis = element.querySelector(".marker-emphasis");
+    if (existingEmphasis) {
+      existingEmphasis.remove();
+    }
+
+    // 새로운 강조 효과 추가
+    const emphasis = document.createElement("div");
+    emphasis.className = "marker-emphasis";
+    emphasis.style.cssText = `
+      position: absolute;
+      top: -4px;
+      left: -4px;
+      right: -4px;
+      bottom: -4px;
+      border: 3px solid ${color};
+      border-radius: 50%;
+      animation: emphasisPulse 2s ease-in-out infinite;
+      z-index: 0;
+      pointer-events: none;
+    `;
+
+    // 마커 자체에 그림자 효과 추가
+    const markerCircle = element.querySelector('div[style*="border-radius: 50%"]') as HTMLElement;
+    if (markerCircle) {
+      markerCircle.style.boxShadow = `
+        0 4px 12px rgba(0,0,0,0.3),
+        0 0 0 2px rgba(255,255,255,0.8) inset,
+        0 0 20px ${color}40
+      `;
+      markerCircle.style.transform = "scale(1.1)";
+      markerCircle.style.transition = "all 0.3s ease";
+    }
+
+    // 애니메이션 스타일 추가
+    const style = document.createElement("style");
+    style.textContent = `
+      @keyframes emphasisPulse {
+        0% {
+          transform: scale(1);
+          opacity: 0.8;
+        }
+        50% {
+          transform: scale(1.2);
+          opacity: 0.4;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 0.8;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+
+    element.appendChild(emphasis);
+  };
+
+  // 마커에서 강조 효과 제거하는 함수
+  const removeEmphasisFromMarker = (marker: NaverMarker) => {
+    const element = marker.getElement();
+    if (!element) return;
+
+    // 강조 효과 제거
+    const emphasis = element.querySelector(".marker-emphasis");
+    if (emphasis) {
+      emphasis.remove();
+    }
+
+    // 마커 원래 상태로 복원
+    const markerCircle = element.querySelector('div[style*="border-radius: 50%"]') as HTMLElement;
+    if (markerCircle) {
+      markerCircle.style.boxShadow = "";
+      markerCircle.style.transform = "scale(1)";
+      markerCircle.style.transition = "all 0.3s ease";
+    }
+  };
+
+  // 클릭된 마커에 꼬리를 추가하는 함수
+  const addTailToMarker = (marker: NaverMarker, color: string) => {
+    const element = marker.getElement();
+    if (!element) return;
+
+    // 기존 꼬리 제거
+    const existingTail = element.querySelector(".marker-tail");
+    if (existingTail) {
+      existingTail.remove();
+    }
+
+    // 애니메이션 스타일 추가
+    const style = document.createElement("style");
+    style.textContent = `
+      @keyframes tailAppear {
+        0% {
+          transform: translateX(-50%) rotate(-45deg) scale(0);
+          opacity: 0;
+        }
+        50% {
+          transform: translateX(-50%) rotate(-45deg) scale(1.2);
+          opacity: 0.8;
+        }
+        100% {
+          transform: translateX(-50%) rotate(-45deg) scale(1);
+          opacity: 1;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  };
 
   // 마커 아이콘 업데이트 함수
   const updateMarkerIcon = (marker: NaverMarker, pin: Pin, currentZoom: number) => {
@@ -36,6 +153,20 @@ export const useMarkerAndClusterManager = ({
       const icon = getCategoryIconByZoom(pin.category, pin.name, currentZoom);
       if (icon) {
         marker.setIcon(icon);
+
+        // 선택된 마커인 경우 강조 효과 추가
+        if (selectedMarkerId === pin.id) {
+          // 카테고리 색상 사용
+          const key = (pin.category as CategoryMarkerKey) ?? "default";
+          const style = CATEGORY_MARKER_STYLE[key] ?? CATEGORY_MARKER_STYLE["default"];
+          const color = style?.color || "#666";
+
+          // 강조 효과 추가
+          addEmphasisToMarker(marker, color);
+        } else {
+          // 강조 효과 제거
+          removeEmphasisFromMarker(marker);
+        }
       }
     } else if (pin.type === "search") {
       // 검색결과 마커 스타일
@@ -103,8 +234,27 @@ export const useMarkerAndClusterManager = ({
 
     const marker = new window.naver.maps.Marker(markerOptions);
 
+    // 마커 생성 후 선택 상태 적용
+    if (selectedMarkerId === pin.id) {
+      if (pin.type === "store" && pin.category) {
+        // 카테고리 색상 사용
+        const key = (pin.category as CategoryMarkerKey) ?? "default";
+        const style = CATEGORY_MARKER_STYLE[key] ?? CATEGORY_MARKER_STYLE["default"];
+        const color = style?.color || "#666";
+
+        // 강조 효과 추가
+        addEmphasisToMarker(marker, color);
+      }
+    }
+
     if (pin.onClick) {
-      window.naver.maps.Event.addListener(marker, "click", pin.onClick);
+      window.naver.maps.Event.addListener(marker, "click", () => {
+        // 클릭 시 선택된 마커 ID 설정
+        setSelectedMarkerId(pin.id);
+
+        // 원래 onClick 함수 실행
+        pin.onClick!();
+      });
     }
 
     return marker;
@@ -240,17 +390,15 @@ export const useMarkerAndClusterManager = ({
   useEffect(() => {
     if (!mapRef.current || !window.naver) return;
 
-    // 줌 레벨 15를 기준으로 매장명 표시 여부가 변경되는지 확인
-    const shouldShowText = zoom > 15;
-    const previousShouldShowText = previousZoomRef.current > 15; // 이전 줌 레벨 기준
-    if (shouldShowText === previousShouldShowText) {
+    // 줌 레벨이 변경되었을 때만 마커 아이콘 업데이트
+    if (zoom === previousZoomRef.current) {
       return;
     }
 
-    // 매장명 표시 여부가 변경되는 경우에만 아이콘 업데이트
-    // 기존 마커들의 아이콘만 업데이트
+    // 모든 마커의 아이콘 업데이트
     const otherPins =
       pins?.filter((pin) => pin.type !== "current" && pin.type !== "selected") || [];
+
     markerRefs.current.forEach((marker, index) => {
       const pin = otherPins[index];
       if (pin) {
@@ -261,6 +409,22 @@ export const useMarkerAndClusterManager = ({
     // 현재 줌 레벨을 이전 줌 레벨로 저장
     previousZoomRef.current = zoom;
   }, [zoom, pins]);
+
+  // 선택된 마커 변경 시 아이콘 업데이트
+  useEffect(() => {
+    if (!mapRef.current || !window.naver) return;
+
+    // 모든 마커의 아이콘 업데이트
+    const otherPins =
+      pins?.filter((pin) => pin.type !== "current" && pin.type !== "selected") || [];
+
+    markerRefs.current.forEach((marker, index) => {
+      const pin = otherPins[index];
+      if (pin) {
+        updateMarkerIcon(marker, pin, zoom);
+      }
+    });
+  }, [selectedMarkerId, pins, zoom]);
 
   return {
     markerRefs,

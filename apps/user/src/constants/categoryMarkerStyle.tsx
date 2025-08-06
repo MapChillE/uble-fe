@@ -74,7 +74,7 @@ const CATEGORY_META = {
   교육: { icon: GraduationCap, markerColor: "#FACC15", textColor: "text-yellow-500" },
   계절: { icon: Calendar, markerColor: "#22C55E", textColor: "text-green-500" },
   우리동네멤버십: { icon: Users, markerColor: "#A16207", textColor: "text-amber-700" },
-  default: { icon: Star, markerColor: "#94A3B8", textColor: "text-slate-500" },
+  default: { icon: Search, markerColor: "#6366F1", textColor: "text-indigo-500" }, // 검색 결과와 동일한 보라색
 } as const;
 
 // 카테고리별 아이콘 스타일 정보 반환 (카테고리바용)
@@ -112,7 +112,7 @@ export const getCategoryIconHTML = (iconComponent: (size?: number) => ReactNode,
 };
 
 // 줌 레벨에 따른 마커 스타일 반환
-export const getCategoryIconByZoom = (category?: string, name?: string, zoom: number = 15) => {
+export const getCategoryIconByZoom = (category?: string, name?: string, zoom: number = 16) => {
   if (!window.naver?.maps) return null;
 
   const key: CategoryMarkerKey = (category as CategoryMarkerKey) ?? "default";
@@ -131,13 +131,135 @@ export const getCategoryIconByZoom = (category?: string, name?: string, zoom: nu
   //   markerSize = 20;
   // } else
   if (zoom <= 15) {
-    // 중간 줌 레벨: 중간 크기 마커, 작은 텍스트
-
+    // 중간 줌 레벨: 중간 크기 마커, 텍스트 숨김
     showText = false;
   } else {
     // 큰 줌 레벨: 기본 크기 마커, 기본 텍스트
+    showText = true;
   }
 
+  // 텍스트를 2줄로 분할하는 로직
+  let textLines: string[] = [];
+  let isTwoLines = false;
+
+  if (showText && name) {
+    const maxLength = 8;
+    if (name.length <= maxLength) {
+      textLines = [name];
+    } else {
+      // 공백을 기준으로 단어 분리
+      const words = name.split(" ");
+
+      if (words.length === 1) {
+        // 단어가 하나면 중간에서 자르기
+        const mid = Math.ceil(name.length / 2);
+        textLines = [name.slice(0, mid), name.slice(mid)];
+      } else {
+        // 첫 번째 줄에 들어갈 단어들 찾기
+        let firstLine = "";
+        let secondLine = "";
+
+        for (let i = 0; i < words.length; i++) {
+          const word = words[i];
+          if (!word) continue;
+          const testLine = firstLine + (firstLine ? " " : "") + word;
+          if (testLine.length <= maxLength) {
+            firstLine = testLine;
+          } else {
+            // 첫 번째 줄이 비어있으면 강제로 첫 번째 단어 추가
+            if (!firstLine) {
+              firstLine = word;
+              secondLine = words.slice(i + 1).join(" ");
+            } else {
+              secondLine = words.slice(i).join(" ");
+            }
+            break;
+          }
+        }
+
+        // 두 번째 줄이 비어있으면 첫 번째 줄을 중간에서 자르기
+        if (!secondLine && firstLine.length > maxLength) {
+          const mid = Math.ceil(firstLine.length / 2);
+          secondLine = firstLine.slice(mid);
+          firstLine = firstLine.slice(0, mid);
+        }
+
+        textLines = [firstLine, secondLine].filter((line) => line.length > 0);
+      }
+    }
+
+    isTwoLines = textLines.length === 2;
+  }
+
+  const textHeight = isTwoLines ? 32 : 20; // 2줄일 때 높이 증가
+
+  // default 카테고리일 때는 검색 결과와 동일한 물방울 핀 디자인 사용
+  if (key === "default") {
+    const pinSize = 36;
+    const iconString = getCategoryIconHTML(() => <Search size={16} color="white" />);
+
+    return {
+      content: `
+      <div style="
+        position: relative;
+        width: ${pinSize}px;
+        height: ${pinSize}px;
+        z-index: 1000;
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+      ">
+        <!-- 검색결과 물방울 핀 -->
+        <div style="
+          width: ${pinSize}px;
+          height: ${pinSize}px;
+          transform: rotate(-45deg);
+          background: #6366F1;
+          border-radius: 50% 50% 50% 0;
+          box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        ">
+          <div style="transform: rotate(45deg);">
+            ${iconString}
+          </div>
+        </div>
+
+        ${
+          showText && name
+            ? `
+          <!-- 텍스트는 마커 아래로 -->
+          <div style="
+            position: absolute;
+            top: ${pinSize + 4}px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: ${fontSize}px;
+            font-weight: bold;
+            color: #333;
+            white-space: nowrap;
+            text-shadow:
+              -1px -1px 0 white,
+               1px -1px 0 white,
+              -1px  1px 0 white,
+               1px  1px 0 white,
+               0px  0px 2px white;
+          ">
+            ${name}
+          </div>
+          `
+            : ""
+        }
+      </div>
+    `,
+      size: new window.naver.maps.Size(pinSize, pinSize + (showText ? 20 : 0)),
+      anchor: new window.naver.maps.Point(pinSize / 2, pinSize),
+    };
+  }
+
+  // 기존 원형 마커 디자인 (default가 아닌 경우)
   return {
     content: `
     <div style="
@@ -166,7 +288,7 @@ export const getCategoryIconByZoom = (category?: string, name?: string, zoom: nu
       </div>
 
       ${
-        showText && name
+        showText && textLines.length > 0
           ? `
         <!-- 텍스트는 마커 아래로 -->
         <div style="
@@ -177,28 +299,31 @@ export const getCategoryIconByZoom = (category?: string, name?: string, zoom: nu
           font-size: ${fontSize}px;
           font-weight: bold;
           color: #333;
-          white-space: nowrap;
+          text-align: center;
           text-shadow:
             -1px -1px 0 white,
              1px -1px 0 white,
             -1px  1px 0 white,
              1px  1px 0 white,
              0px  0px 2px white;
+          line-height: 1.2;
+          max-width: 120px;
+          word-break: keep-all;
         ">
-          ${name}
+          ${textLines.map((line) => `<div>${line}</div>`).join("")}
         </div>
         `
           : ""
       }
     </div>
   `,
-    size: new window.naver.maps.Size(markerSize, markerSize + (showText ? 20 : 0)),
+    size: new window.naver.maps.Size(markerSize, markerSize + (showText ? textHeight : 0)),
     anchor: new window.naver.maps.Point(markerSize / 2, markerSize / 2),
   };
 };
 
 // 검색결과 마커 아이콘
-export const getSearchResultIcon = (name?: string, zoom: number = 15) => {
+export const getSearchResultIcon = (name?: string, zoom: number = 16) => {
   if (!window.naver?.maps) return null;
 
   const pinSize = 36;
@@ -269,7 +394,7 @@ export const getSearchResultIcon = (name?: string, zoom: number = 15) => {
 };
 
 // 내장소 마커 아이콘
-export const getMyPlaceIcon = (name?: string, zoom: number = 15) => {
+export const getMyPlaceIcon = (name?: string, zoom: number = 16) => {
   if (!window.naver?.maps) return null;
 
   const pinSize = 36;
