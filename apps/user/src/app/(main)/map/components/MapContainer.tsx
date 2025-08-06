@@ -26,6 +26,7 @@ import { Pin } from "@/app/(main)/map/components/NaverMap";
 import { toast } from "sonner";
 import useUserStore from "@/store/useUserStore";
 import { Coordinates } from "@/types/map";
+import { useCurrentLocation } from "@/hooks/map/useCurrentLocation";
 
 /**
  * 지도 컨테이너 컴포넌트 (내부 로직)
@@ -47,6 +48,8 @@ const MapContainer = () => {
   const [isLoadingStore, setIsLoadingStore] = useState(false); // 매장 로딩 상태 추적
 
   const currentLocation = useLocationStore((s) => s.currentLocation);
+  const setCurrentLocation = useLocationStore((s) => s.setCurrentLocation);
+  const { getCurrentLocation } = useCurrentLocation();
   const user = useUserStore((s) => s.user);
 
   const handleSelectCategory = useCallback(
@@ -256,14 +259,22 @@ const MapContainer = () => {
   }, [router]);
 
   // 현재 위치로 이동
-  const handleMoveToCurrentLocation = useCallback(() => {
-    if (currentLocation) {
-      // 지도 중심을 현재 위치로 변경하고 현재 위치 마커 포함하여 핀들 다시 가져오기
-      setCurrentMapCenter(currentLocation);
-    } else {
-      toast.error("현재 위치를 가져올 수 없습니다.");
+  const handleMoveToCurrentLocation = useCallback(async () => {
+    try {
+      // 실시간 GPS 위치를 새로 받아오기 (강제 새로고침)
+      const newLocation = await getCurrentLocation({
+        forceRefresh: true, // 캐시 무효화
+        enableHighAccuracy: true,
+        timeout: 10000,
+      });
+
+      // 새로운 위치 정보를 store에 저장하고 지도 중심 이동
+      setCurrentLocation(newLocation);
+      setCurrentMapCenter(newLocation);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "현재 위치를 가져올 수 없습니다.");
     }
-  }, [currentLocation]);
+  }, [getCurrentLocation, setCurrentLocation, setCurrentMapCenter]);
 
   if (!currentLocation || !user) {
     return <div>현재 위치를 불러오는 중입니다...</div>;
