@@ -4,6 +4,7 @@ import {
   InfoForm,
   LogoutRes,
   SetUserInfo,
+  StaticsDetailDataResponse,
   StaticsPreviewResponse,
   UserRole,
 } from "@/types/profile";
@@ -44,5 +45,10 @@ export const registFeedback = async (params: FeedbackForm): Promise<FeedbackRegi
 
 export const fetchUserStatistics = async (): Promise<StaticsPreviewResponse> => {
   const { data } = await api.get("/api/users/statistics/preview");
+  return data;
+};
+
+export const fetchUserStatisticsDetail = async (): Promise<StaticsDetailDataResponse> => {
+  const { data } = await api.get("/api/users/statistics");
   return data;
 };

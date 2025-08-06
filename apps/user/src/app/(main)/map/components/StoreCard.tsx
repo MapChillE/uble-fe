@@ -7,6 +7,7 @@ import MembershipGrade from "@/app/(main)/home/components/ui/MembershipGrade";
 import Image from "next/image";
 import FavoriteBtn from "@/components/FavoriteBtn";
 import BarcodeContainer from "@/components/ui/BarcodeContainer";
+import { getCategoryIconStyle } from "@/constants/categoryMarkerStyle";
 import { Fragment, memo } from "react";
 
 // 공통 헤더 컴포넌트
@@ -35,7 +36,14 @@ const StoreCardHeader = ({
 
     {/* 아래 텍스트 영역 */}
     <div className="flex flex-col space-y-1">
-      <Badge className="w-fit text-xs font-semibold">{data.category}</Badge>
+      <Badge
+        className="w-fit text-xs font-semibold text-white"
+        style={{
+          backgroundColor: getCategoryIconStyle(data.category).markerColor,
+        }}
+      >
+        {data.category}
+      </Badge>
       <h1 className="break-words text-2xl font-bold">{data.storeName}</h1>
 
       {/* 설명 + 길찾기 버튼 한 줄 정렬 */}

@@ -1,6 +1,7 @@
 import FavoriteBtn from "@/components/FavoriteBtn";
 import { BrandDetailData } from "@/types/brand";
 import { Badge } from "@workspace/ui/components/badge";
+import { getCategoryIconStyle } from "@/constants/categoryMarkerStyle";
 
 const PartnershipHeader = (props: BrandDetailData) => {
   const { imgUrl, name, categoryName, description, brandId, isBookmarked, csrNumber } = props;
@@ -13,7 +14,14 @@ const PartnershipHeader = (props: BrandDetailData) => {
           className="h-24 w-24 flex-shrink-0 rounded object-cover"
         />
         <div className="w-full space-y-1">
-          <Badge variant="default">{categoryName}</Badge>
+          <Badge
+            className="w-fit text-xs font-semibold text-white"
+            style={{
+              backgroundColor: getCategoryIconStyle(categoryName).markerColor,
+            }}
+          >
+            {categoryName}
+          </Badge>
           <h1 className="text-2xl font-bold">{name}</h1>
           <div className="flex w-full items-center justify-between">
             <p className="flex-1 text-gray-600">{description}</p>

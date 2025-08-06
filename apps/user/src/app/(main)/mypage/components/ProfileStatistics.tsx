@@ -2,10 +2,13 @@
 import { fetchUserStatistics } from "@/service/user";
 import { StaticsPreviewResponse, UserStatistics } from "@/types/profile";
 import { useQuery } from "@tanstack/react-query";
-import { BarChart3 } from "lucide-react";
+import { Button } from "@workspace/ui/components/button";
+import { BarChart3, ChevronRight } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { Fragment } from "react";
 
 const ProfileStatistics = () => {
+  const router = useRouter();
   const month = new Date().getMonth() + 1;
 
   const { data, isLoading, isError, error } = useQuery({
@@ -56,9 +59,18 @@ const ProfileStatistics = () => {
   // 정상 렌더링
   return (
     <Fragment>
-      <div className="mb-4 flex items-center space-x-2">
-        <BarChart3 className="h-5 w-5 text-gray-600" />
-        <h3 className="font-semibold text-gray-900">{`나의 ${month}월 통계`}</h3>
+      <div className="mb-4 flex items-center justify-between">
+        <div className="flex items-center space-x-2">
+          <BarChart3 className="h-5 w-5 text-gray-600" />
+          <h3 className="font-semibold text-gray-900">{`나의 ${month}월 통계`}</h3>
+        </div>
+        <Button
+          onClick={() => router.push("/mypage/statistics")}
+          variant="ghost"
+          className="flex h-8 w-8 items-center justify-center rounded-full transition-colors hover:bg-gray-100"
+        >
+          <ChevronRight className="h-4 w-4 text-gray-500" />
+        </Button>
       </div>
 
       <div className="space-y-4">
