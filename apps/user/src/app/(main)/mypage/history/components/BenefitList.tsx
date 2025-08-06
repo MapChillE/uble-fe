@@ -58,9 +58,6 @@ const BenefitList = () => {
           {!user && (
             <div className="text-sm text-gray-500">로그인 후 이용 내역을 확인할 수 있습니다.</div>
           )}
-          {user && !userValidation.isValid && (
-            <div className="text-sm text-gray-500">마이페이지에서 프로필 정보를 완성해주세요.</div>
-          )}
         </div>
       </div>
     );
