@@ -42,7 +42,6 @@ export const useHydrateCategories = () => {
           toast.error("카테고리를 불러오지 못했습니다.");
         }
         if (data?.categoryList) {
-          console.log(data.categoryList);
           // 카테고리를 우선순위 순서로 정렬
           const sortedCategories = sortCategoriesByPriority(data.categoryList);
 
