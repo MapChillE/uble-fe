@@ -195,68 +195,7 @@ export const getCategoryIconByZoom = (category?: string, name?: string, zoom: nu
 
   // default 카테고리일 때는 검색 결과와 동일한 물방울 핀 디자인 사용
   if (key === "default") {
-    const pinSize = 36;
-    const iconString = getCategoryIconHTML(() => <Search size={16} color="white" />);
-
-    return {
-      content: `
-      <div style="
-        position: relative;
-        width: ${pinSize}px;
-        height: ${pinSize}px;
-        z-index: 1000;
-        user-select: none;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-      ">
-        <!-- 검색결과 물방울 핀 -->
-        <div style="
-          width: ${pinSize}px;
-          height: ${pinSize}px;
-          transform: rotate(-45deg);
-          background: #6366F1;
-          border-radius: 50% 50% 50% 0;
-          box-shadow: 0 2px 6px rgba(0,0,0,0.25);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        ">
-          <div style="transform: rotate(45deg);">
-            ${iconString}
-          </div>
-        </div>
-
-        ${
-          showText && name
-            ? `
-          <!-- 텍스트는 마커 아래로 -->
-          <div style="
-            position: absolute;
-            top: ${pinSize + 4}px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: ${fontSize}px;
-            font-weight: bold;
-            color: #333;
-            white-space: nowrap;
-            text-shadow:
-              -1px -1px 0 white,
-               1px -1px 0 white,
-              -1px  1px 0 white,
-               1px  1px 0 white,
-               0px  0px 2px white;
-          ">
-            ${name}
-          </div>
-          `
-            : ""
-        }
-      </div>
-    `,
-      size: new window.naver.maps.Size(pinSize, pinSize + (showText ? 20 : 0)),
-      anchor: new window.naver.maps.Point(pinSize / 2, pinSize),
-    };
+    return getSearchResultIcon(name, zoom);
   }
 
   // 기존 원형 마커 디자인 (default가 아닌 경우)
