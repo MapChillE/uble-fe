@@ -1,4 +1,4 @@
-import { useRef, useEffect, useCallback } from "react";
+import { useRef, useEffect } from "react";
 import type { NaverMarker, NaverMap as NaverMapInstance, MyPlace } from "@/types/map";
 import { MarkerClustering } from "@/types/markerClustering";
 import { Pin } from "@/app/(main)/map/components/NaverMap";
