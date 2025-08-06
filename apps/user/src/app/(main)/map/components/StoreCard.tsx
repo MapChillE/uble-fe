@@ -7,7 +7,7 @@ import MembershipGrade from "@/app/(main)/home/components/ui/MembershipGrade";
 import Image from "next/image";
 import FavoriteBtn from "@/components/FavoriteBtn";
 import BarcodeContainer from "@/components/ui/BarcodeContainer";
-import { Fragment } from "react";
+import { Fragment, memo } from "react";
 
 // 공통 헤더 컴포넌트
 const StoreCardHeader = ({
@@ -25,8 +25,8 @@ const StoreCardHeader = ({
       <Image
         src={data.imageUrl || "/placeholder.svg"}
         alt={data.storeName}
-        width={96}
-        height={96}
+        width={80}
+        height={80}
         quality={100}
         className="flex-shrink-0 rounded object-fill"
       />
@@ -70,66 +70,60 @@ const StoreInfoSection = ({ data }: { data: StoreDetail | StoreSummary }) => (
   </div>
 );
 
-export const DetailCard = ({
-  data,
-  onRouteClick,
-  onFavoriteToggle,
-}: {
-  data: StoreDetail;
-  onRouteClick?: () => void;
-  onFavoriteToggle?: () => void;
-}) => (
-  <div className="space-y-4 overflow-y-auto pb-4">
-    <StoreCardHeader data={data} onRouteClick={onRouteClick} onFavoriteToggle={onFavoriteToggle} />
-    <StoreInfoSection data={data} />
-    <div className="m-2 space-y-2 md:m-4">
-      <div>
-        {data.benefitList.map((benefit, idx) => (
-          <div key={benefit.benefitId} className="flex flex-col space-y-2 pb-2">
-            <h3 className="text-lg font-semibold">혜택 내용</h3>
-            <div className="flex flex-col space-y-2">
-              <MembershipGrade rank={benefit.minRank} isVIPcock={benefit.type === "VIP"} />
-              <span className="text-sm font-medium text-gray-900">{benefit.content}</span>
-            </div>
-            <div className="space-y-2 py-4">
-              <h3 className="text-lg font-semibold">이용 안내</h3>
-              <p className="text-sm font-medium text-gray-900">
-                {benefit.manual.split("\n").map((line, idx) => (
-                  <span key={idx}>
-                    {line}
-                    <br />
-                  </span>
-                ))}
-              </p>
-            </div>
-            <p className="text-xs text-gray-600">이용 제한: {benefit.provisionCount}</p>
-            <hr className="my-4 text-gray-200" />
-            {data.benefitList.length - 1 === idx && (
-              <Fragment>
-                <div className="space-y-2 pt-4">
-                  <h3 className="text-lg font-semibold">멤버십 바코드</h3>
-                </div>
-                <BarcodeContainer storeDetail={data} />
-              </Fragment>
-            )}
+export const DetailCard = ({ data }: { data: StoreDetail }) => (
+  <div className="m-2 md:m-4">
+    <div>
+      {data.benefitList.map((benefit, idx) => (
+        <div key={benefit.benefitId} className="flex flex-col space-y-2 pb-2">
+          <h3 className="text-lg font-semibold">혜택 내용</h3>
+          <div className="flex flex-col space-y-2">
+            <MembershipGrade rank={benefit.minRank} isVIPcock={benefit.type === "VIP"} />
+            <span className="text-sm font-medium text-gray-900">{benefit.content}</span>
           </div>
-        ))}
-      </div>
+          <div className="space-y-2 py-4">
+            <h3 className="text-lg font-semibold">이용 안내</h3>
+            <p className="text-sm font-medium text-gray-900">
+              {benefit.manual.split("\n").map((line, idx) => (
+                <span key={idx}>
+                  {line}
+                  <br />
+                </span>
+              ))}
+            </p>
+          </div>
+          <p className="text-xs text-gray-600">이용 제한: {benefit.provisionCount}</p>
+          <hr className="my-4 text-gray-200" />
+          {data.benefitList.length - 1 === idx && (
+            <Fragment>
+              <div className="space-y-2 pt-4">
+                <h3 className="text-lg font-semibold">멤버십 바코드</h3>
+              </div>
+              <BarcodeContainer storeDetail={data} />
+            </Fragment>
+          )}
+        </div>
+      ))}
     </div>
   </div>
 );
 
-export const SummaryCard = ({
-  data,
-  onRouteClick,
-  onFavoriteToggle,
-}: {
-  data: StoreSummary;
-  onRouteClick?: () => void;
-  onFavoriteToggle?: () => void;
-}) => (
-  <div className="space-y-4 overflow-y-auto pb-20">
-    <StoreCardHeader data={data} onRouteClick={onRouteClick} onFavoriteToggle={onFavoriteToggle} />
-    <StoreInfoSection data={data} />
-  </div>
+export const SummaryCard = memo(
+  ({
+    data,
+    onRouteClick,
+    onFavoriteToggle,
+  }: {
+    data: StoreSummary;
+    onRouteClick?: () => void;
+    onFavoriteToggle?: () => void;
+  }) => (
+    <div className="space-y-4 overflow-y-auto pb-8">
+      <StoreCardHeader
+        data={data}
+        onRouteClick={onRouteClick}
+        onFavoriteToggle={onFavoriteToggle}
+      />
+      <StoreInfoSection data={data} />
+    </div>
+  )
 );
