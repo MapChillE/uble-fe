@@ -15,7 +15,7 @@ export default function Footer() {
   ];
 
   return (
-    <div className="fixed bottom-0 left-0 right-0">
+    <div className="fixed bottom-0 left-0 right-0 bg-gray-100">
       <div className="border-border mx-auto max-w-[1080px] rounded-t-md border-t bg-white">
         <nav className="h-[56px]">
           <div className="flex h-full w-full justify-around">

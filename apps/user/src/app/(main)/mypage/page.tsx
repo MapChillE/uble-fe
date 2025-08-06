@@ -10,7 +10,7 @@ import ModalContainer from "./components/ModalContainer";
 const page = () => {
   return (
     <div className="relative w-full bg-white">
-      <div className="min-h-screen space-y-6 px-4 py-6">
+      <div className="scrollbar-hide min-h-screen space-y-6 px-4 py-6">
         {/* 프로필 섹션 - 독립적인 영역 */}
         <div className="rounded-lg border border-gray-50 bg-white shadow-sm">
           <ProfileCard className="p-6">
