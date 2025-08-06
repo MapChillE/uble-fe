@@ -1,6 +1,6 @@
 # Uble - 지도 기반 사용자 맞춤 제휴처 추천 서비스
 
-![Uble Character](apps/user/public/profileImg.png)
+<div align="center"><img src="apps/user/public/profileImg.png" style="max-width: 280px"></div>
 
 <div align="center">
 
