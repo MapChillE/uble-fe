@@ -18,7 +18,6 @@ export async function fetchStorePins(
   bounds: naver.maps.LatLngBounds,
   category: number | "SEASON" | "VIP" | "LOCAL",
   zoomLevel: number,
-  baseLocation?: Coordinates,
   brandId?: number
 ): Promise<Pin[]> {
   try {
@@ -44,9 +43,10 @@ export async function fetchStorePins(
       category: store.category,
       type: "store",
     }));
-
-    // 현재 위치를 가져와서 비교 (useLocationStore에서 가져옴)
+    // 현재 위치와 내 장소 표시 여부 결정
     const currentLocation = useLocationStore.getState().currentLocation;
+    const baseLocation = useLocationStore.getState().baseLocation;
+
     const shouldShowCurrentLocation =
       currentLocation &&
       Math.abs(center[0] - currentLocation[0]) < 0.0001 &&

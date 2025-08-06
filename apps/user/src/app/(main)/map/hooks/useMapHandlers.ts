@@ -1,7 +1,10 @@
 import { useCallback } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import { Coordinates } from "@/types/map";
+import { NaverMapRef } from "@/app/(main)/map/components/NaverMap";
+import { DEFAULT_ZOOM_LEVEL } from "@/types/constants";
 
+const mapId = "naver-map";
 interface UseMapHandlersProps {
   dispatch: (action: any) => void;
   searchType: string | null;
@@ -22,6 +25,7 @@ interface UseMapHandlersProps {
     brandId?: number,
     zoom?: number
   ) => Promise<void>;
+  mapRef: React.RefObject<NaverMapRef | null>;
 }
 
 export const useMapHandlers = ({
@@ -38,6 +42,7 @@ export const useMapHandlers = ({
   onMapCenterChange,
   onExitSearchMode,
   fetchPins,
+  mapRef,
 }: UseMapHandlersProps) => {
   // bounds 변경 핸들러 (디바운스 적용)
   const handleBoundsChange = useDebouncedCallback(
@@ -70,19 +75,28 @@ export const useMapHandlers = ({
 
   // "현 지도에서 검색" 버튼 클릭 핸들러
   const handleSearchHere = useCallback(() => {
-    if (state.bounds && state.center) {
+    // 실시간으로 현재 지도의 바운드와 중심 좌표를 가져옴
+    const currentBounds = mapRef.current?.getCurrentBounds();
+    const currentCenter = mapRef.current?.getCurrentCenter();
+    const currentZoom = mapRef.current?.getCurrentZoom() ?? state.zoom;
+
+    if (currentBounds && currentCenter) {
       setShowSearchBtn(false);
-      setHasSearched(false); // 수동 검색 시 리셋
+      setHasSearched(false);
+
       if (searchType === "BRAND" && searchId) {
-        fetchPins(state.center, state.bounds, 0, searchId, state.zoom);
+        fetchPins(currentCenter, currentBounds, 0, searchId, currentZoom);
       } else {
-        fetchPins(state.center, state.bounds, selectedCategory.categoryId, undefined, state.zoom);
+        fetchPins(
+          currentCenter,
+          currentBounds,
+          selectedCategory.categoryId,
+          undefined,
+          currentZoom
+        );
       }
     }
   }, [
-    state.bounds,
-    state.center,
-    state.zoom,
     searchType,
     searchId,
     selectedCategory.categoryId,
@@ -93,36 +107,45 @@ export const useMapHandlers = ({
 
   // "주변 매장 보기" 버튼 클릭 핸들러
   const handleShowNearbyStores = useCallback(() => {
-    if (state.bounds) {
+    // 실시간으로 현재 지도의 바운드와 중심 좌표를 가져옴
+    const currentBounds = mapRef.current?.getCurrentBounds();
+    const currentCenter = mapRef.current?.getCurrentCenter();
+    const currentZoom = mapRef.current?.getCurrentZoom() ?? state.zoom;
+
+    if (currentBounds && currentCenter) {
       setShowSearchBtn(false);
       setHasSearched(true); // 주변 매장 보기 실행 시 검색 완료 상태로 설정
 
-      // 현재 지도 중심을 검색 중심점으로 사용
-      const searchCenter = state.center;
-
       // 검색 타입에 따라 다른 동작
       if (searchType === "STORE" && searchStoreId) {
-        fetchPins(searchCenter, state.bounds, selectedCategory.categoryId, undefined, state.zoom);
+        fetchPins(
+          currentCenter,
+          currentBounds,
+          selectedCategory.categoryId,
+          undefined,
+          currentZoom
+        );
       } else if (searchType === "BRAND" && searchId) {
-        fetchPins(searchCenter, state.bounds, 0, searchId, state.zoom);
+        fetchPins(currentCenter, currentBounds, 0, searchId, currentZoom);
       } else if (searchType === "CATEGORY" && searchId) {
-        fetchPins(searchCenter, state.bounds, searchId, undefined, state.zoom);
+        fetchPins(currentCenter, currentBounds, searchId, undefined, currentZoom);
       } else {
-        fetchPins(searchCenter, state.bounds, selectedCategory.categoryId, undefined, state.zoom);
+        fetchPins(
+          currentCenter,
+          currentBounds,
+          selectedCategory.categoryId,
+          undefined,
+          currentZoom
+        );
       }
     }
   }, [
-    searchLocation,
-    state.bounds,
-    state.center,
-    state.zoom,
     searchType,
     searchStoreId,
     searchId,
     selectedCategory.categoryId,
     setShowSearchBtn,
     setHasSearched,
-    onExitSearchMode,
     fetchPins,
   ]);
 
