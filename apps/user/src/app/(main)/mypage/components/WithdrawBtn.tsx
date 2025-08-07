@@ -31,7 +31,7 @@ const WithdrawBtn = () => {
         clearUser();
 
         // 브라우저 히스토리 스택 삭제하고 홈으로 이동
-        window.history.pushState(null, "", "/");
+        window.history.replaceState(null, "", window.location.pathname);
         router.replace("/");
 
         toast.success("회원탈퇴가 완료되었습니다.");

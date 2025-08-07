@@ -18,6 +18,7 @@ const LogoutBtn = () => {
     if (result === 0) {
       window.localStorage.removeItem("accessToken");
       clearUser();
+      window.history.replaceState(null, "", window.location.pathname);
       router.push("/");
     } else {
       toast.error("오류가 발생했습니다. 잠시 후 다시 사용해 주세요.");

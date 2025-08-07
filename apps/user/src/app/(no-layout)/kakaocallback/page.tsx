@@ -10,15 +10,20 @@ import { toast } from "sonner";
 function KakaoCallbackInner() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const deleteHistoryStack = () => {
+    window.history.replaceState(null, "", window.location.pathname);
+  };
+
   const login = async () => {
     const code = searchParams.get("code");
     if (code) {
       const { data } = await apiHandler(() => kakaoLogin(code));
       if (data) {
+        deleteHistoryStack();
         data.role === "TMP_USER" ? router.replace("/signup") : router.replace("/map");
       } else {
         toast.error("오류가 발생했습니다. 잠시 후 다시 이용해 주세요.");
-
+        deleteHistoryStack();
         router.replace("/");
       }
     }
@@ -26,7 +31,6 @@ function KakaoCallbackInner() {
 
   useEffect(() => {
     login();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
   return (
