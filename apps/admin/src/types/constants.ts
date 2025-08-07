@@ -1,8 +1,8 @@
 export const filterOptions = {
   rankTarget: ["BRAND", "CATEGORY"] as const,
   gender: ["MALE", "FEMALE", null] as const,
-  ageRange: [10, 20, 30, 40, 50, 60, 70, 80, 90, null] as const,
-  rank: ["NONE", "NORMAL", "PREMIUM", "VIP", "VVIP", null] as const,
+  ageRange: [10, 20, 30, 40, 50, 60, 70, null] as const,
+  rank: ["NORMAL", "PREMIUM", "VIP", "VVIP", null] as const,
   benefitType: ["VIP", "LOCAL", "NORMAL", null] as const,
 };
 

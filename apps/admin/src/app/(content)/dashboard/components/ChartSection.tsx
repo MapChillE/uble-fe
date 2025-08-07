@@ -119,7 +119,7 @@ const ChartSection: React.FC<ChartSectionProps> = ({ topUsageLocalList, topUsage
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
       {/* 지역구 인기 순위 (파이 차트) */}
-      <ChartCard title="지역구 인기 순위">
+      <ChartCard title="Top 5 서울 지역구 인기 순위">
         {topUsageLocalList.length > 0 ? (
           <Pie data={pieChartData} options={pieOptions} />
         ) : (
