@@ -37,23 +37,6 @@
 | **주제**       | LG U+ 멤버십 제휴처 안내 지도 서비스 |
 | **개발 기간**  | 2025.06.30 - 2025.08.08              |
 
-## 💡 기능 명세
-
-| 기능명                                                     | 설명                                                                                                                                  |
-| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| **사용자 정보 및 관심사 기반 제휴처 추천** | <img src="https://github.com/user-attachments/assets/76b19543-f01b-48cb-9c77-9a878d8a07e9" width="250"/> <br> 사용자의 나이, 성별, 관심 카테고리 등 프로필 정보를 분석하여 맞춤형 LGU+ 멤버십 제휴처를 추천합니다.|
-| **LGU+ 멤버십 제휴처 혜택 정보**                           | <img src="https://github.com/user-attachments/assets/b3974a9b-e678-4c2b-a7ba-8a0338bff2b8" width="250" /> <br> 각 제휴처의 상세한 혜택 정보를 조회하고, 할인 및 이벤트 등의 최신 정보를 제공합니다.                                                  
-| **실시간 인기 멤버십 제휴처 정보**                         | <img width="250" alt="image" src="https://github.com/user-attachments/assets/c08a0d69-2f35-4467-b507-dddccaa658d1" /> <br> 현재 시간 기준으로 사용자들이 가장 많이 방문한 인기 제휴처 정보를 실시간으로 제공합니다.                                              
-| **자동 완성 기능을 탑재한 검색 기능**                      | <img width="250" src="https://github.com/user-attachments/assets/2ce870f6-40bf-45b5-9f1a-146292bebb33" /> <br> 제휴처 및 키워드 검색 시, 사용자 입력에 따라 자동 완성 및 추천 검색어를 실시간으로 제공합니다.                                        
-| **지도 기반 제휴처 탐색**                                  | <img src="https://github.com/user-attachments/assets/9abc8d76-dcf9-4542-aa60-8b03aed299b9" width="250" /> <br> 사용자의 현재 위치 주변에 존재하는 LGU+ 제휴처를 지도상에서 확인할 수 있으며, 매장 클릭 시 상세 정보가 제공됩니다.                    
-| **사용자 지정 위치 저장**                                  |  <img src="https://github.com/user-attachments/assets/0e38e285-9195-4ac9-815f-aff245c5cc4b" width="250" /> <br> 사용자가 자주 방문하거나 관심 있는 위치를 지정하여 빠르게 탐색할 수 있도록 저장할 수 있습니다.                                        
-| **자동 완성 기능을 탑재한 제휴처 매장 검색 기능**          | <img src="https://github.com/user-attachments/assets/52879155-6c4a-416c-8156-6a2dee63c1f1" width="250" /> <br> 제휴처 이름이나 키워드를 입력할 때, 관련 매장을 자동 완성 형태로 실시간으로 제안하여 빠르게 탐색할 수 있습니다.                       
-| **제휴처 즐겨찾기**                                        | <img src="https://github.com/user-attachments/assets/9d909a53-6c90-441e-8dc3-3321a3d143fe" width="250" /> <br> 관심 있는 제휴처를 즐겨찾기로 저장하여 언제든지 쉽게 다시 확인할 수 있도록 지원합니다.                                                
-| **사용자 정보 및 관심 카테고리 등 설정 지원(마이페이지)**  | <img src="https://github.com/user-attachments/assets/6d8bd429-9338-4e60-afbf-dc447cba1a7a" width="250" /> <br> 사용자 프로필 정보, 관심 카테고리, 멤버십 등급, 바코드 번호 등 다양한 설정을 마이페이지에서 관리할 수 있도록 지원합니다.             
-| **바코드 기반 멤버십 혜택 사용**                           | <img src="https://github.com/user-attachments/assets/35685677-aa6f-4b41-9a97-42cfe27036aa" width="250" /> <br> 사용자가 등록한 바코드 번호를 기반으로 실제 사용할 수 있는 멤버십 바코드를 자동 생성하여 제휴처에서 혜택을 받을 수 있도록 지원합니다.
-| **유저 개인 및 전체 사용자 평균 기준 혜택 사용 통계 조회** | <img src="https://github.com/user-attachments/assets/43d92131-a5c5-480c-b055-5e438d0016fd" width="250" /> <br> 개인의 혜택 사용량과 전체 사용자 평균 사용량을 비교하여 시각적으로 제공합니다.                                                       
-| **혜택 사용 내역 조회**                                    | <img src="https://github.com/user-attachments/assets/08eaa0d0-474e-4597-adb7-b42bf37376be" width="250" /> <br> 사용자가 실제 사용한 제휴처 혜택의 사용 내역과 날짜, 사용처, 할인율 등의 상세 정보를 조회할 수 있도록 제공합니다.                    
-
 ## 👥 Teams
 
 |                                      송민규                                       |                                      정다희                                      |
@@ -164,16 +147,27 @@ uble-fe/
 
 ![Admin Flow](diagrams/information_architecture.png)
 
-## 📄 기획안  
-[기획안 보기](https://docs.google.com/document/d/1Jc75pIE8n0mWEddReLd9L6h3VKGicifBojlAmoiGeNE/edit?tab=t.0)
-
-
-## ✅ QA  
-[QA 문서 바로가기](https://www.notion.so/QA-23a71951642680fea8d9e334f6945acc?pvs=21)
-
-
-## 🛠 TroubleShooting  
-[TroubleShooting 문서 바로가기](https://www.notion.so/troubleshooting-23b719516426804f9a2ce97e0b1e2432?pvs=21)
-
 ## 💻 Screens
 
+| 기능명                                                     | 설명                                                                                                                                  |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| **사용자 정보 및 관심사 기반 제휴처 추천** | <img src="https://github.com/user-attachments/assets/76b19543-f01b-48cb-9c77-9a878d8a07e9" width="250"/> <br> 사용자의 나이, 성별, 관심 카테고리 등 프로필 정보를 분석하여 맞춤형 LGU+ 멤버십 제휴처를 추천합니다.|
+| **LGU+ 멤버십 제휴처 혜택 정보**                           | <img src="https://github.com/user-attachments/assets/b3974a9b-e678-4c2b-a7ba-8a0338bff2b8" width="250" /> <br> 각 제휴처의 상세한 혜택 정보를 조회하고, 할인 및 이벤트 등의 최신 정보를 제공합니다.                                                  
+| **실시간 인기 멤버십 제휴처 정보**                         | <img width="250" alt="image" src="https://github.com/user-attachments/assets/c08a0d69-2f35-4467-b507-dddccaa658d1" /> <br> 현재 시간 기준으로 사용자들이 가장 많이 방문한 인기 제휴처 정보를 실시간으로 제공합니다.                                              
+| **자동 완성 기능을 탑재한 검색 기능**                      | <img width="250" src="https://github.com/user-attachments/assets/2ce870f6-40bf-45b5-9f1a-146292bebb33" /> <br> 제휴처 및 키워드 검색 시, 사용자 입력에 따라 자동 완성 및 추천 검색어를 실시간으로 제공합니다.                                        
+| **지도 기반 제휴처 탐색**                                  | <img src="https://github.com/user-attachments/assets/9abc8d76-dcf9-4542-aa60-8b03aed299b9" width="250" /> <br> 사용자의 현재 위치 주변에 존재하는 LGU+ 제휴처를 지도상에서 확인할 수 있으며, 매장 클릭 시 상세 정보가 제공됩니다.                    
+| **사용자 지정 위치 저장**                                  |  <img src="https://github.com/user-attachments/assets/0e38e285-9195-4ac9-815f-aff245c5cc4b" width="250" /> <br> 사용자가 자주 방문하거나 관심 있는 위치를 지정하여 빠르게 탐색할 수 있도록 저장할 수 있습니다.                                        
+| **자동 완성 기능을 탑재한 제휴처 매장 검색 기능**          | <img src="https://github.com/user-attachments/assets/52879155-6c4a-416c-8156-6a2dee63c1f1" width="250" /> <br> 제휴처 이름이나 키워드를 입력할 때, 관련 매장을 자동 완성 형태로 실시간으로 제안하여 빠르게 탐색할 수 있습니다.                       
+| **제휴처 즐겨찾기**                                        | <img src="https://github.com/user-attachments/assets/9d909a53-6c90-441e-8dc3-3321a3d143fe" width="250" /> <br> 관심 있는 제휴처를 즐겨찾기로 저장하여 언제든지 쉽게 다시 확인할 수 있도록 지원합니다.                                                
+| **사용자 정보 및 관심 카테고리 등 설정 지원(마이페이지)**  | <img src="https://github.com/user-attachments/assets/6d8bd429-9338-4e60-afbf-dc447cba1a7a" width="250" /> <br> 사용자 프로필 정보, 관심 카테고리, 멤버십 등급, 바코드 번호 등 다양한 설정을 마이페이지에서 관리할 수 있도록 지원합니다.             
+| **바코드 기반 멤버십 혜택 사용**                           | <img src="https://github.com/user-attachments/assets/35685677-aa6f-4b41-9a97-42cfe27036aa" width="250" /> <br> 사용자가 등록한 바코드 번호를 기반으로 실제 사용할 수 있는 멤버십 바코드를 자동 생성하여 제휴처에서 혜택을 받을 수 있도록 지원합니다.
+| **유저 개인 및 전체 사용자 평균 기준 혜택 사용 통계 조회** | <img src="https://github.com/user-attachments/assets/43d92131-a5c5-480c-b055-5e438d0016fd" width="250" /> <br> 개인의 혜택 사용량과 전체 사용자 평균 사용량을 비교하여 시각적으로 제공합니다.                                                       
+| **혜택 사용 내역 조회**                                    | <img src="https://github.com/user-attachments/assets/08eaa0d0-474e-4597-adb7-b42bf37376be" width="250" /> <br> 사용자가 실제 사용한 제휴처 혜택의 사용 내역과 날짜, 사용처, 할인율 등의 상세 정보를 조회할 수 있도록 제공합니다.       
+
+## 📄 산출물  
+
+[기획안](https://docs.google.com/document/d/1Jc75pIE8n0mWEddReLd9L6h3VKGicifBojlAmoiGeNE/edit?tab=t.0)
+  
+[QA](https://www.notion.so/QA-23a71951642680fea8d9e334f6945acc?pvs=21)
+ 
+[TroubleShooting](https://www.notion.so/troubleshooting-23b719516426804f9a2ce97e0b1e2432?pvs=21)
