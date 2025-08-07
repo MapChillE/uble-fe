@@ -13,6 +13,7 @@ import {
 } from "chart.js";
 import { RankItem } from "@/types/dashboard";
 import ChartCard from "./ui/ChartCard";
+import EmptyChartState from "./ui/EmptyChartState";
 
 // Chart.js 등록
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
@@ -119,12 +120,20 @@ const ChartSection: React.FC<ChartSectionProps> = ({ topUsageLocalList, topUsage
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
       {/* 지역구 인기 순위 (파이 차트) */}
       <ChartCard title="지역구 인기 순위">
-        <Pie data={pieChartData} options={pieOptions} />
+        {topUsageLocalList.length > 0 ? (
+          <Pie data={pieChartData} options={pieOptions} />
+        ) : (
+          <EmptyChartState title="지역구 인기 순위" type="pie" />
+        )}
       </ChartCard>
 
       {/* 가장 사용량이 많은 top5 제휴처 (바 차트) */}
       <ChartCard title="Top 5 제휴처">
-        <Bar data={barChartData} options={barOptions} />
+        {topUsageRankList.length > 0 ? (
+          <Bar data={barChartData} options={barOptions} />
+        ) : (
+          <EmptyChartState title="Top 5 제휴처" type="bar" />
+        )}
       </ChartCard>
     </div>
   );
