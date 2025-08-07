@@ -51,7 +51,7 @@ const LoginPage = () => {
                   <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 transform text-gray-400" />
                   <Input
                     id="username"
-                    type="text"
+                    type="password"
                     placeholder="인증 코드를 입력하세요"
                     value={code}
                     onChange={(e) => setCode(e.target.value)}
