@@ -29,7 +29,6 @@ import { renderToStaticMarkup } from "react-dom/server";
 export type CategoryMarkerKey =
   | "액티비티"
   | "뷰티/패션"
-  | "뷰티/건강"
   | "쇼핑"
   | "생활"
   | "식당"
@@ -38,7 +37,6 @@ export type CategoryMarkerKey =
   | "여행"
   | "카페"
   | "편의점"
-  | "생활/건강"
   | "영화관"
   | "렌트카"
   | "우리동네멤버십"
@@ -64,14 +62,12 @@ const CATEGORY_META = {
   액티비티: { icon: Activity, markerColor: "#F87171", textColor: "text-red-500" },
   식당: { icon: Utensils, markerColor: "#FB7185", textColor: "text-rose-500" },
   "뷰티/패션": { icon: Heart, markerColor: "#EC4899", textColor: "text-pink-500" },
-  "뷰티/건강": { icon: Heart, markerColor: "#EC4899", textColor: "text-pink-500" },
   카페: { icon: Coffee, markerColor: "#FB923C", textColor: "text-orange-400" },
   쇼핑: { icon: ShoppingCart, markerColor: "#34D399", textColor: "text-emerald-500" },
   여행: { icon: Plane, markerColor: "#5EEAD4", textColor: "text-teal-400" },
   렌트카: { icon: Car, markerColor: "#2DD4BF", textColor: "text-teal-500" },
   생활: { icon: Home, markerColor: "#60A5FA", textColor: "text-blue-500" },
   편의점: { icon: Store, markerColor: "#38BDF8", textColor: "text-sky-500" },
-  "생활/건강": { icon: Store, markerColor: "#38BDF8", textColor: "text-sky-500" },
   "문화/여가": { icon: Theater, markerColor: "#C084FC", textColor: "text-purple-500" },
   영화관: { icon: Popcorn, markerColor: "#A855F7", textColor: "text-purple-600" },
   VIP콕: { icon: Gem, markerColor: "#7C3AED", textColor: "text-purple-600" },
