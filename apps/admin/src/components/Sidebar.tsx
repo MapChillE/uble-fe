@@ -5,6 +5,7 @@ import { cn } from "@workspace/ui/lib/utils";
 import { Button } from "@workspace/ui/components/button";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 interface AdminSidebarProps {
   isMobileMenuOpen: boolean;
@@ -39,9 +40,7 @@ export function Sidebar({ isMobileMenuOpen, onMobileMenuClose }: AdminSidebarPro
         {/* Mobile close button */}
         <div className="flex items-center justify-between p-4 md:hidden">
           <div className="flex items-center space-x-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-500">
-              <span className="text-sm font-bold text-white">U</span>
-            </div>
+            <Image src="/profileImg.png" alt="Uble Character" width={32} height={32} />
             <span className="text-xl font-bold text-gray-900">Uble Admin</span>
           </div>
           <Button variant="ghost" size="icon" onClick={onMobileMenuClose}>
@@ -52,9 +51,7 @@ export function Sidebar({ isMobileMenuOpen, onMobileMenuClose }: AdminSidebarPro
         {/* Desktop header */}
         <div className="hidden p-6 md:block">
           <div className="flex items-center space-x-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-500">
-              <span className="text-sm font-bold text-white">U</span>
-            </div>
+            <Image src="/profileImg.png" alt="Uble Character" width={32} height={32} />
             <span className="text-xl font-bold text-gray-900">Uble Admin</span>
           </div>
         </div>

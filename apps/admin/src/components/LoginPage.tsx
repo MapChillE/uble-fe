@@ -10,6 +10,7 @@ import { Input } from "@workspace/ui/components/input";
 import { Label } from "@workspace/ui/components/label";
 import { apiHandler } from "@api/apiHandler";
 import { adminLogin } from "@/service/login";
+import Image from "next/image";
 
 const LoginPage = () => {
   const [code, setCode] = useState<string>("");
@@ -31,8 +32,8 @@ const LoginPage = () => {
     <div className="flex h-[100dvh] items-center justify-center bg-gradient-to-br from-green-50 to-blue-50 p-4">
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
-          <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-green-500">
-            <span className="text-2xl font-bold text-white">U</span>
+          <div className="flex justify-center">
+            <Image src="/profileImg.png" alt="Uble Character" width={100} height={100} />
           </div>
           <h1 className="text-3xl font-bold text-gray-900">Uble Admin</h1>
           <p className="mt-2 text-gray-600">관리자 페이지에 로그인하세요</p>
