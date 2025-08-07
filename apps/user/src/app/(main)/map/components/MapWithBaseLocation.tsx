@@ -146,24 +146,39 @@ export default function MapWithBaseLocation({
     }
   }, [selectedPlaceId]);
 
-  // 카테고리 변경시 현재 위치에서 fetchPins (baseLocation 변경과 중복되지 않도록, STORE 타입 제외)
+  // 카테고리 변경시 현재 위치에서 fetchPins (baseLocation 변경과 중복되지 않도록)
   useEffect(() => {
-    if (!searchType && !isChangingBaseLocation) {
+    if (!isChangingBaseLocation) {
       const currentBounds = mapRef.current?.getCurrentBounds();
       const currentCenter = mapRef.current?.getCurrentCenter();
       const currentZoom = mapRef.current?.getCurrentZoom() ?? state.zoom;
 
       if (currentBounds && currentCenter) {
-        fetchPins(
-          currentCenter,
-          currentBounds,
-          selectedCategory.categoryId,
-          undefined,
-          currentZoom
-        );
+        // 검색 모드가 아닌 경우: 일반 카테고리 검색
+        if (!searchType) {
+          fetchPins(
+            currentCenter,
+            currentBounds,
+            selectedCategory.categoryId,
+            undefined,
+            currentZoom
+          );
+        }
+        // 검색 모드인 경우: 현재 검색 결과에 카테고리 필터 적용
+        else if (searchType === "CATEGORY" && searchId) {
+          // 카테고리 검색 모드에서 카테고리가 변경된 경우, 새로운 카테고리로 검색
+          fetchPins(
+            currentCenter,
+            currentBounds,
+            selectedCategory.categoryId,
+            undefined,
+            currentZoom
+          );
+        }
+        // BRAND 검색 모드에서는 카테고리 변경 무시 (브랜드 검색이 우선)
       }
     }
-  }, [selectedCategory.categoryId, fetchPins, searchType, isChangingBaseLocation]);
+  }, [selectedCategory.categoryId, fetchPins, searchType, searchId, isChangingBaseLocation]);
 
   // 검색 위치로 이동 (초기화 완료 후에만 실행)
   useEffect(() => {

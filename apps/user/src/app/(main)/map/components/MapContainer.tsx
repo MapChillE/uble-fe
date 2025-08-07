@@ -58,14 +58,19 @@ const MapContainer = () => {
       // 카테고리 변경 시 브랜드 필터 초기화
       setSelectedBrandId(null);
       setSelectedBrandName(null);
-      // 검색 모드도 초기화
-      setSearchLocation(null);
-      setSearchType(null);
-      setSearchId(null);
-      // URL 파라미터 제거하여 기본 모드로 전환
-      router.push("/map");
+
+      // 검색 모드가 아닌 경우에만 검색 모드 초기화
+      if (!searchType) {
+        setSearchLocation(null);
+        setSearchType(null);
+        setSearchId(null);
+        // URL 파라미터 제거하여 기본 모드로 전환
+        router.push("/map");
+      }
+      // 검색 모드인 경우: 카테고리만 변경하고 검색 모드 유지
+      // (MapWithBaseLocation에서 카테고리 변경에 따른 검색 업데이트 처리)
     },
-    [router]
+    [router, searchType]
   );
 
   const handleBrandSelect = useCallback(
@@ -187,7 +192,13 @@ const MapContainer = () => {
   }, [searchType, searchId, searchLocation, currentLocation]);
 
   // URL 파라미터 파싱
-  const parseSearchParams = useCallback(() => {
+  const parseSearchParams = useMemo<{
+    type: string | null;
+    id: string | null;
+    lat: string | null;
+    lng: string | null;
+    storeId: string | null;
+  }>(() => {
     const type = searchParams.get("type"); // "BRAND" | "CATEGORY" | "STORE"
     const id = searchParams.get("id"); // brandId or categoryId
     const lat = searchParams.get("lat");
@@ -199,7 +210,7 @@ const MapContainer = () => {
 
   // URL 파라미터 변경 감지 및 처리
   useEffect(() => {
-    const { type, id, lat, lng, storeId } = parseSearchParams();
+    const { type, id, lat, lng, storeId } = parseSearchParams;
 
     // 검색 파라미터가 없으면 초기화
     if (!lat && !lng && !storeId && !type && !id) {
@@ -279,7 +290,7 @@ const MapContainer = () => {
 
   if (!currentLocation || !user) {
     return (
-      <div className="flex h-full w-full flex-col items-center justify-center">
+      <div className="flex h-screen w-full flex-col items-center justify-center">
         <div className="border-t-action-green mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-4 border-gray-300"></div>
         <p className="text-gray-600">현재 위치를 불러오는 중...</p>
       </div>
@@ -287,12 +298,12 @@ const MapContainer = () => {
   }
 
   // URL 파라미터가 있는 경우 파싱이 완료될 때까지 대기
-  const { type, id, lat, lng, storeId } = parseSearchParams();
+  const { type, id, lat, lng, storeId } = parseSearchParams;
   const hasSearchParams = !!(lat && lng && (storeId || (type && id)));
 
   if (hasSearchParams && !searchLocation && !searchType && !searchStoreId) {
     return (
-      <div className="flex h-full w-full flex-col items-center justify-center">
+      <div className="flex h-full h-screen w-full flex-col items-center justify-center">
         <div className="border-t-action-green mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-4 border-gray-300"></div>
         <p className="text-gray-600">검색 정보를 불러오는 중...</p>
       </div>
@@ -300,7 +311,7 @@ const MapContainer = () => {
   }
 
   return (
-    <div className="map-container relative mx-auto h-screen w-full max-w-[1080px] overflow-hidden">
+    <div className="map-container relative mx-auto min-h-screen w-full max-w-[1080px] overflow-hidden">
       <MapWithBaseLocation
         selectedCategory={selectedCategory}
         onPinClick={handlePinClick}
