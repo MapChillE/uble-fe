@@ -1,0 +1,334 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@source "../../../apps/**/*.{ts,tsx}";
+@source "../../../components/**/*.{ts,tsx}";
+@source "../**/*.{ts,tsx}";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ========================
+  폰트 정의
+   ======================== */
+@font-face {
+  font-family: "Futura";
+  src: url("/fonts/Futura-Bold.otf") format("opentype");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ========================
+  지도 컨테이너 높이 설정
+   ======================== */
+
+/* 공통 높이 설정 */
+.map-container,
+.map-page,
+body.map-page-active {
+  height: 100vh !important;
+  height: 100dvh !important;
+  overflow: hidden !important;
+}
+
+/* map 페이지 전용 스타일 - 헤더/푸터 제외한 높이 */
+.map-page {
+  height: calc(100dvh - 55px - 55px) !important;
+  min-height: calc(100dvh - 55px - 55px) !important;
+  overflow: hidden !important;
+  position: relative !important;
+}
+
+/* 지도 페이지 컨테이너 */
+.map-page {
+  position: relative !important;
+}
+
+/* 지도 콘텐츠 */
+.map-content {
+  height: 100% !important;
+}
+
+/* 네이버 지도 요소 */
+#naver-map,
+#naver-map[style*="height"] {
+  height: 100% !important;
+  width: 100% !important;
+  max-height: 100vh !important;
+  max-height: 100dvh !important;
+  min-height: 100% !important;
+}
+
+/* 모바일 특화 설정 */
+@media screen and (max-width: 768px) {
+  .map-container {
+    min-height: 100vh !important;
+  }
+
+  /* map 페이지가 있을 때 body 스타일 (최신 브라우저) */
+  body:has(.map-page) {
+    overflow: hidden !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+  }
+}
+
+/* ========================
+  모바일 뷰포트 대응
+   ======================== */
+
+/* iOS Safari */
+@supports (-webkit-touch-callout: none) {
+  .h-screen {
+    height: 100dvh;
+  }
+}
+
+/* 모바일 safe area 변수 */
+:root {
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+}
+
+/* Android Chrome, Firefox */
+@media screen and (max-width: 768px) {
+  .h-screen {
+    height: 100vh;
+    height: 100dvh; /* dynamic viewport height for modern browsers */
+  }
+}
+
+/* Safari 및 삼성 브라우저 */
+.h-screen {
+  height: 100dvh; /* Safari 15.0+, Samsung Internet */
+  min-height: 100vh; /* fallback */
+}
+
+:root {
+  --font-pretendard: "Pretendard";
+  --font-futura: "Futura";
+
+  --action-green: #41d596;
+  --hover-green: #14b470;
+  --disabled-green: #bcf0db;
+  --error-red: #f66f63;
+  --grade-vvip: #eb3f88;
+  --grade-vip: #9869f1;
+  --grade-excellent: #93aefe;
+  --grade-normal: #b5b3c2;
+
+  --background: 0 0% 100%;
+  --foreground: 0 0% 9%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 9%;
+  --primary: 158 65% 55%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 0 0% 96%;
+  --secondary-foreground: 0 0% 9%;
+  --muted: 0 0% 96%;
+  --muted-foreground: 0 0% 45%;
+  --accent: 0 0% 96%;
+  --accent-foreground: 0 0% 9%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 0 0% 90%;
+  --input: 0 0% 90%;
+  --ring: 158 65% 55%;
+
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: 0 0% 9%;
+  --foreground: 0 0% 98%;
+  --card: 0 0% 9%;
+  --card-foreground: 0 0% 98%;
+  --popover: 0 0% 9%;
+  --popover-foreground: 0 0% 98%;
+  --primary: 158 65% 55%;
+  --primary-foreground: 0 0% 9%;
+  --secondary: 0 0% 15%;
+  --secondary-foreground: 0 0% 98%;
+  --muted: 0 0% 15%;
+  --muted-foreground: 0 0% 64%;
+  --accent: 0 0% 15%;
+  --accent-foreground: 0 0% 98%;
+  --destructive: 0 62% 30%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 0 0% 15%;
+  --input: 0 0% 15%;
+  --ring: 158 65% 55%;
+}
+
+@theme inline {
+  --font-pretendard: var(--font-pretendard);
+  --font-futura: var(--font-futura);
+
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --color-action-green: var(--action-green);
+  --color-hover-green: var(--hover-green);
+  --color-disabled-green: var(--disabled-green);
+  --color-error-red: var(--error-red);
+  --color-grade-vvip: var(--grade-vvip);
+  --color-grade-vip: var(--grade-vip);
+  --color-grade-excellent: var(--grade-excellent);
+  --color-grade-normal: var(--grade-normal);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: light;
+    background-color: white !important;
+    color: black !important;
+  }
+}
+@layer base {
+  /* *,
+  ::before,
+  ::after {
+    @apply box-border;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  *::-webkit-scrollbar {
+    display: none;
+  } */
+
+  html {
+    @apply scroll-auto antialiased;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-pretendard);
+    font-size: 0.875rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply m-0 p-0;
+    font-size: inherit;
+    font-weight: inherit;
+  }
+
+  p {
+    @apply m-0 p-0;
+  }
+
+  ul,
+  ol {
+    @apply m-0 p-0;
+    list-style: none;
+  }
+
+  a {
+    @apply text-inherit no-underline;
+  }
+
+  button {
+    @apply cursor-pointer border-0 bg-transparent p-0;
+    font-family: inherit;
+  }
+
+  input,
+  textarea,
+  select {
+    @apply border-0 bg-transparent outline-none;
+    font-family: inherit;
+  }
+
+  img {
+    @apply h-auto max-w-full;
+  }
+}
+
+@layer utilities {
+  .font-futura {
+    font-family: var(--font-futura);
+  }
+
+  .input-underline {
+    border-bottom: 2px solid #e5e7eb;
+    transition: border-color 0.2s ease;
+    outline: none;
+  }
+
+  .input-underline:focus {
+    border-bottom-color: #111827;
+    outline: none;
+  }
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+
+  .animate-accordion-down {
+    animation: accordion-down 0.2s ease-out;
+  }
+
+  .animate-accordion-up {
+    animation: accordion-up 0.2s ease-out;
+  }
+
+  /* ========================
+  공통 스타일 (스크롤바 제거)
+   ======================== */
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+}
