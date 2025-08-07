@@ -176,11 +176,9 @@ const NaverMap = forwardRef<NaverMapRef, NaverMapProps>(
     return (
       <div style={{ width: "100%", height: "100%", position: "relative" }}>
         {!isMapReady && (
-          <div className="absolute inset-0 z-50 flex items-center justify-center bg-white/80">
-            <div className="text-center text-gray-600">
-              <div className="mb-3 h-10 w-10 animate-spin rounded-full border-4 border-gray-200 border-t-blue-500" />
-              <div>지도를 불러오는 중...</div>
-            </div>
+          <div className="flex h-screen w-full flex-col items-center justify-center">
+            <div className="border-t-action-green mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-4 border-gray-300"></div>
+            <p className="text-gray-600">지도를 불러오는 중...</p>
           </div>
         )}
         <div id={mapId} style={{ width: "100%", height: "100%" }} />
