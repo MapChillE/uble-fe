@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 const useNaverServiceReady = () => {
   const [serviceReady, setServiceReady] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
-  const maxRetries = 50; // 최대 5초 (100ms * 50)
+  const maxRetries = 30; // 최대 3초 (100ms * 50)
 
   useEffect(() => {
     const checkServices = () => {

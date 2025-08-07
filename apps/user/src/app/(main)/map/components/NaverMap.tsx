@@ -5,6 +5,7 @@ import { Coordinates } from "@/types/map";
 import type { NaverMap as NaverMapInstance, NaverMapOptions } from "@/types/map";
 import { useLocationStore } from "@/store/useLocationStore";
 import { useMarkerAndClusterManager } from "@/app/(main)/map/hooks/useMarkerAndClusterManager";
+import { toast } from "sonner";
 
 const mapId = "naver-map";
 
@@ -87,6 +88,11 @@ const NaverMap = forwardRef<NaverMapRef, NaverMapProps>(
 
     // 최초 지도 생성
     useEffect(() => {
+      // 이미 지도가 초기화되었으면 재실행하지 않음
+      if (mapRef.current || isMapReady) {
+        return;
+      }
+
       if (typeof window === "undefined" || !window.naver?.maps) {
         return;
       }
@@ -142,19 +148,23 @@ const NaverMap = forwardRef<NaverMapRef, NaverMapProps>(
       // 폴링 방식으로 재시도
       const interval = setInterval(() => {
         retryCount++;
+        console.log(retryCount);
+        // 최대 재시도 횟수 초과 시 중단
+        if (retryCount >= maxRetries) {
+          clearInterval(interval);
+          toast.error("지도를 불러오는 중 오류가 발생했습니다.");
+          return;
+        }
 
+        // 지도 초기화 시도
         if (initializeMap()) {
           clearInterval(interval);
           return;
         }
-
-        if (retryCount >= maxRetries) {
-          clearInterval(interval);
-        }
-      }, 100);
+      }, 500);
 
       return () => clearInterval(interval);
-    }, [loc, onBoundsChange, onZoomChange, lat, lng, zoom]);
+    }, [loc, onBoundsChange, onZoomChange, lat, lng, zoom, isMapReady]);
 
     // center 이동
     useEffect(() => {
