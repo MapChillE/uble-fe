@@ -48,7 +48,7 @@ const NaverMap = forwardRef<NaverMapRef, NaverMapProps>(
     const selectedPlaceId = useLocationStore((s) => s.selectedPlaceId);
     const selectedPlace = useLocationStore((s) => s.myPlaces.find((p) => p.id === selectedPlaceId));
     const [isMapReady, setIsMapReady] = useState(false);
-    
+
     // 마커와 클러스터러 통합 관리 훅 사용
     useMarkerAndClusterManager({
       mapRef,
@@ -143,6 +143,7 @@ const NaverMap = forwardRef<NaverMapRef, NaverMapProps>(
       // 즉시 시도
       if (initializeMap()) {
         return;
+      }
 
       // 폴링 방식으로 재시도
       const interval = setInterval(() => {
