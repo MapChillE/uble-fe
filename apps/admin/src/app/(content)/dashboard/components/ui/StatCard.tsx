@@ -87,9 +87,7 @@ const StatCard: React.FC<StatCardProps> = ({
         </div>
         <div>
           <p className="mb-1 text-sm font-medium text-gray-600">{title}</p>
-          <p className={cn("text-2xl font-bold md:text-4xl", classes.value)}>
-            {formatNumber(value)}
-          </p>
+          <p className={cn("text-2xl font-bold md:text-4xl", classes.value)}>{value}</p>
           {showChange && change && (
             <div className="mt-2 flex items-center">
               <span

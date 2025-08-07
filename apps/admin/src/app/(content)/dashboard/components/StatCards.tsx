@@ -13,7 +13,7 @@ const StatCards: React.FC<StatCardsProps> = ({ dashboardData }) => {
       {/* 월간 활성 이용자 수 */}
       <StatCard
         icon={Users}
-        title="총 사용자 수"
+        title="이번달 활성 사용자 수"
         value={dashboardData.mau}
         previousValue={dashboardData.lastMau}
         subtitle="MAU"
@@ -27,7 +27,7 @@ const StatCards: React.FC<StatCardsProps> = ({ dashboardData }) => {
         title="이번 달 혜택 이용"
         value={dashboardData.usageCount}
         previousValue={dashboardData.lastUsageCount}
-        subtitle="이번 달"
+        subtitle="모든 유저"
         color="orange"
         showChange={true}
       />
@@ -47,7 +47,7 @@ const StatCards: React.FC<StatCardsProps> = ({ dashboardData }) => {
         icon={MapPin}
         title="전국 제휴처 매장 수"
         value={dashboardData.totalStoreCount}
-        subtitle="전국"
+        subtitle="스토어"
         color="blue"
         showChange={false}
       />
