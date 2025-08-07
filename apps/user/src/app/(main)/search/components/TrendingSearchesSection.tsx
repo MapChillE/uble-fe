@@ -104,11 +104,7 @@ const TrendingSearchesSection = ({ onSearchClick }: TrendingSearchesSectionProps
       <div className="mb-3 flex items-center justify-between">
         <h3 className="text-sm font-semibold text-gray-900">실시간 인기 검색어</h3>
         <span className="text-xs text-gray-500">
-          {new Date().toLocaleTimeString("ko-KR", {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}{" "}
-          기준
+          {`${String(new Date().getHours()).padStart(2, "0")}:00 기준`}
         </span>
       </div>
       {isLoading ? (
